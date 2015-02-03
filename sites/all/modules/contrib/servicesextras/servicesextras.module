@@ -1,0 +1,789 @@
+<?php
+
+/**
+ * implements hook_services_resources
+ * @return boolean
+ */
+function servicesextras_services_resources() {
+  $resources['search'] = array(
+    'index' => array(
+      //'file' => array('type' => 'inc', 'module' => 'servicesextras', 'name' => 'servicesextras.services'),
+      'callback' => 'servicesextras_search_resource',
+      'description' =>  'Query content indexes and return the results',
+      'args' => array(
+        array(
+          'name' => 'index',
+          'optional' => FALSE,
+          'source' => array('path' => 0),
+          'type' => 'string',
+          'default value' => 'node_index',
+          'description' =>  'The name of the search index to query.  Current options: node_index, user_index',
+        ),
+        array(
+          'name' => 'mode',
+          'optional' => TRUE,
+          'source' => array('path' => 1),
+          'type' => 'string',
+          'default value' => 'ui',
+          'description' =>  'The result mode.  Defaults to ui.  Current options: ui, raw',
+        ),
+        array(
+          'name' => 'keys',
+          'optional' => TRUE,
+          'type' => 'string',
+          'default value' => NULL,
+          'source' => array('param' => 'keys'),
+          'description' =>  'Optional search string.',
+        ),
+        array(
+          'name' => 'sort',
+          'optional' => TRUE,
+          'type' => 'string',
+          'default value' => NULL,
+          'source' => array('param' => 'sort'),
+          'description' =>  'Sort order (defaults to created:DESC)',
+        ),
+        array(
+          'name' => 'offset',
+          'optional' => TRUE,
+          'type' => 'int',            
+          'default value' => 0,
+          'source' => array('param' => 'offset'),
+          'description' =>  'The position of the first returned search results relative to the whole result in the index.',
+        ),
+        array(
+          'name' => 'limit',
+          'optional' => TRUE,
+          'type' => 'int',            
+          'default value' => 25,
+          'source' => array('param' => 'limit'),
+          'description' =>  'The number of search results to return. -1 means no limit.',
+        ),
+        array(
+          'name' => 'facets',
+          'optional' => TRUE,
+          'type' => 'array',            
+          'default value' => NULL,
+          'source' => array('param' => 'f'),
+          'description' =>  'An array of facets where the value is the facet name and facet item id sepearated by a colon.  E.g. ?f[0]=field_tags:100&f[1]=field_tags:101',
+        ),
+      ),
+      'access callback' => 'user_is_logged_in',
+    ),
+  );  
+  
+  $resources['uiglobals'] = array(
+    'index' => array(
+      'file' => array('type' => 'inc', 'module' => 'servicesextras', 'name' => 'servicesextras.services'),
+      'callback' => 'servicesextras_uiglobals',
+      'description' =>  'Returns UI global variables for the current session',
+      'access arguments' => array('access content'),
+    ),
+  );
+  
+  $resources['node']['relationships']['ui'] = array(
+    'file' => array('type' => 'inc', 'module' => 'servicesextras', 'name' => 'servicesextras.services'),
+      'callback' => 'servicesextras_uinode',
+      'args' => array(
+        array(
+          'name' => 'nid',
+          'optional' => TRUE,
+          'source' => array('path' => 0),
+          'type' => 'int',
+          'description' => 'The nid of the node.',
+        ),
+      ),
+      'access callback' => '_servicesextras_node_resource_access',
+      'access arguments' => array('view'),
+      'access arguments append' => TRUE,
+  );
+  
+  $resources['user']['relationships']['ui'] = array(
+    'file' => array('type' => 'inc', 'module' => 'servicesextras', 'name' => 'servicesextras.services'),
+      'callback' => 'servicesextras_uiuser',
+      'args' => array(
+        array(
+          'name' => 'uid',
+          'optional' => TRUE,
+          'source' => array('path' => 0),
+          'type' => 'string',
+          'description' => 'The uid or username of the user.',
+        ),
+      ),
+      'access callback' => '_servicesextras_user_resource_access',
+      'access arguments' => array('view'),
+      'access arguments append' => TRUE,
+  );
+  
+  return $resources;
+}
+
+/**
+ * Implements hook_services_resources_alter().
+ */
+function servicesextras_services_resources_alter(&$resources, $endpoint) {
+  //use a custom login function so we can include LDAP logins
+  $resources['user']['actions']['login']['callback'] = '_servicesextras_user_resource_login';
+  //$resources['user']['actions']['login']['file'] =  array('type' => 'services.inc', 'module' => 'servicesextras');
+}
+
+/**
+ * search resource callback
+ * @param type $index
+ * @param type $mode
+ * @param type $keys
+ * @param type $sort
+ * @param type $offset
+ * @param type $limit
+ * @return type
+ */
+function servicesextras_search_resource($index, $mode, $keys = NULL, $sort = NULL, $offset = 0, $limit = 25) {
+  //perform the search query
+  $options = array('offset' => $offset, 'limit' => $limit);
+  $query = search_api_query($index, $options);
+  $query = $keys ? $query->keys($keys) : $query;
+  if ($sort) {
+    $sorts = explode(':', $sort);
+    $query->sort($sorts[0], $sorts[1]);
+  }
+
+  drupal_alter('servicesextras_search_resource_query', $query, $index, $mode, $keys, $sort);
+  $result = $query->execute();
+
+  //format the results
+  $result['search_api_facets'] = servicesextras_format_facets($result['search_api_facets'], $index);
+  $result['mode'] = $mode;
+  $entities = entity_load($query->getIndex()->item_type, array_keys($result['results']));
+  $result['results'] = servicesextras_format_entities($entities, $query->getIndex()->item_type, $result['mode'], $result['results']);
+  $result['results'] = array_values($result['results']); //we call array_values to kill the id keys to keep json_encode from resorting our array
+  return $result;
+}
+
+/**
+ * format facet data to include text labels
+ * @param type $facets
+ * @param type $index
+ * @return type
+ */
+function servicesextras_format_facets($facets, $index) {
+  //load labels for facets and filter values
+  foreach ($facets as $facet_name => &$filters) {
+    //sanitize filter values
+    foreach ($filters as &$filter) {
+      $filter['filter'] = substr($filter['filter'], 1, strlen($filter['filter'])-2);
+      $values[] = $filter['filter'];
+    }
+    
+    //map filter values to labels
+    $searcher = 'search_api@' . $index;
+    $facet = facetapi_facet_load($facet_name, $searcher);
+    $facets[$facet_name]['label'] = intranetcore_facetapi_display_title($facet, facetapi_adapter_load($searcher));
+    
+    if ($facet_name == 'og_group_ref') {
+      //we have to load extra data for og_group_ref
+      $entities = entity_load('node', $values);
+      foreach ($filters as &$filter) {
+        if (isset($entities[$filter['filter']])) {
+          $wrap = entity_metadata_wrapper('node', $entities[$filter['filter']]);
+          $filter['is_site'] = isset($wrap->field_is_site) && $wrap->field_is_site->value() ?  TRUE : FALSE;
+        }
+      }
+    }
+    
+    //add labels to result facet array
+    $map = call_user_func($facet['map callback'], $values, $facet['map options']);
+    foreach ($filters as &$filter) {
+      if (isset($map[$filter['filter']])) {
+        $filter['label'] = $map[$filter['filter']];
+      }
+      else {
+        $filter['label'] = $filter['filter'];
+      }
+    }
+  }
+  
+  return $facets;
+}
+
+/**
+ * format entities (currently supports user and node entities)
+ * @param type $entities
+ * @param type $entity_type
+ * @param type $mode
+ * @return type
+ */
+function servicesextras_format_entities(&$entities, $entity_type, $mode, $sapi_results = NULL) {
+  drupal_alter('servicesextras_format_entities', $entities, $entity_type, $mode);
+  if ($mode == 'ui') {
+    foreach ($entities as $index => &$entity) {
+      $wrap = entity_metadata_wrapper($entity_type, $entity);
+
+      if (isset($sapi_results[$index]['excerpt'])) {
+        $entity->excerpt = $sapi_results[$index]['excerpt'];
+      }
+
+      if ($wrap->access('edit')) { //add edit link if user has access
+        $entity->edit_link = $entity_type . '/' . entity_id($entity_type, $entity) . '/edit';
+      }
+
+      if ($entity_type == 'user') { //format username
+        $entity->display_name = format_username($entity);
+      }
+
+      //format existing field data
+      $info = $wrap->getPropertyInfo(); //dpm($info);
+      foreach ($entity as $prop_name => &$prop) {
+        //these are never needed by the ui so we unset
+        $unsets = array('promote', 'sticky', 'vid', 'language', 'tid', 'revision_timestamp', 'revision_uid', 'tnid', 'translate', 'data', 'log', 'group_content_access', 'picture', 'pass', 'theme', 'signature', 'signature_format', 'init', 'picture', 'data');
+        if (in_array($prop_name, $unsets) || stripos($prop_name, 'ldap_') === 0) {
+          unset($entity->{$prop_name});
+          continue;
+        }
+
+        if (is_array($prop) && isset($info[$prop_name])) { //I think this condition catches all fields, does it?
+          //unset if current user does not have access to the field
+          $access = field_access('view', field_info_field($prop_name), $entity_type, $entity);
+          if (!$access) {
+            unset($entity->{$prop_name});
+            continue;
+          }
+          $prop = servicesextras_uifield($wrap, $wrap->{$prop_name}, $prop_name);
+        }
+      }
+    }
+
+    if ($entity_type != 'user') {
+      servicesextras_uiauthors($entities);
+    }
+  }
+  
+  return $entities;
+}
+
+/**
+ * format a field in ui mode
+ * @param type $wrap
+ * @param type $propwrap
+ * @param type $prop_name
+ * @return type
+ */
+function servicesextras_uifield($wrap, $propwrap, $prop_name) {
+  $prop = $propwrap->value();
+  
+  $type = $propwrap->type();
+  if (strpos($type, 'list<') === 0) {
+    $listtype = substr(str_replace('>', '', $type), stripos($type, '<')+1);
+    $type = 'list';
+  }
+  
+  switch ($type) {
+    case 'text_formatted':
+      if (is_array($propwrap->value())) {
+        $prop = array(
+          'full' => $propwrap->value->value(),
+          'teaser' => isset($wrap->value()->excerpt) ? $wrap->value()->excerpt : substr(strip_tags($propwrap->value->value()), 0, 200) //this is janky
+        );
+      }
+      break;
+    case 'list':
+      $prop = array();
+      foreach ($propwrap->value() as $obj) {
+        $prop[] = servicesextras_uifield($wrap, entity_metadata_wrapper($listtype, $obj), $prop_name);
+      }
+      break;
+    case 'taxonomy_term':
+    case 'node':
+      if ($propwrap->getIdentifier()) {
+        $prop = array(
+          'id' => $propwrap->getIdentifier(), 
+          'label' => $propwrap->label(), 
+          'type' => $type
+        );
+      }
+      break;
+    case 'field_item_image':
+      if ($prop == NULL) {
+        $prop = servicesextras_default_image($wrap->type(), $prop_name, $wrap->value());
+      }
+      if ($prop != NULL) {
+        if (is_object($prop)) {
+          $prop = get_object_vars($prop);
+        }
+        $prop['urls']['default'] = file_create_url($prop['uri']);
+        foreach (image_styles() as $style_name => $style) {
+          $prop['urls'][$style_name] = file_create_url(image_style_path($style_name, $prop['uri']));
+        }
+      }
+      break;
+    case 'field_item_file':
+      if ($propwrap->value() != NULL) {
+        $prop['urls']['default'] = file_create_url($prop['uri']);
+      }
+      break;
+    case 'text':
+      $prop = array('label' => $propwrap->value());
+      break;
+    case 'date':  
+    default;
+      $prop = $propwrap->value();
+      break;
+  }
+
+  return $prop;
+}
+
+/**
+ * get the default image for a field if one is set
+ * @param type $entity_type
+ * @param type $field_name
+ * @param type $entity
+ * @return type
+ */
+function servicesextras_default_image($entity_type, $field_name, $entity) {
+  static $files = array();
+  
+  $bundle_name = $entity_type == 'node' ? $entity->type : $entity_type;
+  $fullname = "$entity_type-$bundle_name-$field_name";
+  if (!isset($files[$fullname])) {
+    //load default image for a field config
+    $field = field_info_field($field_name);
+    $files[$fullname] = isset($field['settings']['default_image']) ? file_load($field['settings']['default_image']) : 0;
+
+    //load default image for a field instance
+    $instance = field_info_instance($entity_type, $field_name, $bundle_name);
+    if (isset($instance['settings']['default_image']) && $instance['settings']['default_image']) {
+      $files[$fullname] = file_load($instance['settings']['default_image']);
+    }
+  }
+  
+  return $files[$fullname];
+}
+
+/**
+ * format authors in ui mode
+ * @param type $entities
+ */
+function servicesextras_uiauthors(&$entities) {
+  //load user objects
+  $uids = array();
+  foreach ($entities as $node) {
+    $uids[$node->uid] = $node->uid;
+  }
+  $authors = entity_load('user', $uids);
+
+  //create an author object for each result 
+  foreach ($entities as &$node) {
+    $a = $authors[$node->uid];
+    $wrap = entity_metadata_wrapper('user', $a);  
+    $node->author = array(
+      'id' => $a->uid,
+      'name' => $a->name,
+      'label' => format_username($a),
+      'image' => servicesextras_uifield($wrap, $wrap->field_user_photo, 'field_user_photo'),
+    );
+  }
+}
+
+/**
+ * load comments for a node
+ * @param type $entities
+ * @param type $mode
+ * @return type
+ */
+function servicesextras_load_comments(&$entities, $mode = NULL) {
+  module_load_include('resources/node_resource.inc', 'services');
+  foreach ($entities as &$entity) {
+    $comments = array_values(_node_resource_load_node_comments($entity->nid));
+    $entity->comments = servicesextras_format_entities($comments, 'comment', $mode);
+  }
+  return $entities;
+}
+
+/**
+ * uiglobals resource callback.  Returns global settings useful to the UI layer
+ * @return type
+ */
+function servicesextras_uiglobals() { 
+  $globals = array(    
+    'basePath' => base_path(), 
+    'site-name' => variable_get('site_name', ''),
+    'publicFilePath' => file_stream_wrapper_get_instance_by_uri('public://')->getDirectoryPath(),
+    'privateFilePath' => 'system',
+    'main-menu' => servicesextras_uimenu('main-menu'),
+    'user-menu' => servicesextras_uimenu('user-menu'),  
+    'image-styles' => array_keys(image_styles()),
+    'messages' => drupal_get_messages(NULL, TRUE),
+  );
+  
+  if (user_is_logged_in()) {
+    $globals['user'] = servicesextras_uiuser($GLOBALS['user']->uid);
+  }
+  
+  drupal_alter('servicesextras_uiglobals', $globals);
+  return $globals;
+}
+
+/**
+ * 
+ * @param type $menu_name
+ * @return type
+ */
+function servicesextras_uimenu($menu_name) {
+  $menu = menu_tree($menu_name);
+  $result = array();
+  foreach ($menu as $key => $item) {
+    if (is_numeric($key)) {
+      $item['#localized_options']['absolute'] = TRUE;
+      $result[] = array(
+        'id' => $key,
+        'title' => $item['#title'],
+        'href' => url($item['#href'], $item['#localized_options']),
+        'attributes' => $item['#attributes'],
+      );
+    }
+  }
+  return $result;
+}
+
+/**
+ * callback for node ui relationship
+ * @param type $nid
+ * @return type
+ */
+function servicesextras_uinode($nid) {
+  $node = node_load($nid);
+  drupal_alter('servicesextras_uinode', $node);
+  $entities = array($nid => $node);
+  $entities = servicesextras_format_entities($entities, 'node', 'ui');
+  $entities = servicesextras_load_comments($entities, 'ui');
+  return $entities[$nid];
+}
+
+/**
+ * access callback for node resource
+ * @param type $op
+ * @param type $args
+ * @return type
+ */
+function _servicesextras_node_resource_access($op = 'view', $args = array()) {
+  // Make sure we have an object or this all fails, some servers can
+  // mess up the types.
+  if (is_array($args[0])) {
+    $args[0] = (object) $args[0];
+  }
+  elseif (!is_array($args[0]) && !is_object($args[0])) {  //This is to determine if it is just a string happens on node/%NID
+    $args[0] = (object)array('nid' => $args[0]);
+  }
+
+  if ($op != 'create' && !empty($args)) {
+    $node = node_load($args[0]->nid);
+  }
+  elseif ($op == 'create') {
+    if (isset($args[0]->type)) {
+      $node = $args[0]->type;
+      return node_access($op, $node);
+    }
+    else {
+      return services_error(t('Node type is required'), 406);
+    }
+  }
+  if (isset($node->nid) && $node->nid) {
+    $access = node_access($op, $node);
+    if (!$access) return services_error(t('Access denied'), 403);
+    return $access;
+  }
+  else {
+    return services_error(t('Not found'), 404);
+  }
+}
+
+/*
+ * callback for ui user relationship
+ */
+function servicesextras_uiuser($uid) {
+  $account = is_numeric($uid) ? user_load($uid) : user_load_by_name($uid);
+  if (empty($account)) {
+    return services_error(t('There is no user with ID @uid.', array('@uid' => $uid)), 404);
+  }
+
+  $entities = array($uid => $account);
+  $result = servicesextras_format_entities($entities, 'user', 'ui');
+  return $result[$uid];
+}
+
+/**
+ * Access check callback for user resource.
+ */
+function _servicesextras_user_resource_access($op = 'view', $args = array()) {
+  // Check if the user exists if appropriate.
+  if ($op != 'create' && $op != 'register' ) {
+    $i = is_numeric($args[0]);
+    $account = is_numeric($args[0]) ? user_load($args[0]) : user_load_by_name($args[0]);
+    if (!$account) {
+      return services_error(t('Not found'), 404);
+    }
+  }
+
+  global $user;
+  switch ($op) {
+    case 'view':
+      $access = user_view_access($account);
+      if (!$access) return services_error(t('Access denied'), 403);
+      return $access;
+    case 'update':
+      return ($user->uid == $account->uid || user_access('administer users'));
+    case 'create':
+    case 'register':
+      if (!$user->uid && variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL) != USER_REGISTER_ADMINISTRATORS_ONLY) {
+        return TRUE;
+      }
+      else {
+        return user_access('administer users');
+      }
+    case 'delete':
+      return user_access('administer users');
+  }
+}
+
+/**
+ * Login a user using the specified credentials.
+ *
+ * Note this will transfer a plaintext password.
+ *
+ * @param $username
+ *   Username to be logged in.
+ * @param $password
+ *   Password, must be plain text and not hashed.
+ *
+ * @return
+ *   A valid session object.
+ */
+function _servicesextras_user_resource_login($username, $password) {
+  global $user;
+
+  if ($user->uid) {
+    // user is already logged in
+    return services_error(t('Already logged in as @user.', array('@user' => $user->name)), 406);
+  }
+
+  // Check if account is active.
+  if (user_is_blocked($username)) {
+    return services_error(t('The username %name has not been activated or is blocked.', array('%name' => $username)), 403);
+  }
+
+  //standard auth
+  $uid = user_authenticate($username, $password);
+  
+  //ldap auth
+  if (!$uid && module_exists('ldap_authentication')) {
+    $form_state['values'] = array('name' => $username, 'pass' => $password);
+    module_load_include('inc', 'ldap_authentication');
+    $account = _ldap_authentication_user_login_authenticate_validate($form_state);
+    $uid = $account->uid;
+  }
+
+  if ($uid) {
+    $user = user_load($uid);
+    if ($user->uid) {
+      user_login_finalize();
+
+      $return = new stdClass();
+      $return->sessid = session_id();
+      $return->session_name = session_name();
+
+      services_remove_user_data($user);
+
+      $return->user = $user;
+
+      return $return;
+    }
+  }
+  watchdog('user', 'Invalid login attempt for %username.', array('%username' => $username));
+  return services_error(t('Wrong username or password.'), 401);
+}
+
+/**
+ * Implements hook_perm().
+ */
+function servicesextras_permission() {
+  return array(
+    'retrieve definition' => array(
+      'title' => t('Retreive Services definition'),
+      'description' => t('Retrieve Services definition for current endpoint.'),
+    ),
+  );
+}
+
+/**
+ * implements hook_ctools_plugin_pre_alter
+ * @param type $plugin
+ * @param type $info
+ */
+function servicesextras_ctools_plugin_pre_alter(&$plugin, &$info) {
+  // Override a function defined by the plugin.
+  if ($info['type'] == 'export_ui' && (!empty($plugin['schema']) && $plugin['schema'] == 'services_endpoint')) {
+    $plugin['allowed operations']['definition'] = array('title' => 'Definitions');
+    $plugin['menu']['items']['definition'] = array(
+      'path' => 'list/%ctools_export_ui/definition',
+      'title' => 'Definitions',
+      'page callback' => 'servicesextras_definition_endpoint',
+      'page arguments' => array(4),
+      'access arguments' => array('retrieve definition'),
+      'type' => MENU_LOCAL_TASK, 
+    );
+  }
+}
+
+/**
+ * callback for Services definition (adapted from Services Tools module)
+ * @param type $endpoint
+ * @return string
+ */
+function servicesextras_definition_endpoint($endpoint) {
+  if(!count($endpoint->resources)) {
+    drupal_set_message('You have no resources enabled', 'error');
+    return '';
+  } else {
+    //drupal_set_message('This is only a list of ENABLED resources and methods giving you a real API Documentation.');
+  }
+
+  //We only want enabled resource methods so we have to loop through and compare to our endpoint
+  module_load_include('resource_build.inc', 'services');
+  // Call _services_build_resources() directly instead of
+  // services_get_resources to bypass caching.
+  $resources = _services_build_resources();
+  $indexes = array('actions', 'relationships', 'targeted actions');
+  foreach($endpoint->resources as $key=>$resource) {
+    $row = array();
+    $opcell = array();
+    foreach($resource as $index => $methods) {
+      if(in_array($index, $indexes) || $index == 'operations') {
+        foreach($methods as $method => $enabled) {
+          $resources[$key][$index][$method]['name'] = $method;
+          $resources[$key][$index][$method]['type'] = $index;
+          $opcell[] = $resources[$key][$index][$method]; 
+        }         
+      }
+    }
+    $tables[$key] = $opcell;
+  }
+  $output = '';
+  $output .= '<h2>API Definition</h2>';
+  $endpoint_path = url('', array('absolute' => TRUE)) . $endpoint->path;
+  $method_map = array(
+    'retrieve'         => 'GET',
+    'update'           => 'PUT',
+    'delete'           => 'DELETE',
+    'index'            => 'GET',
+    'create'           => 'POST',
+    'actions'          => 'POST',
+    'targeted actions' => 'POST',
+    'relationships'    => 'GET',
+  );
+  $cruds = array('create', 'update', 'delete', 'retrieve', 'index');
+  foreach($tables as $title => $methods) {
+    $rows = array();
+    $header = array('controller', 'url', 'method', 'args');
+    foreach($methods as $method) {
+      $name = $method['name'];
+      $url = $endpoint_path . '/' . $title;
+      $args = array();
+      //Get our arguments
+      if(isset($method['args'])) {
+        foreach($method['args'] as $argument) {
+          $argname = '';
+          $argdescription = 'No description available.';
+          $argsource = '';
+          if(isset($argument['name'])) {
+            $argname = $argument['name'];
+          }
+          if(isset($argument['description'])) {
+            $argdescription = $argument['description'];
+          }
+          if(isset($argument['type'])) {
+            $argtype = $argument['type'];
+          }
+          if(isset($argument['source'])) {
+            $argsource = $argument['source'];
+            if(is_array($argsource) && array_key_exists('path', $argsource)) {
+              $argsource = 'path argument';
+            } elseif(is_array($argsource) && array_key_exists('param', $argsource)) {
+              $argsource = 'query param';
+            } else {
+              $argsource = 'post body';
+            }
+          }
+          if(!$argument['optional']) {
+            $args['required'][] = array('title' => $argname, 'description' => $argdescription, 'source' => $argsource, 'type' => $argtype);
+          } else {
+            $args['optional'][] = array('title' => $argname, 'description' => $argdescription, 'source' => $argsource, 'type' => $argtype);
+          }
+        }
+        $arg_output = '';
+        foreach($args as $requirment => $arguments) {
+            $argrows = array();
+            $argheaders = array('title', 'description');
+            $arg_fieldset = '';
+            foreach($arguments as $argument) {
+              $arg_fieldset .= '' . $argument['title'] . '<br/>';              
+              $arg_fieldset .= '<div class="description"> type:' . $argument['type'] . ' | source:' . $argument['source'] . ' | ' . $argument['description'] . '</div><hr />';
+
+              $fieldset = array(
+               '#theme' => 'fieldset',
+               '#title' => $requirment,
+               '#children' => $arg_fieldset,
+              );
+            }
+          $arg_output .= theme('fieldset', $fieldset);
+        }  
+      } else {
+        $arg_output = 'None';
+      }
+      
+      //Get our method request type, IE POST, or GET, etc
+      if(in_array($method['type'], $indexes)) {
+        $request_type = $method_map[$method['type']];
+      } else {
+        $request_type = $method_map[$name];
+      }
+
+      //get URL
+      //if we are a crud action
+      if (in_array($name, $cruds)) {
+        if (isset($method['args'])) {
+          $params = array();
+          foreach($method['args'] as $argument) {
+            if (isset($argument['source']['path']) && $argument['source']['path'] == '0' ) {
+              $url = $url . '/' . strtoupper($argument['name']);
+            } elseif (is_array($argument['source']) && array_key_exists('param', $argument['source'])) {
+              $params[] = $argument['source']['param'] . '=' .strtoupper($argument['source']['param']);
+            }
+          }
+          $url = !empty($params) ? $url . '?' . implode("&", $params) : $url;
+        }
+      } elseif ($method['type'] == 'actions') {
+        $url = $url . '/' . $name;
+      } elseif ($method['type'] == 'relationships') {
+        $params = array();
+        foreach($method['args'] as $argument) {
+          if (isset($argument['source']['path']) && $argument['source']['path'] == '0' ) {
+            $url = $url . '/' . strtoupper($argument['name']);
+          } elseif (is_array($argument['source']) && array_key_exists('param', $argument['source'])) {
+            $params[] = $argument['source']['param'] . '=' .strtoupper($argument['source']['param']);
+          }
+        }
+        $url = !empty($params) ? $url . '?' . implode("&", $params) : $url;
+      }
+      $url = isset($method['description']) ? $url . '<div class="description">' . $method['description'] . '</div>' : $url;
+      $rows[] = array($name, $url, $request_type, $arg_output);
+    }
+    $fieldset = array(
+     '#theme' => 'fieldset',
+     '#title' => $title,
+     '#children' => theme('table', array('header' => $header, 'rows' => $rows)),
+    );
+    $output .= theme('fieldset', $fieldset);
+  }
+
+  return $output;
+}

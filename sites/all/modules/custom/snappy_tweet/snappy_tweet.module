@@ -1,0 +1,128 @@
+<?php
+
+function snappy_tweet_block_info() {
+
+  $blocks['snappy_tweet'] = array(
+    'info' => t('Latest tweets'),
+    'cache' => DRUPAL_NO_CACHE,
+  );  
+
+  return $blocks;
+}
+
+function snappy_tweet_block_view($delta = '') {
+  // This example is adapted from node.module.
+  $block = array();
+
+  switch ($delta) {
+    case 'snappy_tweet':
+      $block['subject'] = t('Latest tweets');
+      $block['content'] = get_latest_tweets();
+      break;    
+  }
+  return $block;
+}
+
+function get_latest_tweets() {
+	require_once(drupal_get_path('module', 'snappy_tweet').'/tweet/TweetPHP.php');
+	$TweetPHP = new TweetPHP(
+	  array(
+	    'consumer_key'          => variable_get('consumer_key', ''),
+	    'consumer_secret'       => variable_get('consumer_secret', ''),
+	    'access_token'          => variable_get('access_token', ''),
+	    'access_token_secret'   => variable_get('access_token_secret', ''),
+	    'twitter_screen_name'   => variable_get('twitter_screen_name', ''),
+	    'tweets_to_display'     => variable_get('item_to_display', 3),
+	    'cachetime'             => variable_get('tweet_cache_time', 3600),
+	    'twitter_wrap_open'     => '<div class="widget footer-widget tweets-widget"><ul>',
+	    'twitter_wrap_close'    => '</ul></div>',
+	    'tweet_wrap_open'       => '<li><p>',
+	    'meta_wrap_open'        => '<p>',
+	    'meta_wrap_close'       => '</p>',
+	    'tweet_wrap_close'      => '</p></li>',
+	  )
+	);
+	return $TweetPHP->get_tweet_list();
+}
+
+function snappy_tweet_block_configure($delta = '') {
+  
+  $form = array();
+  if ($delta == 'snappy_tweet') {
+    $form['consumer_key'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Consumer Key'),
+      '#default_value' => variable_get('consumer_key', ''),
+      '#required' => TRUE,
+    );
+    $form['consumer_secret'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Consumer Secret'),
+      '#default_value' => variable_get('consumer_secret', ''),
+      '#required' => TRUE,
+    );
+    $form['access_token'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Oauth Token'),
+      '#default_value' => variable_get('access_token', ''),
+      '#required' => TRUE,
+    );
+    $form['access_token_secret'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Oauth Token Secret'),
+      '#default_value' => variable_get('access_token_secret', ''),
+      '#required' => TRUE,
+    );
+    $form['twitter_screen_name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Twitter screen name'),
+      '#default_value' => variable_get('twitter_screen_name', ''),
+      '#required' => TRUE,
+    );
+    $form['item_to_display'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Item to display'),
+      '#default_value' => variable_get('item_to_display', 3),      
+    );
+    $form['tweet_cache_time'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Cache time'),
+      '#default_value' => variable_get('tweet_cache_time', 3600),      
+    );    
+  }
+  return $form;
+}
+
+function snappy_tweet_form_block_admin_configure_alter(&$form, &$form_state, $form_id) {
+  if ($form['module']['#value'] == 'snappy_tweet') {
+    $form['#validate'][] = 'snappy_tweet_block_validate';
+  }
+}
+
+function snappy_tweet_block_validate(&$form, $form_state) {
+	$item_num = $form_state['values']['item_to_display'];
+  if (strlen(trim($item_num)) > 0){
+    if (!is_numeric($item_num)) {
+      form_set_error('item_to_display', t('Item to display must be Numeric'));
+    }
+  }
+  $cachetime = $form_state['values']['tweet_cache_time'];
+  if (strlen(trim($cachetime)) > 0){
+    if (!is_numeric($cachetime)) {
+      form_set_error('tweet_cache_time', t('Cache time must be Numeric'));
+    }
+  }
+}
+
+function snappy_tweet_block_save($delta = '', $edit = array()) {
+  
+  if ($delta == 'snappy_tweet') {
+    variable_set('consumer_key', $edit['consumer_key']);
+    variable_set('consumer_secret', $edit['consumer_secret']);
+    variable_set('access_token', $edit['access_token']);
+    variable_set('access_token_secret', $edit['access_token_secret']);
+    variable_set('twitter_screen_name', $edit['twitter_screen_name']);
+    variable_set('item_to_display', $edit['item_to_display']);
+    variable_set('tweet_cache_time', $edit['tweet_cache_time']);
+  }
+}

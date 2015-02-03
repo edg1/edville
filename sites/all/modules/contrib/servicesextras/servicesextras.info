@@ -1,0 +1,11 @@
+name = Services Extras
+core = 7.x
+description = Extra features that extend the Services module
+package = Services
+dependencies[] = services
+; Information added by drupal.org packaging script on 2013-10-01
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "servicesextras"
+datestamp = "1380627300"
+

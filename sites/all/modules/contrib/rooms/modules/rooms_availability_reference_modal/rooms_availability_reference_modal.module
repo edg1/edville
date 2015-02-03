@@ -1,0 +1,340 @@
+<?php
+
+/**
+ * @file
+ * Defines a field formatter for showing availability calendar in a ctools modal.
+ */
+
+/**
+ *  Implements of hook_menu()
+ */
+function rooms_availability_reference_modal_menu() {
+  $items['availability/%ctools_js/%'] = array(
+      'title' => 'Availability',
+      'page arguments' => array(1, 2, 3, 4),
+      'page callback' => 'rooms_availability_reference_modal_page',
+      'access callback' => TRUE,
+      'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+function rooms_availability_reference_modal_preprocess_html(&$variables) {
+  drupal_add_js(array(
+    'rooms-responsive' => array(
+      'modalSize' => array(
+        'type' => 'scale',
+        'width' => .8,
+        'height' => .8,
+        'addWidth' => 0,
+        'addHeight' => 0,
+        'contentRight' => 25,
+        'contentBottom' => 75,
+      ),
+      'modalOptions' => array(
+        'opacity' => 0.2,
+        'background' => '#001438'
+      ),
+      'animation' => 'fadeIn',
+      'modalTheme' => 'ResponsiveModal',
+      'throbberTheme' => 'ResponsiveModalThrobber',
+      'throbber' => theme('image', array(
+        'path' => drupal_get_path('module', 'rooms_availability_reference_modal') . '/rooms-responsive-modal-throbber.gif',
+        'title' => t('Loading'),
+        'alt' => t('Loading...'),
+        'attributes' => array('class' => array('rooms-responsive-modal-throbber')),
+      )),
+      'closeImage' => theme('image', array(
+        'path' => drupal_get_path('module', 'rooms_availability_reference_modal') . '/rooms-responsive-modal-close-icon.png',
+        'title' => t('Close window'),
+        'alt' => t('Close window'),
+        'attributes' => array('class' => array('rooms-responsive-modal-close')),
+      )),
+    ),
+  ), 'setting');
+  drupal_add_js(drupal_get_path('module', 'rooms_availability_reference_modal') . '/rooms-responsive-modal.js');
+
+  // Override ctools modal.css
+  $css = drupal_add_css();
+  foreach($css as $key => $value) {
+    if (strpos($key, 'ctools/css/modal.css') !== FALSE) {
+      drupal_add_css(drupal_get_path('module', 'rooms_availability_reference_modal') . '/rooms-responsive-modal.css');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function rooms_availability_reference_modal_theme($existing, $type, $theme, $path) {
+  return array(
+    'availability_calendar_popup_button' => array(
+      'render element' => 'element',
+      'variables' => array(
+        'name' => NULL,
+        'alt' => NULL,
+        'unit_ids' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Process variables for theme_availability_calendar_popup_button().
+ */
+function rooms_availability_reference_modal_preprocess_availability_calendar_popup_button(&$variables) {
+
+  // Create the path from the Unit IDs provided.
+  if (!empty($variables['unit_ids'])) {
+    if (is_array($variables['unit_ids'])) {
+      $variables['path'] = 'availability/nojs/' . implode('+', $variables['unit_ids']);
+    }
+    else {
+      $variables['path'] = 'availability/nojs/' . $variables['unit_ids'];
+    }
+  }
+
+  // Provide the default link and hover text, if none provided.
+  if (!isset($variables['name'])) {
+    $variables['name'] = t('Check Availaibility');
+  }
+  if (!isset($variables['alt'])) {
+    $variables['alt'] = t('View this unitʼs availability calendar');
+  }
+}
+
+/**
+ * Default theme implementation for the availability calendar popup button.
+ * @param  name - the link text.
+ * @param  alt - the hover text (also known as HTML title attribute).
+ * @param  unit_ids - a list or array of rooms unit ids to use for
+ *         the availability calendar.
+ * @param  path - the path to the availability calendar, derived from unit_ids.
+ * @return the popup button rendered as HTML
+ */
+function theme_availability_calendar_popup_button($variables) {
+  return ctools_modal_text_button($variables['name'], $variables['path'], $variables['alt'], 'ctools-modal-rooms-responsive');
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function rooms_availability_reference_modal_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools' && $plugin_type == 'content_types') {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function rooms_availability_reference_modal_field_formatter_info() {
+  $ret = array(
+    'rooms_availability_reference_modal' => array(
+      'label'       => t('Availability Calendar Modal Popup'),
+      'description' => t('Displays availability information on a calendar inside a modal popup.'),
+      'field types' => array('rooms_availability_reference'),
+    ),
+  );
+  return $ret;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * @todo handle multiple unit calendars
+ * @todo parametrize date range
+ */
+function rooms_availability_reference_modal_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+
+  $result = array();
+
+  if ($display['type'] == 'rooms_availability_reference_modal' && !empty($items)) {
+    // Include the CTools tools that we need.
+    ctools_include('ajax');
+    ctools_include('modal');
+
+    // Add CTools' javascript to the page.
+    ctools_modal_add_js();
+
+    // Build list of unit_ids
+    foreach ($items as $delta => $item) {
+      $unit = rooms_unit_load($item['unit_id']);
+      $unit_ids[] = $unit->unit_id;
+    }
+
+    $result[] = array(
+      '#theme' => 'availability_calendar_popup_button',
+      '#unit_ids' => $unit_ids,
+    );
+  }
+  return $result;
+}
+
+function rooms_availability_reference_modal_page($js = NULL, $unit_ids = NULL, $year = '', $month = '') {
+  if ($unit_ids == NULL) {
+    // You can customize the string below, or use a drupal_goto() to
+    // send the user to a custom error page.
+    return 'No unit id was sent. Error.';
+  }
+  if ($js) {
+    // Required includes for ctools to work:
+    ctools_include('modal');
+    ctools_include('ajax');
+  }
+
+  // Build the availability calendar from the specified unit ids
+  rooms_fullcalendar_loaded();
+  drupal_add_js(drupal_get_path('module', 'rooms_availability_reference') . '/js/rooms_availability_reference.js');
+
+  $unit_names = array();
+
+  foreach (explode('+', $unit_ids) as $id) {
+    $unit = rooms_unit_load($id);
+    $unit_names[] = $unit->name;
+  }
+
+  // Inject settings in javascript that we will use
+  $js_settings['roomsAvailabilityRef'][] = array(
+    'unitID' => $unit_ids,
+    'style' => ROOMS_AVAILABILITY_GENERIC_STYLE,
+  );
+
+  drupal_add_js($js_settings, 'setting');
+
+  $result[] = array(
+    '#prefix' => '<div class="availability-title">',
+    '#markup' => '<h2>' . implode(', ', $unit_names) . '</h2>',
+    '#suffix' => '</div>',
+  );
+
+  $element[] = array(
+    '#theme' => 'rooms_three_month_calendar',
+    '#url' => 'availability/nojs/' . $unit_ids,
+    '#form' => drupal_get_form('rooms_modal_booking_form', explode('+', $unit_ids), $year, $month, $js),
+    '#year' => $year,
+    '#month' => $month,
+    '#link_options' => !empty($js) ? array('attributes' => array('class' => array('ctools-use-modal ctools-modal-rooms-responsive'))) : NULL,
+  );
+
+  $title = t('Check Availability');
+  if ($js) {
+    return ctools_modal_render($title, drupal_render($element));
+  }
+  else {
+    return $element;
+  }
+}
+
+/**
+ * The modal-enabled form lets users see availability and book a date range.
+ */
+function rooms_modal_booking_form($form, &$form_state, $unit_id, $year, $month, $js=FALSE) {
+  // Pass variables to $form_state to be available for other modules.
+  $form_state['year'] = $year;
+  $form_state['month'] = $month;
+
+  $form['#attributes']['class'][] = 'rooms-modal-booking-form';
+
+  $form['unit_booking'] = array(
+    '#type' => 'fieldset',
+    '#description' => variable_get_value('rooms_availability_reference_modal_select_dates'),
+  );
+
+  $form['unit_booking']['unit_id'] = array(
+    '#type' => 'hidden',
+    '#value' => $unit_id,
+  );
+
+  $form['unit_booking']['rooms_date_range'] = rooms_date_range_fields();
+
+  $form['unit_booking']['group_size'] = array(
+    '#title' => variable_get_value('rooms_booking_manager_group_size'),
+    '#type' => 'select',
+    '#options' => rooms_assoc_range(1, variable_get('rooms_booking_manager_search_form_max_group_size', 8)),
+    '#default_value' => '2',
+  );
+
+  // Unset a js setting
+  drupal_add_js(array('rooms' => array('roomsBookingStartDay' => 0)), 'setting');
+
+  // We add the form's #submit array to this button along with the actual submit
+  // handler to preserve any submit handlers added by a form callback_wrapper.
+  $submit = array();
+
+  if (!empty($form['unit_booking']['#submit'])) {
+    $submit += $form['unit_booking']['#submit'];
+  }
+
+  $form['unit_booking']['actions'] = array(
+    '#type' => 'actions',
+    '#tree' => false,
+  );
+
+  $form['unit_booking']['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => variable_get_value('rooms_availability_reference_modal_book_this'),
+    '#submit' => $submit + array('rooms_modal_booking_form_submit'),
+    '#ajax' => array('callback' => 'rooms_modal_booking_form_ajax_submit'),
+  );
+
+  // We append the validate handler to #validate in case a form callback_wrapper
+  // is used to add validate handlers earlier.
+  $form['#validate'][] = 'rooms_form_start_end_dates_validate';
+  //@todo validate with 'rooms_booking_availability_search_form_validate()';
+
+  $form['#attached']['css'][] = drupal_get_path('module', 'rooms_availability_reference_modal') . '/css/rooms_modal_booking.css';
+  $form['#attached']['js'][] = drupal_get_path('module', 'rooms_availability_reference_modal') . '/js/rooms_modal_booking.js';
+  $form['#attached']['js'][] = array(
+    'data' => array('roomsAvailability' => array('roomID' => $unit_id)),
+    'type' =>'setting',
+  );
+
+  return $form;
+}
+
+/**
+ * Submit handler for the rooms_modal_booking_form().
+ */
+function rooms_modal_booking_form_submit(&$form, &$form_state) {
+  list($url, $options) = _rooms_modal_booking_form_get_redirect_url($form_state);
+  $form_state['redirect'] = array($url, $options);
+}
+
+/**
+ * AJAX Submit handler for the rooms_modal_booking_form().
+ */
+function rooms_modal_booking_form_ajax_submit(&$form, &$form_state) {
+  list($url, $options) = _rooms_modal_booking_form_get_redirect_url($form_state);
+  ctools_include('ajax');
+  ctools_add_js('ajax-responder');
+  $commands[] = ctools_ajax_command_redirect($url, 0, $options);
+  $page = array('#type' => 'ajax', '#commands' => $commands);
+  $commands = ajax_prepare_response($page);
+  print ajax_render($commands);
+  drupal_exit();
+}
+
+/**
+ * Helper function converts variables from form into a URL for redirect.
+ */
+function _rooms_modal_booking_form_get_redirect_url(&$form_state) {
+  // Create date objects.
+  $start_date = new DateTime($form_state['values']['rooms_start_date']);
+  $end_date = new DateTime($form_state['values']['rooms_end_date']);
+
+  // Convert dates to the required URL format.
+  $start_date = $start_date->format('Y-m-d');
+  $end_date = $end_date->format('Y-m-d');
+
+  $unit_id = implode('+', $form_state['values']['unit_id']);
+
+  $query_string = array();
+  if (!empty($form_state['values']['group_size'])) {
+    $query_string['rooms_group_size1'] = $form_state['values']['group_size'];
+  }
+
+  $url = "booking/$start_date/$end_date/$unit_id";
+  $options = array('query' => $query_string);
+  return array($url, $options);
+}

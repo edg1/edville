@@ -1,0 +1,7 @@
+name = Rooms Views Test
+description = Dummy module for Rooms Views testing
+core = 7.x
+
+package = Rooms
+
+dependencies[] = rooms_views

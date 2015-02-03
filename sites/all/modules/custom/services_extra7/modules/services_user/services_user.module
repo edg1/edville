@@ -1,0 +1,595 @@
+<?php
+
+
+/**
+ * Implements hook_services_resources().
+ */
+function services_user_services_resources() { 
+  $resources = array();
+
+  $resources['user_permission'] = array(
+    'retrieve' => array(
+      'callback' => '_permission_module_user_resource_retrieve',
+        'args' => array(
+          array(
+            'name' => 'modules',
+            'optional' => TRUE,
+            'source' => array('path' => 0),
+            'type' => 'string',
+            'description' => 'The permission of the module to get',
+          ),
+          array(
+            'name' => 'roles',
+            'optional' => TRUE,
+            'source' => array('param' => 'role'),
+            'type' => 'int',
+            'description' => 'The enabled permission of the role to get',
+          ),
+        ),
+        'access callback' => '_permission_module_user_resource_access',
+        'access arguments' => array('view'),
+        'access arguments append' => TRUE,
+    ),
+    'update' => array(
+      'callback' => '_permission_module_user_resource_update',
+        'args' => array(
+          array(
+            'name' => 'rid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type' => 'int',
+            'description' => 'The rid of the role to get',
+          ),
+          array(
+            'name' => 'permission',
+            'optional' => FALSE,
+            'source' => 'data',
+            'description' => 'The permission data to update',
+            'type' => 'array',
+          ),
+        ),
+        'access callback' => '_permission_module_user_resource_access',
+        'access arguments' => array('update'),
+        'access arguments append' => TRUE,
+    ),
+    'index' => array(
+      'callback' => '_permission_module_user_resource_index',
+        'args' => array(
+          array(
+            'name' => 'page',
+            'optional' => TRUE,
+            'type' => 'int',
+            'description' => 'The zero-based index of the page to get, defaults to 0.',
+            'default value' => 0,
+            'source' => array('param' => 'page'),
+          ),
+          array(
+            'name' => 'fields',
+            'optional' => TRUE,
+            'type' => 'string',
+            'description' => 'The fields to get.',
+            'default value' => '*',
+            'source' => array('param' => 'fields'),
+          ),
+          array(
+            'name' => 'parameters',
+            'optional' => TRUE,
+            'type' => 'array',
+            'description' => 'Parameters array',
+            'default value' => array(),
+            'source' => array('param' => 'parameters'),
+          ),
+          array(
+            'name' => 'pagesize',
+            'optional' => TRUE,
+            'type' => 'init',
+            'description' => 'Number of records to get per page.',
+            'default value' => variable_get('services_node_index_page_size', 20),
+            'source' => array('param' => 'pagesize'),
+          ),
+        ),
+     'access arguments' => array('administer permissions'),
+     'access arguments append' => FALSE,
+    ),
+  );
+
+  $resources['user_update'] = array(
+    'create' => array(
+      'callback' => '_user_update_resource_create',
+        'args' => array(
+          array(
+            'name' => 'user_data',
+            'optional' => FALSE,
+            'source' => 'data',
+            'description' => 'The user data to update',
+            'type' => 'array',
+          ),
+        ),
+        'access callback' => '_user_update_resource_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+    ),
+  );
+
+  $resources['user_filter'] = array(
+    'create' => array(
+      'callback' => '_user_filter_resource_create',
+        'args' => array(
+          array(
+            'name' => 'user_data',
+            'optional' => FALSE,
+            'source' => 'data',
+            'description' => 'The user data to filter',
+            'type' => 'array',
+          ),
+        ),
+        'access callback' => '_user_filter_resource_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+      ),
+  );
+
+  $resources['role'] = array(
+    'retrieve' => array(
+      'callback' => '_role_resource_retrieve',
+        'args' => array(
+          array(
+            'name' => 'rid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type' => 'int',
+            'description' => 'The rid of the node to get',
+          ),
+        ),
+        'access callback' => '_role_resource_access',
+        'access arguments' => array('view'),
+        'access arguments append' => TRUE,
+    ),
+    'create' => array(
+      'callback' => '_role_resource_create',
+        'args' => array(
+          array(
+            'name' => 'role',
+            'optional' => FALSE,
+            'source' => 'data',
+            'description' => 'The role data to create',
+            'type' => 'array',
+          ),
+        ),
+        'access callback' => '_role_resource_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+    ),
+    'update' => array(
+      'callback' => '_role_resource_update',
+        'args' => array(
+          array(
+            'name' => 'rid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type' => 'int',
+            'description' => 'The rid of the node to get',
+          ),
+          array(
+            'name' => 'data',
+            'optional' => FALSE,
+            'source' => 'data',
+            'description' => 'The role data to update',
+            'type' => 'string',
+          ),
+        ),
+        'access callback' => '_role_resource_access',
+        'access arguments' => array('update'),
+        'access arguments append' => TRUE,
+    ),
+    'delete' => array(
+      'callback' => '_role_resource_delete',
+        'args' => array(
+          array(
+            'name' => 'rid',
+            'optional' => FALSE,
+            'type' => 'int',
+            'source' => array('path' => 0),
+          ),
+        ),
+        'access callback' => '_role_resource_access',
+        'access arguments' => array('delete'),
+        'access arguments append' => TRUE,
+    ),
+    'index' => array(
+      'callback' => '_role_resource_index',
+        'args' => array(
+          array(
+            'name' => 'page',
+            'optional' => TRUE,
+            'type' => 'int',
+            'description' => 'The zero-based index of the page to get, defaults to 0.',
+            'default value' => 0,
+            'source' => array('param' => 'page'),
+          ),
+          array(
+            'name' => 'fields',
+            'optional' => TRUE,
+            'type' => 'string',
+            'description' => 'The fields to get.',
+            'default value' => '*',
+            'source' => array('param' => 'fields'),
+          ),
+          array(
+            'name' => 'parameters',
+            'optional' => TRUE,
+            'type' => 'array',
+            'description' => 'Parameters array',
+            'default value' => array(),
+            'source' => array('param' => 'parameters'),
+          ),
+          array(
+            'name' => 'pagesize',
+            'optional' => TRUE,
+            'type' => 'init',
+            'description' => 'Number of records to get per page.',
+            'default value' => variable_get('services_node_index_page_size', 20),
+            'source' => array('param' => 'pagesize'),
+          ),
+        ),
+        'access arguments' => array('administer users'),
+        'access arguments append' => FALSE,
+    ),
+  );
+
+  return $resources;
+}
+
+function _permission_module_user_resource_access($op = 'view', $args = array()) {
+  return user_access('administer permissions');
+}
+
+function _permission_module_user_resource_retrieve($module = NULL, $rid = 0) {
+
+  if (!module_exists($module)) {
+    return services_error(t('Module @module is not enabled or installed.', array('@module' => $module)), 404);
+  }
+
+  // Retrieve role names for columns.
+  $role_names = user_roles();
+
+  if (array_key_exists($rid, $role_names)) {
+
+    if (is_numeric($rid)) {
+      $role_names = array($rid => $role_names[$rid]);
+    }
+
+    // Fetch permissions for all roles or the one selected role.
+    $permissions = user_role_permissions($role_names);
+    $role_permissions = array_keys($permissions[$rid]);
+
+    $module_permission = array_keys(module_invoke($module, 'permission'));
+    $role_module_permissions = array_intersect($role_permissions, $module_permission);
+
+    return empty($role_module_permissions) ? FALSE : $role_module_permissions;
+
+  }
+  else {
+    $permissions = module_invoke($module, 'permission');
+
+    foreach($permissions as $key =>$value) {
+      $module_permission[$module][] = array(
+        'title' => $value['title'],
+        'permission' => $key
+      );
+    }
+ 
+    return $module_permission;
+  }
+
+}
+
+function _permission_module_user_resource_index($page, $fields, $parameters, $page_size) {
+  $modules = array();
+  $modules["modules"] = module_implements('permission');
+  asort($modules);
+  return $modules;
+}
+
+function _permission_module_user_resource_update($rid, $permissions) {
+
+  if (!$rid && empty($permissions)) {
+    return services_error(t('Role or Permission missing'), 406, array('form_errors' => t('Role or Permission missing')));
+  }
+
+  user_role_change_permissions($rid, $permissions);
+  return array('status_message' => t('The changes have been saved.'));
+}
+
+function _user_update_resource_access($op = 'view', $args = array()) {
+  switch ($op) {
+    case 'create':
+      return user_access('administer users');
+      break;
+  }
+}
+
+function _user_update_resource_create($user_data){
+  $return = array();
+  $user_total = count($user_data['user']);
+  $update_user_total = 0;
+  $option=$user_data['option'];
+  
+  if(empty($option) || empty($user_data['user']))
+    return services_error(t('option or uid field is requried') ,406,array('form_errors' => "option or uid field is requried."));
+
+  if($option == "block")
+      $values = 0;
+  if($option == "active")
+      $values = 1;  
+
+  foreach ($user_data['user'] as $key => $value) { watchdog('Key', $key);
+      $uid = $value['uid'];
+      $account = user_load($uid); // Loading Account
+      if($account) {
+        $total_uid[]=$uid;
+        if ($uid != null && ($option=="block" || $option=="active" )) {
+          $edit = array(
+            'status' => $values
+          );
+          user_save($account, $edit);
+          $update_user_total++;
+        }
+        else if ($uid != null && $option="delete") {
+          user_delete($uid);
+           $update_user_total++;
+        }
+      }
+      else {
+        $error_uid[] = $uid;
+      }
+  
+  }
+    return TRUE;
+  if (!empty($error_uid)) {
+    $not_found_uid = implode(",",$error_uid);
+//Need to ask
+    return services_error(t('User with id @id does not exists.', array('@id' => $not_found_uid)) ,406,null);
+  }
+}  
+
+function _user_filter_resource_access($op = 'view', $args = array()) {
+  switch ($op) {
+    case 'create':
+      return user_access('administer users');
+      break;
+   }
+}
+
+function _user_filter_resource_create($user_data){
+  $return = array();
+  $option = $user_data['user']['option'];
+  $filter = $user_data['user']['filter'];
+  $page = $user_data['user']['page'];
+ 
+  if(empty($option) || empty($filter)) {
+// Need to ask 
+    return services_error(t('Option or filter field is requried.'), 406, array('form_errors' => t('Option or filter field is requried.')));
+  }
+  if ($option == "role") {
+    $no_records = db_query("Select count(*) from users_roles r inner join users u on r.uid = u.uid where r.rid = :rid", array(':rid' => $filter))->fetchField();
+    $query = db_select('users_roles', 'ur');
+    $query -> innerJoin('users', 'u', '(ur.uid = u.uid)');
+    $query -> fields('ur',array('uid'));
+    $query -> condition('ur.rid',$filter,'=');
+    $query -> orderBy('ur.uid','DESC');
+    $query -> execute();
+    while ($record = $query->fetchAssoc()) {
+      $uid_array[] = $record['uid'];
+    }
+    foreach ($uid_array as $key => $uid) {
+      $user_details[] = user_load($uid);
+    }
+  }    
+  else if ($option == "permission") {
+    $query = db_select('role_permission', 'p');
+    $query -> fields('p',array('rid'))
+           -> condition('p.permission',$filter,'=')
+           -> orderBy('p.rid','DESC')
+           -> execute();
+    while ($record = $query->fetchAssoc()) {
+      $rid[] = $record['rid'];
+    }
+    for ($i = 0; $i<count($rid); $i++) {
+      if ($rid[$i] == 2) {
+        $query = db_select('users', 'u')
+               -> fields('u',array('uid'))
+               -> condition('u.uid',0,'!=')
+               -> orderBy('uid','DESC')
+               -> execute();
+        while ($record = $query->fetchAssoc()) {
+          $uid_array[]=$record['uid'];
+        }
+        foreach ($uid_array as $key => $uid) {
+          $user_details[]=user_load($uid);
+        } 
+        $page_size = 20;   
+        $start_index = 0;
+        $page_no = 0;
+        $last_index = 10;
+        for ($m = 0; $m<count($user_details); $m= $m+10) {
+          $page_user[$page_no] = array_slice($user_details,$start_index,$last_index);
+          $start_index = $start_index + 10;
+  	  $last_index = $last_index + 10;
+  	  $page_no++;
+        }
+        $user_filter_data['total'] = count($user_details);
+        $user_filter_data['users'] = $page_user[$page];
+        return $user_filter_data;
+      }
+    }
+    for ($i=0;$i<count($rid);$i++) {
+      $query = db_select('users_roles', 'u');
+      $query -> fields('u',array('uid'))
+             -> condition('u.rid',$rid[$i],'=')
+             -> orderBy('uid','DESC')
+             -> execute();
+      while ($record = $query->fetchAssoc()) {
+        $user_detail[] = $record['uid'];
+      }
+      foreach($user_detail as $key => $val) {
+        $user_details[] = user_load($val);
+      }
+      $merge_array = $user_details;
+      unset($user_details);
+   }
+   $size_array = count($merge_array);
+   for ($i = 0; $i<$size_array; $i++) {
+     for ($j = 0; $j<$size_array; $j++) {
+       if ($i == $j) {
+         continue;
+       }
+       else if ($merge_array[$i]->uid == $merge_array[$j]->uid) {
+         unset ($merge_array[$i]);
+       }
+     }
+   }
+   foreach ($merge_array as $key =>$val) {
+     $all_user[] = $val;
+   }
+   $page_size = 20;
+   $start_index = 0;
+   $page_no = 0;
+   $last_index = 10;
+   for ($i = 0; $i<count($all_user); $i= $i+$page_size) {
+     $page_user[$page_no] = array_slice($all_user,$start_index,$last_index);
+     $start_index = $start_index + $page_size;
+     $last_index = $last_index + $page_size;
+     $page_no++;
+   }
+   $user_filter_data['total'] = count($all_user);
+   $user_filter_data['users'] = $page_user[$page];
+   return $user_filter_data;
+   }
+   else if ($option == "status") {
+     if ($filter == "active"){
+       $no_records = db_query("SELECT COUNT(*) FROM {users} u WHERE  u.status = :status && u.uid != :uid", array(':status' => 1,':uid' => 0))->fetchField();
+       $query = db_select('users', 'u');
+       $query -> fields('u',array('uid'))
+              -> condition('u.uid',0,'!=')
+              -> condition('u.status',1,'=')
+              -> orderBy('u.uid','DESC')
+              -> execute();
+       while ($record = $query->fetchAssoc()) {
+         $user_detail[] = $record['uid'];
+       }
+       foreach ($user_detail as $key => $val) {
+         $user_details[] = user_load($val);
+       }
+     }
+     else if ($filter == "blocked") {
+       $no_records = db_query("SELECT COUNT(*) FROM {users} u WHERE  u.status = :status && u.uid != :uid", array(':status' => 0,':uid' => 0))->fetchField();
+       $query = db_select('users', 'u');
+       $query -> fields('u',array('uid'))
+              -> condition('u.uid',0,'!=')
+              -> condition('u.status',0,'=')
+              -> orderBy('u.uid','DESC')
+              -> execute();
+       while ($record = $query->fetchAssoc()) {
+               $user_detail[]=$record['uid'];
+       }
+       foreach ($user_detail as $key => $val) {
+        $user_details[] = user_load($val);
+       }
+     }
+  }
+  if (empty($user_details)) {
+   return services_error(t('No users available.'), 404);
+  }
+
+  //@todo : use constants instead hardcoded values.
+  $page_size = 20;
+  $start_index = 0;
+  $last_index = 10;
+  for ($i = 0; $i<count($user_details); $i= $i+$page_size) {
+    $page_user[$page_no] = array_slice($user_details,$start_index,$last_index);
+    $start_index = $start_index + $page_size;
+    $last_index = $last_index + $page_size;
+    $page_no++;
+  }
+  $user_filter_data['total'] =$no_records;
+  $user_filter_data['users'] = $page_user[$page];
+  return $user_filter_data;
+}
+
+function _role_resource_access($op = 'view', $args = array()) {
+   return user_access('administer permissions'); 
+}
+
+function _role_resource_retrieve($rid) {
+  // Fetch role object
+  $role = user_role_load($rid);
+  return $role;
+}
+
+
+/*
+ * @todo: Put proper comment on each function.
+ */
+function _role_resource_index($page, $fields, $parameters, $page_size) { 
+  //@todo: use user_roles();
+  $roles = user_roles();
+  $role_list = array();
+  foreach ($roles as $key => $role) { 
+    $role_list[] = user_role_load_by_name($role);
+  } 
+  return $role_list;
+}
+
+function _role_resource_create($role){
+  if(empty($role)) //@todo : use t()
+    return services_error(t('role name filed is required'), 406,array('form_errors' => "role[name] field is required."));
+
+  $role_name = $role['name'];
+  $data = array(
+    'name' => $role_name,
+  );
+  
+//@todo : user_role_save($role) instead of queries.
+
+  if(user_role_save($data)) {
+    $role = user_load_by_name($role_name);
+    return $role;
+  }
+}
+
+function _role_resource_update($rid, $role_update) {
+
+  if (empty($role_update)) {
+    return services_error(t('Role name is required'), 406, array('form_errors' => 'role[name] field is required.'));
+  }
+
+  $role = user_role_load($rid);
+  if (!$role) {
+    return services_error(t('There is no role with id @rid', array('@rid' => $rid)), 406, null);
+  }
+
+  if ($role) {
+    $role->name = $role_update['role']['name'];
+    user_role_save($role);
+    return $role;
+  }
+}
+
+function _role_resource_delete($rid) {
+
+  if($rid == DRUPAL_ANONYMOUS_RID || $rid == DRUPAL_AUTHENTICATED_RID){
+    return services_error(t('your request will not accepted'), 212, null);
+  }
+  
+  $role = user_role_load($rid);
+  if (!$role) {
+    return services_error(t('There is no role with id').$rid,406,null);
+  }
+
+  //@todo use : user_role_delete() instead of sql queries.
+  if ($role) {
+    user_role_delete($rid);
+    return TRUE;
+  }
+}

@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Code for the services_extra feature.
+ */
+
+  include_once 'services_extra.features.inc';
+
+  module_load_include('inc', 'services_extra', 'resources/watchdog');
+  module_load_include('inc', 'services_extra', 'resources/system_info');
+  module_load_include('inc', 'services_extra', 'resources/site_configuration');
+  module_load_include('inc', 'services_extra', 'resources/is_module_installed');
+  module_load_include('inc', 'services_extra', 'resources/image_upload');
+
+  function services_extra_services_resources()
+  {
+    $resources = array();
+    $resources['watchdog'] = watchdog_resources();
+    $resources['system_info'] = system_info_resources();
+    $resources['site_configuration'] = site_configuration_resources();
+    $resources['image_upload'] = image_upload_resources();
+    $resources['is_module_installed'] = is_module_installed_resources();
+    return $resources;
+  }
+

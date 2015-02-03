@@ -1,0 +1,8 @@
+name = Latest tweets
+package = Snappy
+description = Latest tweets
+
+version = "7.x-2.1"
+core = "7.x"
+project = "latest_tweets"
+datestamp = "1398607428"

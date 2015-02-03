@@ -1,0 +1,24 @@
+/* Hide header on single-row month form display */
+.rooms-bulk-availability-form .fc-header {
+  display: none;
+}
+
+/* Filter month form */
+.rooms-filter-month-form .form-item-month,
+.rooms-filter-month-form .form-item-year,
+.rooms-filter-month-form .form-item-type {
+  float: left;
+  margin-right: 20px;
+}
+.rooms-filter-month-form .form-item-month label,
+.rooms-filter-month-form .form-item-year label,
+.rooms-filter-month-form .form-item-type label {
+  display: inline;
+  margin-right: 4px;
+}
+.fc-day-grid-container {
+  overflow-y: hidden;
+}
+.fc-title {
+  color: white;
+}
