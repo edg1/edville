@@ -53,6 +53,8 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
     '#default_value' => $rooms_number,
   );
 
+  
+
   // Create an AJAX wrapper id depending on the form caller to avoid duplicates.
   $ajax_wrapper_id = 'rooms-group-' . substr($form_state['build_info']['form_id'], strlen('rooms_booking_availability_search_form_'));
   $form['rooms_fieldset'] = array(

@@ -6204,4 +6204,8 @@ button.close {
 .mybtn {
   margin-top:22px;
 }
+
+.someHidden{
+  display:none !important;
+}
 /*# sourceMappingURL=bootstrap.css.map */
