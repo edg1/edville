@@ -16,7 +16,10 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
   form_load_include($form_state, 'inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
 
   $form['#attributes']['class'][] = 'rooms-management-form rooms-availability-search';
-  $form['#attached']['css'] = array(drupal_get_path('module', 'rooms_booking_manager') . '/css/booking_search.css');
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'rooms_booking_manager') . '/css/booking_search.css',
+    drupal_get_path('module', 'rooms_booking_manager') . '/css/newcss.css'
+    );
 
   $rooms_number = 1;
 
@@ -179,6 +182,8 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
     '#value' => variable_get_value('rooms_booking_manager_button_search_for_availability'),
     '#submit' => $submit + array('rooms_booking_availability_search_form_submit'),
   );
+
+  $form['actions']['submit']['#attributes']['class'][] = 'mybtn';
 
   // We append the validate handler to #validate in case a form callback_wrapper
   // is used to add validate handlers earlier.
