@@ -1217,7 +1217,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
 
   // Used below to add a "Place booking" button at the top of the form
   // in the first row only).
-  $first_row = TRUE;
+  $first_row = FALSE;
 
   // Check if there are multiple units chosen, and keep a running tally of
   // the number of elements chosen.
