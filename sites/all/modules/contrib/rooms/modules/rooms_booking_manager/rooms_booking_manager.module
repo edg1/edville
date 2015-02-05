@@ -512,7 +512,7 @@ function rooms_booking_manager_change_search_form($form, &$form_state, $start_da
       '#type' => 'fieldset',
       '#title' => variable_get_value('rooms_booking_manager_your_current_search'),
       '#tree' => FALSE,
-      '#attributes' => array('class' => array('rooms-current-search__info', 'form-item')),
+      '#attributes' => array('class' => array('rooms-current-search__info', 'form-item', 'rooms-current-search-info_new')),
     );
   }
   if (!isset($form['info']['params'])) {
