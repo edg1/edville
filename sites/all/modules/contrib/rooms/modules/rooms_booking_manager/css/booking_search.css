@@ -99,7 +99,7 @@
 .rooms-current-search__info .form-item label {
   display: block;
   float: left;
-  width: 9.5em;
+  width: 7.5em;
   text-align: right;
   margin-right: .5em;
 }
@@ -171,4 +171,25 @@
 }
 .rooms-search-result__new-price {
   font-weight: bold;
+}
+
+
+.rooms-current-search-info_new {
+  margin-bottom: 0px !important;
+  border: 0 !important;
+  -webkit-box-shadow: 0 0 0 !important;
+  box-shadow: 0 0 0!important;
+}
+
+.panel-heading-new{
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin-bottom: 15px !important;
+  margin-top: 15px !important;
+  font-size: 21px !important;
+  line-height: inherit !important;
+  color: #333 !important;
+  border: 0 !important;
+  background-color: #fff !important;
 }

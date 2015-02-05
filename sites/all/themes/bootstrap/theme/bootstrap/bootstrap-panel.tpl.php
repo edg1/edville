@@ -19,7 +19,7 @@
         </a>
       </legend>
     <?php else: ?>
-      <legend class="panel-heading">
+      <legend class="panel-heading panel-heading-new">
         <div class="panel-title fieldset-legend">
           <?php print $title; ?>
         </div>
