@@ -2737,7 +2737,7 @@ select[multiple].input-lg {
           user-select: none;
   background-image: none;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 .btn:focus,
 .btn:active:focus,
@@ -2811,8 +2811,8 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
   color: #fff;
-  background-color: #428bca;
-  border-color: #357ebd;
+  background-color: black;
+  border-color: black;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -2820,8 +2820,8 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   color: #fff;
-  background-color: #3071a9;
-  border-color: #285e8e;
+  background-color: black;
+  border-color: black;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -6199,5 +6199,13 @@ button.close {
   .hidden-print {
     display: none !important;
   }
+}
+
+.mybtn {
+  margin-top:22px;
+}
+
+.someHidden{
+  display:none !important;
 }
 /*# sourceMappingURL=bootstrap.css.map */

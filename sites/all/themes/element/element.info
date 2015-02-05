@@ -40,6 +40,8 @@ stylesheets[all][] = css/font-awesome.css
 stylesheets[all][] = css/jquery.bxslider.css
 stylesheets[all][] = css/flexslider.css
 stylesheets[all][] = css/style.css
+stylesheets[all][] = css/newcss.css
+
 
 
 ; For information on choosing the desired method, please read the Drupal

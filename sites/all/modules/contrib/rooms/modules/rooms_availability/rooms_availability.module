@@ -174,7 +174,7 @@ function rooms_availability_bulk_unit_management($year = '', $month = '', $type 
   if ($type != 'all') {
     $efq->entityCondition('bundle', $type, '=');
   }
-  $efq->pager(20);
+  $efq->pager(32);
   $rooms_units = $efq->execute();
 
   $rooms_id = $units = array();

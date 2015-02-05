@@ -15,10 +15,15 @@
 .rooms-availability-search .form-item-group-size-children,
 .rooms-availability-search .form-item-group-size-adults,
 .rooms-availability-search .form-item-unit-type,
-.rooms-availability-search .form-item-rooms,
 .rooms-availability-search .form-wrapper {
   float: left;
   margin: 0 1em .6em 0;
+}
+
+.rooms-availability-search .form-item-rooms{
+  float:left;
+  margin: 0 1em .6em 0;
+  display: none;
 }
 
 .rooms-availability-search .rooms-date-range .form-text {

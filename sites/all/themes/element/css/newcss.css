@@ -1,0 +1,12 @@
+.mybtn {
+	top : 50%;
+	color: #fff;
+	background-color: #111111!important;
+	border-color: #111111!important;
+}
+
+.mybtn:hover, .mybtn:focus, .mybtn:active, .mybtn.active, .open > .dropdown-toggle.mybtn {
+color: #fff;
+background-color: #3071a9;
+border-color: #285e8e;
+}
