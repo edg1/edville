@@ -15,6 +15,7 @@ function element_js_alter(&$js) {
 }
 
 function element_preprocess_page(&$variables) {
+  $variables['show_title'] = FALSE;
   // Add information about the number of sidebars.
   if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
     $variables['content_column_class'] = ' class="col-md-6 col-sm-4"';

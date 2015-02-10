@@ -94,7 +94,7 @@
 }
 .rooms-current-search__change-search-button {
   float: left;
-  margin-left: 10em;
+  margin-left: 0;
 }
 .rooms-current-search__info .form-item label {
   display: block;
@@ -116,7 +116,7 @@
 .rooms-search-result__unit-type-name {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #ccc;
+  border-top: 0 solid #ccc;
 }
 .rooms-search-result__booking-form {
   vertical-align: top;
@@ -192,4 +192,15 @@
   color: #333 !important;
   border: 0 !important;
   background-color: #fff !important;
+}
+
+.rooms-search-result__base_price{
+  font-size:14px;
+  color:white !important;
+}
+
+.rooms-search-result__unit_summary_wrapper{
+  position: relative;
+  bottom: 60px;
+  left: 440px;
 }
