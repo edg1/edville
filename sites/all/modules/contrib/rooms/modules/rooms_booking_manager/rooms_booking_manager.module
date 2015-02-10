@@ -1280,7 +1280,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
     );
 
     $form[$type]['open-markup'] = array(
-      '#markup' => '<table class="rooms-search-result__booking-form">',
+      '#markup' => '<div class="rooms-search-result__booking-form">',
     );
 
     // Sort by least expensive first.
@@ -1311,9 +1311,9 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
               $node_html = render($node_view);
 
               $form[$type][$price]['description'] = array(
-                '#prefix' => '<tr class="rooms-search-result__unit_details_wrapper"><td class="rooms-search-result__room-description">',
+                '#prefix' => '<div class="rooms-search-result__unit_details_wrapper"><div class="rooms-search-result__room-description">',
                 '#markup' => $node_html,
-                '#suffix' => '</td><td class="empty"></td><td class="empty"></td></tr>',
+                '#suffix' => '',
               );
             }
           }
@@ -1322,33 +1322,21 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
 
       // Element to display price.
       $form[$type][$price]['price'] = array(
-        '#prefix' => '<tr class="rooms-search-result__unit_summary_wrapper"><td class="rooms-search-result__base_price">',
-        '#markup' => format_plural(count($units), '1 @unit_type '.variable_get_value('rooms_booking_manager_unit_available_from').' @price', '@count @unit_type '.variable_get_value('rooms_booking_manager_unit_available_from').' @price', array(
-          '@unit_type' => $type_obj->label,
-          '@price' => t('@currency_symbol @amount', array( // TODO: replace with a proper currency formatter
-            '@currency_symbol' => $currency_symbol,
-            '@amount' => $price))
-          )
-        ),
+        '#prefix' => '<div class="rooms-search-result__unit_summary_wrapper"><div class="rooms-search-result__base_price">Starting at <font size="5" color="white">',
+        '#markup' => t('@price@currency_symbol', array('@price' => $price, '@currency_symbol' => $currency_symbol)),
       );
       if (variable_get('rooms_price_calculation', ROOMS_PER_NIGHT) == ROOMS_PER_PERSON) {
         $units_keys = array_keys($units);
         // Calculate the price per person for the period.
         $base_price = $units[$units_keys[0]]['price'] / $units[$units_keys[0]]['unit']->max_sleeps;
-        $form[$type][$price]['price']['#markup'] = format_plural(count($units), '1 @unit_type unit available starting at @price per person', '@count @unit_type units available starting at @price per person', array(
-          '@unit_type' => $type_obj->label,
-          '@price' => t('@currency_symbol @amount', array( // TODO: replace with a proper currency formatter
-            '@currency_symbol' => $currency_symbol,
-            '@amount' => $base_price))
-          )
-        );
+        $form[$type][$price]['price']['#markup'] = t('@price@currency_symbol', array('@price' => $base_price, '@currency_symbol' => $currency_symbol));
       }
 
       // Element to hold price.
       $form[$type][$price]['price_value'] = array(
         '#type' => 'hidden',
         '#value' => $price,
-        '#suffix' => '</td>',
+        '#suffix' => '</font>/per person</div></div></div>',
       );
 
       // Dropdown to select quantity.
@@ -1359,11 +1347,11 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
       // AJAX wrapper id.
       $id = 'rooms_' . $type . '_' . $price;
       $form[$type][$price]['quantity'] = array(
-        '#prefix' => '<td class="rooms-search-result__select-units">',
+        '#prefix' => '<div class="rooms-search-result__select-units">',
         '#field_suffix' => variable_get_value('rooms_booking_manager_units_chosen'),
         '#type' => 'select',
         '#options' => $options,
-        '#suffix' => '</td>',
+        '#suffix' => '</div>',
         '#ajax' => array(
           'callback' => 'rooms_booking_manager_quantity_change_callback',
           'wrapper' => $type . '_' . $price . '_container',
@@ -1376,25 +1364,25 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
       // Show button 'Place Booking' only on the first row.
       if ($first_row == TRUE) {
         $form[$type][$price]['submit'] = array(
-          '#prefix' => '<td class="rooms-search-result__booking-legend"><div class="booking-legend booking-legend--rooms-search-result">',
+          '#prefix' => '<div class="rooms-search-result__booking-legend"><div class="booking-legend booking-legend--rooms-search-result">',
           '#type' => 'submit',
           '#value' => variable_get_value('rooms_booking_manager_button_place_booking'),
           '#submit' => array('book_units_per_type_form_submit'),
-          '#suffix' => '</div></td></tr>',
+          '#suffix' => '</div></div></div>',
         );
 
         $first_row = FALSE;
       }
       else {
         $form[$type][$price]['submit'] = array(
-          '#prefix' => '<td class="rooms-search-result__booking-legend">',
-          '#suffix' => '</td></tr>',
+          '#prefix' => '<div class="rooms-search-result__booking-legend">',
+          '#suffix' => '</div></div>',
         );
       }
 
       // Display price options.
       $form[$type][$price]['field_start'] = array(
-        '#markup' => '<tr id="rooms_' . $type . '_' . $price . '" style="display:none;"><td class="rooms-search-result__unit_options_wrapper" colspan="2">',
+        '#markup' => '<div id="rooms_' . $type . '_' . $price . '" style="display:none;"><div class="rooms-search-result__unit_options_wrapper" colspan="2">',
       );
 
       $form[$type][$price]['fieldset'] = array(
@@ -1651,12 +1639,12 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
       }
 
       $form[$type][$price]['close-row'] = array(
-        '#markup' => '</td></tr>',
+        '#markup' => '</div></div>',
       );
     }
 
     $form[$type]['close-markup'] = array(
-      '#markup' => '</table> <!-- /.rooms-search-result__booking-form -->',
+      '#markup' => '</div> <!-- /.rooms-search-result__booking-form -->',
     );
 
   }
@@ -1672,6 +1660,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
     '#type' => 'submit',
     '#value' => variable_get_value('rooms_booking_manager_button_place_booking'),
     '#submit' => array('book_units_per_type_form_submit'),
+    '#attributes' => array('class' => array('btn-primary')),
   );
 
   // We append the validate handler to #validate in case a form callback_wrapper
