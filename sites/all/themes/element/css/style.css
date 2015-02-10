@@ -6911,7 +6911,7 @@ div.error {
 }
 .error-section {
   padding: 60px 0 105px;
-  background: url('../images/pattern1.jpg');
+  background: white;
   text-align: center;
 }
 .error-section img {
