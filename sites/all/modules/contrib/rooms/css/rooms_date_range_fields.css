@@ -34,7 +34,7 @@
   width: 10em;
 }
 .rooms-date-range .form-type-textfield label {
-  display: none;
+  display: none !important;
 }
 .rooms-date-range .date-padding,
 .rooms-date-range .container-inline-date .date-padding {

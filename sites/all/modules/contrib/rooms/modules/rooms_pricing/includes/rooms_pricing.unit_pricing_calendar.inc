@@ -67,8 +67,8 @@ class UnitPricingCalendar extends RoomsCalendar implements UnitPricingCalendarIn
       if (variable_get('rooms_price_calculation', ROOMS_PER_NIGHT) == ROOMS_PER_PERSON) {
         $children_discount_options = variable_get('rooms_children_discount_options', array());
 
-        $price = $price + ($days * $event->amount * ($persons - $children));
-
+//        $price = $price + ($days * $event->amount * ($persons - $children));
+        $npersons = $persons - $children;
         foreach ($children_ages as $age) {
           if (is_array($age)) {
             $age = $age['value'];
@@ -81,7 +81,20 @@ class UnitPricingCalendar extends RoomsCalendar implements UnitPricingCalendarIn
             }
           }
 
-          $price = $price + ($days * $event->amount * (100 - $discount) / 100);
+//          $price = $price + ($days * $event->amount * (100 - $discount) / 100);
+			$npersons += (100 - $discount) / 100;
+        }
+        if ($npersons <= 10)
+        {
+        	$price += $days * $event->amount * 10;
+        }
+        else if ($npersons <= 20)
+        {
+        	$price += $days * $event->amount * $npersons;
+        }
+        else
+        {
+        	$price += $days * $event->amount * 20 + $days * 20 * ($npersons - 20);
         }
       }
       else {
@@ -105,7 +118,6 @@ class UnitPricingCalendar extends RoomsCalendar implements UnitPricingCalendarIn
         $booking_price = $pricing_events[0]->amount;
         break;
     }
-
     return array('full_price' => $price, 'booking_price' => $booking_price);
   }
 

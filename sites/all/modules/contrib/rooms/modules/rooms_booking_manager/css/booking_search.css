@@ -197,10 +197,12 @@
 .rooms-search-result__base_price{
   font-size:14px;
   color:white !important;
+  display:inline;
 }
 
 .rooms-search-result__unit_summary_wrapper{
   position: relative;
+  display:inline;
   bottom: 60px;
   left: 440px;
 }
