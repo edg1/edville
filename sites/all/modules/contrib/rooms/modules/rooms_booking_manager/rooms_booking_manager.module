@@ -1406,6 +1406,15 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
           '#suffix' => '</div>',
         );
 
+      $groupsize = 8;
+      if (isset($_GET['rooms_group_size1']))
+        $groupsize = $_GET['rooms_group_size1'];
+      
+      $childcnt = 0;
+      if (isset($_GET['rooms_children1']))
+        $childcnt = $_GET['rooms_children1'];
+
+
       // Add text for sheets & service
       foreach (rooms_unit_get_unit_options($units[$units_keys[0]]['unit']) as $option) {
         $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
@@ -1418,24 +1427,24 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
 
       $form[$type][$price]['booking_params']['bbb'] = array(
           '#prefix' => '<div id="rooms_booking_parameters_group_size"><label>',
-          '#markup' => 'Guests (including adults and children) : ' . $_GET['rooms_group_size1'],
+          '#markup' => 'Guests (including adults and children) : ' . $groupsize,
           '#suffix' => '</label></div>',
         );
 
       $form[$type][$price]['booking_params']['ccc'] = array(
           '#prefix' => '<div id="rooms_booking_parameters_children_count"><label>',
-          '#markup' => 'Children : ' . $_GET['rooms_children1'],
+          '#markup' => 'Children : ' . $childcnt,
           '#suffix' => '</label></div>',
         );
 
-      for ($t = 1; $t <= $_GET[rooms_children1]; $t++) {
+      for ($t = 1; $t <= $childcnt; $t++) {
         $form[$type][$price]['booking_params']['childrens_age'][$t] = array(
           '#type' => 'select',
           '#field_prefix' => t('Age of child @num', array('@num' => $t)),
           '#options' => range(0, 18),
           '#ajax' => array(
             'callback' => 'rooms_booking_manager_options_change_callback',
-            'wrapper' => $type . '_' . $price . '_' . $c . '_price',
+            'wrapper' => $type . '_' . $price . '_' . 'price',
           ),
           '#attributes' => array('class' => array('rooms-search-result__childrens-age')),
         );
