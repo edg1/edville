@@ -424,6 +424,24 @@ function rooms_booking_manager_results_page(DateTime $start_date, DateTime $end_
       }
     }
 
+    foreach ($booking_parameters as $key => $parameter) {
+      $adults = 0;
+      $children = 0;
+
+      if (isset($parameter['adults'])) {
+        $adults = $parameter['adults'];
+      }
+      if (isset($parameter['children'])) {
+        $children = $parameter['children'];
+      }
+
+      if ($adults > 0 && $children > 0 && $adults <= $children){
+        drupal_set_message(t('Too many children. Must be less than group size.'));
+        drupal_goto('booking');
+        exit;
+      }
+    }
+
     // Get all the units.
     $agent = new AvailabilityAgent($start_date, $end_date, $booking_parameters, $booking_units, variable_get('rooms_valid_availability_states', array(ROOMS_AVAILABLE, ROOMS_ON_REQUEST, ROOMS_UNCONFIRMED_BOOKINGS)), $unit_types);
 
@@ -1380,9 +1398,56 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
         );
       }
 
+
+
+      // new inputs
+      $form[$type][$price]['booking_params'] = array(
+          '#prefix' => '<div id="rooms_booking_parameters">',
+          '#suffix' => '</div>',
+        );
+
+      // Add text for sheets & service
+      foreach (rooms_unit_get_unit_options($units[$units_keys[0]]['unit']) as $option) {
+        $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+        $form[$type][$price]['booking_params']['aaa'] = array(
+          '#prefix' => '<div id="rooms_booking_parameters_sheets_service"><label>',
+          '#markup' => t($option['name']) . ' : '. $option['value'] . $currency_symbol,
+          '#suffix' => '</label></div>',
+        );
+      }
+
+      $form[$type][$price]['booking_params']['bbb'] = array(
+          '#prefix' => '<div id="rooms_booking_parameters_group_size"><label>',
+          '#markup' => 'Guests (including adults and children) : ' . $_GET['rooms_group_size1'],
+          '#suffix' => '</label></div>',
+        );
+
+      $form[$type][$price]['booking_params']['ccc'] = array(
+          '#prefix' => '<div id="rooms_booking_parameters_children_count"><label>',
+          '#markup' => 'Children : ' . $_GET['rooms_children1'],
+          '#suffix' => '</label></div>',
+        );
+
+      for ($t = 1; $t <= $_GET[rooms_children1]; $t++) {
+        $form[$type][$price]['booking_params']['childrens_age'][$t] = array(
+          '#type' => 'select',
+          '#field_prefix' => t('Age of child @num', array('@num' => $t)),
+          '#options' => range(0, 18),
+          '#ajax' => array(
+            'callback' => 'rooms_booking_manager_options_change_callback',
+            'wrapper' => $type . '_' . $price . '_' . $c . '_price',
+          ),
+          '#attributes' => array('class' => array('rooms-search-result__childrens-age')),
+        );
+      }
+
+
+
+
+
       // Display price options.
       $form[$type][$price]['field_start'] = array(
-        '#markup' => '<div id="rooms_' . $type . '_' . $price . '" style="display:none;"><div class="rooms-search-result__unit_options_wrapper" colspan="2">',
+        '#markup' => '<div id="rooms_' . $type . '_' . $price . '" style="display:table-row;"><div class="rooms-search-result__unit_options_wrapper" colspan="2">',
       );
 
       $form[$type][$price]['fieldset'] = array(

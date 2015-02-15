@@ -94,7 +94,7 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
       $form['rooms_fieldset']['group_size_adults:' . $i] = array(
         '#type' => 'select',
         '#options' => rooms_assoc_range(1, variable_get('rooms_booking_manager_search_form_max_group_size', 8)),
-        '#default_value' => isset($booking_parameters[$i]['adults']) ? $booking_parameters[$i]['adults'] : '2',
+        '#default_value' => isset($booking_parameters[$i]['adults']) ? $booking_parameters[$i]['adults'] : '8',
         '#prefix' => '<td class="rooms-group-size__people">',
         '#suffix' => '</td>',
       );
@@ -102,7 +102,7 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
       if (variable_get('rooms_display_children', ROOMS_DISPLAY_CHILDREN_NO) == ROOMS_DISPLAY_CHILDREN) {
         $form['rooms_fieldset']['group_size_children:' . $i] = array(
           '#type' => 'select',
-          '#options' => rooms_assoc_range(0, 3),
+          '#options' => rooms_assoc_range(0, variable_get('rooms_booking_manager_search_form_max_group_size', 8) - 1),
           '#default_value' => isset($booking_parameters[$i]['children']) ? $booking_parameters[$i]['children'] : '0',
           '#prefix' => '<td class="rooms-group-size__children">',
           '#suffix' => '</td>',
