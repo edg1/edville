@@ -1448,7 +1448,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
 
       $form[$type][$price]['booking_params']['quantity'] = array(
         '#type' => 'hidden',
-        '#value' => $quantity,
+//        '#default_value' => $quantity,
         '#attributes' => array(
           'id' => $type . '_' . $price . '_quantity',
           ),
@@ -1606,13 +1606,13 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
          'onclick' => "
             var bookStatus = document.getElementById('$id');
             var curBtn = document.getElementById('$btnid');
-            if (bookStatus.value == '0'){
-              bookStatus.value = '1';
-              curBtn.innerHTML = 'Remove From Cart';
-            }
-            else{
+            if (bookStatus.value == '1'){
               bookStatus.value = '0';
               curBtn.innerHTML = 'Add To Cart';
+            }
+            else{
+              bookStatus.value = '1';
+              curBtn.innerHTML = 'Remove From Cart';
             }
           ",
         ),
