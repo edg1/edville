@@ -1593,27 +1593,21 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
       // Show button 'Place Booking' only on the first row.
       //if ($first_row == TRUE) {
       $id = $type . '_' . $price . '_quantity';
-      $btnid = $type . '_' . $price . '_add_to_cart';
+      $btnid = $type . '_' . $price . '_book_this_unit';
 
-      $form[$type][$price]['add_to_cart'] = array(
-        '#prefix' => '<div class="rooms-search-result__booking-legend"><div class="booking-legend booking-legend--rooms-search-result">',
-        '#type' => 'button',
-        '#value' => 'Add To Cart',//variable_get_value('rooms_booking_manager_button_place_booking'),
+      $form[$type][$price]['book_this_unit'] = array(
+        '#type' => 'submit',
+        '#submit' => array('book_units_per_type_form_submit'),
+        '#attributes' => array('class' => array('btn-primary')),
+        '#prefix' => '<div ><div>',
+        '#value' => 'Book this unit',//variable_get_value('rooms_booking_manager_button_place_booking'),
 //        '#submit' => array('book_units_per_type_form_submit'),
         '#suffix' => '</div></div>',
         '#attributes' => array(
           'id' => $btnid,
          'onclick' => "
             var bookStatus = document.getElementById('$id');
-            var curBtn = document.getElementById('$btnid');
-            if (bookStatus.value == '1'){
-              bookStatus.value = '0';
-              curBtn.innerHTML = 'Add To Cart';
-            }
-            else{
-              bookStatus.value = '1';
-              curBtn.innerHTML = 'Remove From Cart';
-            }
+            bookStatus.value = '1';
           ",
         ),
       );
@@ -1905,12 +1899,12 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
     '#attributes' => array('class' => array('rooms-search-result__actions')),
   );
 
-  $form['actions']['place_booking'] = array(
-    '#type' => 'submit',
-    '#value' => variable_get_value('rooms_booking_manager_button_place_booking'),
-    '#submit' => array('book_units_per_type_form_submit'),
-    '#attributes' => array('class' => array('btn-primary')),
-  );
+  // $form['actions']['place_booking'] = array(
+  //   '#type' => 'submit',
+  //   '#value' => variable_get_value('rooms_booking_manager_button_place_booking'),
+  //   '#submit' => array('book_units_per_type_form_submit'),
+  //   '#attributes' => array('class' => array('btn-primary')),
+  // );
 
   // We append the validate handler to #validate in case a form callback_wrapper
   // is used to add validate handlers earlier.

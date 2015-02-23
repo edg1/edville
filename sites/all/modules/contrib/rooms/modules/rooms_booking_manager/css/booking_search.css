@@ -201,10 +201,10 @@
 }
 
 .rooms-search-result__unit_summary_wrapper{
-  position: relative;
+  position: absolute;
   display:inline;
   float:right;
-  bottom: 80px;
+  top: 575px;
   right: 20px;
 }
 
