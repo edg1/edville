@@ -116,6 +116,15 @@ tbody {
   margin: 20px 1em 20px 0;
 }
 
+.booking-params{
+  margin-top:10px;
+}
+
+.right-button-box{
+  text-align:right;
+  margin-top:10px;
+}
+
 button{
 border-radius:0 !important;
 }

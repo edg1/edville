@@ -1401,7 +1401,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
 
       // new inputs
       $form[$type][$price]['booking_params'] = array(
-          '#prefix' => '<div id="' . $type . $price . '_rooms_booking_parameters">',
+          '#prefix' => '<div id="' . $type . $price . '_rooms_booking_parameters" class="booking-params">',
           '#suffix' => '</div>',
         );
 
@@ -1598,8 +1598,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
       $form[$type][$price]['book_this_unit'] = array(
         '#type' => 'submit',
         '#submit' => array('book_units_per_type_form_submit'),
-        '#attributes' => array('class' => array('btn-primary')),
-        '#prefix' => '<div ><div>',
+        '#prefix' => '<div ><div class="right-button-box">',
         '#value' => 'Book this unit',//variable_get_value('rooms_booking_manager_button_place_booking'),
 //        '#submit' => array('book_units_per_type_form_submit'),
         '#suffix' => '</div></div>',
@@ -1609,6 +1608,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
             var bookStatus = document.getElementById('$id');
             bookStatus.value = '1';
           ",
+          'class' => array('btn-primary'),
         ),
       );
 
