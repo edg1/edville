@@ -84,7 +84,7 @@ class UnitPricingCalendar extends RoomsCalendar implements UnitPricingCalendarIn
 //          $price = $price + ($days * $event->amount * (100 - $discount) / 100);
 			$npersons += (100 - $discount) / 100;
         }
-        if ($npersons <= 10)
+        if ($npersons <= $this->unit->min_sleeps)
         {
         	$price += $days * $event->amount * $this->unit->min_sleeps;
         }

@@ -132,3 +132,37 @@ border-radius:0 !important;
 a{
   border-radius: 0 !important;
 }
+
+.gallery{
+  margin-top:20px;
+  margin-bottom:10px;
+}
+
+.gallery h2{
+  display:none !important;
+}
+
+.gallery .contextual-links-processed,
+.gallery .field-name-unit-description-description{
+  display:none !important;
+}
+
+.unit_gallery_item{
+  margin-left:20px;
+  width:25%;
+  height:25%;
+  display:inline-block;
+}
+
+.unit_gallery_item img{
+  width:100%;
+  height:100%;
+}
+
+.unit_gallery_item_title{
+  text-align: center;
+}
+
+.rooms-availability-search{
+  margin-top: 10px;
+}

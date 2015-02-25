@@ -41,7 +41,8 @@
       unset ($content['type']);
       unset ($content['sleeps']);
       unset ($content['bed_arrangement']);
-      print render($content);
+      //print render($content);
+      print_r($content);
     ?>
   </div>
 </div>

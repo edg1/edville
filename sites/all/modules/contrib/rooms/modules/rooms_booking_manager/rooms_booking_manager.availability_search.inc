@@ -187,6 +187,16 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
 
   $form['actions']['submit']['#attributes']['class'][] = 'mybtn';
 
+
+  $form['gallery'] = array(
+    '#prefix' => '<div class="gallery">',
+    '#suffix' => '</div>',
+    '#markup' => rooms_booking_availability_search_form_thumbnail(),
+    '#weight' => 500,
+    '#tree' => FALSE,
+    );
+
+
   // We append the validate handler to #validate in case a form callback_wrapper
   // is used to add validate handlers earlier.
   $form['#validate'][] = 'rooms_booking_availability_search_form_validate';
@@ -271,4 +281,40 @@ function rooms_booking_availability_search_form_submit(&$form, &$form_state) {
       'query' => $rooms_query,
     ),
   );
+}
+
+
+
+function rooms_booking_availability_search_form_thumbnail(){
+  $sql =  "select         ru.unit_id, rut.label, rut.data ";
+  $sql .= "from           rooms_units ru ";
+  $sql .= "inner  join    rooms_unit_type rut ";
+  $sql .= "       on      ru.type = rut.type";
+
+  $result = db_query($sql);
+
+  $html = '<div class="unit_gallery">';
+
+  while ($record = $result->fetchObject())
+  {
+    $dt = unserialize($record->data);
+    
+    $source_ref = explode(':', $dt['rooms_description_source']);
+    $node_id = $source_ref[1];
+    $node = node_load($node_id);
+    $node_html = '';
+    if ($node !== FALSE) {
+      $node_view = node_view($node, 'rooms_list');
+      $node_html = render($node_view);
+    }
+    $html .= '<div class="unit_gallery_item">';
+    $html .= $node_html;
+    $html .= '<div class="unit_gallery_item_title"><span>';
+    $html .= $record->label;
+    $html .= '</span></div>';
+    $html .= '</div>';
+  }
+
+  $html .= "</div>";
+  return $html;
 }
