@@ -28,6 +28,15 @@
  * @see template_process()
  */
 ?>
+
+
+<?php
+  // link javascript for slider
+  drupal_add_js(drupal_get_path('module', 'rooms') . '/js/rooms_unit.js');
+?>
+
+
+
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php if (!$page): ?>
     <h2<?php print $title_attributes; ?>>
@@ -42,7 +51,13 @@
       unset ($content['sleeps']);
       unset ($content['bed_arrangement']);
       //print render($content);
-      print_r($content);
+      
+      echo $content['slider'];
+
+      echo $content['gallery'];
+
+      print_r($content['node']);
+
     ?>
   </div>
 </div>

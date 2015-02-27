@@ -302,13 +302,14 @@ function rooms_booking_availability_search_form_thumbnail(){
     $source_ref = explode(':', $dt['rooms_description_source']);
     $node_id = $source_ref[1];
     $node = node_load($node_id);
-    $node_html = '';
-    if ($node !== FALSE) {
-      $node_view = node_view($node, 'rooms_list');
-      $node_html = render($node_view);
-    }
+    // $node_html = '';
+    // if ($node !== FALSE) {
+    //   $node_view = node_view($node, 'rooms_list');
+    //   $node_html = render($node_view);
+    // }
+    $imgurl = file_create_url($node->unit_description_image['und'][0]['uri']);
     $html .= '<div class="unit_gallery_item">';
-    $html .= $node_html;
+    $html .= "<img src='$imgurl' />";//$node_html;
     $html .= '<div class="unit_gallery_item_title"><span>';
     $html .= $record->label;
     $html .= '</span></div>';
