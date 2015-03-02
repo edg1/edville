@@ -798,25 +798,17 @@ class RoomsUnitController extends EntityAPIController {
 
 
 
-    $node = $this->get_unit_node($entity->unit_id);
+
+    $content['node'] = get_object_vars($entity);
+
+    $description = new RoomsUnitDescription($entity);
 
 
+    $content['slider'] = $description->get_slider(); //$this->build_slider_html($slider);
 
-    $content['node'] = get_object_vars($node);
+    $content['attributes'] = $description->get_attributes();
 
-    $udimg = $this->get_node_info($node); // detailed image of this unit type
-
-    $slider = array($udimg);
-
-    $nodes = $this->get_unit_contents($entity->unit_id);
-    for ($i = 0; $i < count($nodes); $i++)
-    {
-      $slider[] = $this->get_node_info($nodes[$i]); // these are gallery pictures of units
-    }
-
-    $content['slider'] = $this->build_slider_html($slider);
-
-    $content['gallery'] = $this->build_gallery_html($slider);
+    $content['gallery'] = $description->get_gallery(); //$this->build_gallery_html($slider);
 
 
     if (isset($entity->data['bed_arrangement'])) {
@@ -827,121 +819,6 @@ class RoomsUnitController extends EntityAPIController {
 
     return $content;
   }
-
-
-
-  // returns image + label + description
-  private function get_node_info($node){ 
-    return array(
-      'img' => $this->get_image_from_node($node),
-      'label' => $this->get_title_from_node($node),
-      'description' => $this->get_description_from_node($node),
-      );
-  }
-
-
-  // returns content for unit type
-
-  private function get_unit_node($unit_id){
-    $sql =  "select         ru.unit_id, rut.label, rut.data ";
-    $sql .= " from           rooms_units ru ";
-    $sql .= " inner  join    rooms_unit_type rut ";
-    $sql .= "       on      ru.type = rut.type";
-    $sql .= " where         ru.unit_id = $unit_id";
-
-    $result = db_query($sql);
-
-    while ($record = $result->fetchObject())
-    {
-      $dt = unserialize($record->data);
-      
-      $source_ref = explode(':', $dt['rooms_description_source']);
-      $node_id = $source_ref[1];
-      $node = node_load($node_id);
-      return $node;
-    }
-  }
-
-
-
-  // returns contents for unit
-
-  private function get_unit_contents($unit_id){
-    
-    $sql = "select        entity_id
-             from         field_data_field_unit_link
-             where        field_unit_link_unit_id = $unit_id";
-
-    $result = db_query($sql);
-
-    $contents = array();
-
-    while ($record = $result->fetchObject())
-    {
-      $contents[] = node_load($record->entity_id);
-    }
-
-    return $contents;
-  }
-
-
-  // returns image of content / node
-
-  private function get_image_from_node($node)
-  {
-    return file_create_url($node->unit_description_image['und'][0]['uri']);
-  }
-
-
-  //returns title of content / node
-
-  private function get_title_from_node($node)
-  {
-    return $node->title;
-  }
-
-
-  // returns detail of content / node
-
-  private function get_description_from_node($node){
-    return $node->unit_description_description['und'][0]['value'];
-  }
-
-
-
-  // returns html for slider
-
-  private function build_slider_html($data){
-    $html = '<div class="unit_header_slider">';
-    $html .= '<ul class="bxslider">';
-    foreach($data as $d){
-      $html .= '<li>';
-      $html .= "<img src='" . $d['img'] . "' />";
-      $html .= '</li>';
-    }
-    $html .= '</ul></div>';
-    return $html;
-  }
-
-
-  // returns html for gallery
-
-  private function build_gallery_html($data){
-    $html = '<div class="unit_gallery">';
-    for ($i = 1; $i < count($data); $i++)
-    {
-      $html .= '<div class="unit_gallery_item">';
-      $html .= "<img src='" . $data[$i]['img'] . "' />";
-      $html .= '<div class="unit_gallery_item_title"><span>';
-      $html .= $data[$i]['label'];
-      $html .= '</span></div>';
-      $html .= '</div>';
-    }
-    $html .= "</div>";
-    return $html;
-  }
-
-
 }
 
 /**
@@ -971,6 +848,261 @@ class RoomsUnitTypeController extends EntityAPIControllerExportable {
     );
     $unit_type = parent::create($values);
     return $unit_type;
+  }
+
+}
+
+
+
+/**
+ * Unit Description Wrapper
+*/
+
+class RoomsUnitDescription{
+  var $unit_id;
+  var $node;
+  var $unit;
+  var $contents; // for slider & gallery
+
+  public function __construct($entity){
+    $this->unit = $entity;
+    $this->unit_id = $entity->unit_id;
+    $this->node = $this->get_unit_node();
+    $this->contents = $this->get_unit_contents(); // for slider & gallery
+  }
+
+  public function get_slider(){
+    $udimg = $this->get_node_info($this->node); // detailed image of this unit type
+
+    $slider = array($udimg);
+    $slider = array_merge($slider, $this->get_gallery_images()); // slider images = unit image & gallery images
+    return $this->build_slider_html($slider);
+  }
+
+  public function get_gallery(){
+    $slider = $this->get_gallery_images();
+    return $this->build_gallery_html($slider);
+  }
+
+  public function get_attributes(){
+    $data = $this->get_header_attribute_values();
+    return $this->build_attributes_html($data);
+  }
+  
+  // returns content for unit type
+
+  private function get_unit_node(){
+
+    $unit_id = $this->unit_id;
+
+    $sql =  "select         ru.unit_id, rut.label, rut.data ";
+    $sql .= " from           rooms_units ru ";
+    $sql .= " inner  join    rooms_unit_type rut ";
+    $sql .= "       on      ru.type = rut.type";
+    $sql .= " where         ru.unit_id = $unit_id";
+
+    $result = db_query($sql);
+
+    while ($record = $result->fetchObject())
+    {
+      $dt = unserialize($record->data);
+      
+      $source_ref = explode(':', $dt['rooms_description_source']);
+      $node_id = $source_ref[1];
+      $node = node_load($node_id);
+      return $node;
+    }
+  }
+
+
+
+  // returns contents for unit for slider and gallery
+
+  private function get_unit_contents(){
+    $unit_id = $this->unit_id;
+    $sql = "select        entity_id
+             from         field_data_field_unit_link
+             where        field_unit_link_unit_id = $unit_id";
+
+    $result = db_query($sql);
+
+    $contents = array();
+
+    while ($record = $result->fetchObject())
+    {
+      $contents[] = node_load($record->entity_id);
+    }
+
+    return $contents;
+  }
+
+
+// returns image + label + description, mainly for slider & gallery
+  private function get_node_info($node){ 
+    return array(
+      'img' => $this->get_image_from_node($node),
+      'label' => $this->get_title_from_node($node),
+      'description' => $this->get_description_from_node($node),
+      );
+  }
+
+
+  // returns slider
+  private function get_gallery_images(){
+    $slider = array();
+
+    for ($i = 0; $i < count($this->contents); $i++)
+    {
+      $slider[] = $this->get_node_info($this->contents[$i]); // these are gallery pictures of units
+    }
+    return $slider;
+  }
+
+
+  // returns image of content / node
+
+  private function get_image_from_node($node)
+  {
+    return file_create_url($node->unit_description_image['und'][0]['uri']);
+  }
+
+
+  //returns title of content / node
+
+  private function get_title_from_node($node)
+  {
+    return $this->node->title;
+  }
+
+
+  // returns detail of content / node
+
+  private function get_description_from_node($node){
+    return $this->node->unit_description_description['und'][0]['value'];
+  }
+
+
+  // returns header attributes
+
+  private function get_header_attribute_values(){
+    $attributes = array(
+      'home' => array(
+        'img' => 'public://Home.png',
+        'label' => 'HOME',
+        'visible' => count($this->unit->field_home) > 0
+                  && $this->unit->field_home['und'][0]['value'],
+        ),
+      'group_size' => array(
+        'img' => 'public://Group Size.png',
+        'label' => 'GROUP SIZE ' . $this->unit->max_sleeps,
+        'visible' => true,
+        ),
+      'beds' => array(
+        'img' => 'public://Bed.png',
+        'label' => $this->unit->data['bed_arrangement']['singles'] + $this->unit->data['bed_arrangement']['doubles'] . ' BEDS',
+          'visible' => true,
+        ),
+      'showers' => array(
+        'img' => 'public://Shower.png',
+        'label' => count($this->unit->field_showers) > 0 ? 
+                $this->unit->field_showers['und'][0]['value'] . ' SHOWERS' : '',
+        'visible' => count($this->unit->field_showers) > 0,
+        ),
+      'tables' => array(
+        'img' => 'public://Table.png',
+        'label' => count($this->unit->field_tables) > 0 ? 
+                $this->unit->field_tables['und'][0]['value'] . ' TABLES' : '',
+        'visible' => count($this->unit->field_tables) > 0,
+        ),
+      'baby_beds' => array(
+        'img' => 'public://Baby Bed.png',
+        'label' => count($this->unit->field_baby_beds) > 0 ? $this->unit->field_baby_beds['und'][0]['value'] . ' SHOWERS' : '',
+        'visible' => count($this->unit->field_baby_beds) > 0,
+        ),
+      'business' => array(
+        'img' => 'public://Business.png',
+        'label' => 'BUSINESS APPROVED',
+        'visible' => count($this->unit->field_business_approved) > 0 &&
+                    $this->unit->field_business_approved['und'][0]['value'],
+        ),
+      'wc' => array(
+        'img' => 'public://WC.png',
+        'label' => count($this->unit->field_wc) > 0 ? 
+                  $this->unit->field_wc['und'][0]['value'] . ' WC' : '',
+        'visible' => count($this->unit->field_wc) > 0,
+        ),
+      'rooms' => array(
+        'img' => 'public://Rooms.png',
+        'label' => count($this->unit->field_rooms) > 0 ? 
+                $this->unit->field_rooms['und'][0]['value'] . ' ROOMS' : '',
+        'visible' => count($this->unit->field_rooms) > 0,
+        ),
+      'wifi' => array(
+        'img' => 'public://WIFI.png',
+        'label' => 'WIFI',
+        'visible' => count($this->unit->field_wifi) > 0 &&
+                    $this->unit->field_wifi['und'][0]['value'],
+        ),
+      );
+    return $attributes;
+  }
+
+
+  // returns html for slider
+
+  private function build_slider_html($images){
+    $html = '<div class="unit_header_slider">';
+    $html .= '<ul class="bxslider">';
+    foreach($images as $img){
+      $html .= '<li>';
+      $html .= "<img src='" . $img['img'] . "' />";
+      $html .= '</li>';
+    }
+    $html .= '</ul></div>';
+    return $html;
+  }
+
+
+  // returns html for gallery
+
+  private function build_gallery_html($images){
+    
+    $html = '<div class="unit_gallery">';
+
+    for ($i = 0; $i < count($images); $i++)
+    {
+      $html .= '<div class="unit_gallery_item">';
+      $html .= "<img src='" . $images[$i]['img'] . "' />";
+      $html .= '<div class="unit_gallery_item_title"><span>';
+      $html .= $images[$i]['label'];
+      $html .= '</span></div>';
+      $html .= '</div>';
+    }
+    $html .= "</div>";
+    return $html;
+  }
+
+
+  // returns html for attributes
+
+  private function build_attributes_html($data){
+    $html = '<div class="unit_attributes">';
+
+    foreach($data as $t => $d)
+    {
+      if (!$d['visible'])
+        break;
+      $html .= '<div class="unit_attribute_item">';
+      $html .= '<div class="unit_attribute_item_img">';
+      $html .= "<img src='" . file_create_url($d['img']) . "' />";
+      $html .= '</div>';
+      $html .= '<div class="unit_attribute_item_title"><span>';
+      $html .= $d['label'];
+      $html .= '</span></div>';
+      $html .= '</div>';
+    }
+    $html .= "</div>";
+    return $html;
   }
 
 }

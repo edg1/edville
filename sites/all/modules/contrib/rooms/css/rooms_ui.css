@@ -163,9 +163,27 @@ a{
   text-align: center;
 }
 
-.unit_gallery_item ul{
-  display:none !important;
+.unit_attribute_item_img{
+  display:inline-block;
 }
+
+.unit_attribute_item{
+  display:inline-block;
+  margin-left:20px;
+  text-align: center;
+}
+
+.unit_attribute_item img{
+  width:75%;
+  height:75%;
+}
+
+.unit_attribute_item_title{
+  text-align: center;
+  height:30px;
+  font-size: 10px;
+}
+
 
 .rooms-availability-search{
   margin-top: 10px;

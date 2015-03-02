@@ -51,8 +51,10 @@
       unset ($content['sleeps']);
       unset ($content['bed_arrangement']);
       //print render($content);
-      
+
       echo $content['slider'];
+
+      echo $content['attributes'];
 
       echo $content['gallery'];
 
