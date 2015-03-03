@@ -53,9 +53,9 @@
       //print render($content);
 
       echo $content['slider'];
-
       echo $content['attributes'];
-
+      echo $content['description'];
+      echo $content['arrangement'];
       echo $content['gallery'];
 
       print_r($content['node']);

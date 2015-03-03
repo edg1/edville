@@ -184,6 +184,25 @@ a{
   font-size: 10px;
 }
 
+.unit_indent_bullet{
+  width:32px;
+  height:32px;
+}
+
+.unit_description_description{
+  color:black;
+  font-size:14px;
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: white;
+  border: 0;
+  font-family: Tahoma;
+}
 
 .rooms-availability-search{
   margin-top: 10px;
