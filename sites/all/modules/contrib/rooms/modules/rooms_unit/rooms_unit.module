@@ -814,6 +814,10 @@ class RoomsUnitController extends EntityAPIController {
 
     $content['gallery'] = $description->get_gallery();
 
+    $content['location'] = $description->get_location();
+
+    $content['search'] = $description->get_search();
+
 
     if (isset($entity->data['bed_arrangement'])) {
       $content['bed_arrangement'] = array(
@@ -899,6 +903,14 @@ class RoomsUnitDescription{
 
   public function get_business_arrangement(){
     return $this->build_business_arrangement_html();
+  }
+
+  public function get_location(){
+    return $this->build_location_html();
+  }
+
+  public function get_search(){
+    return $this->build_search_availibility_html();
   }
   
   // returns content for unit type
@@ -1164,8 +1176,35 @@ class RoomsUnitDescription{
     $html .= '<pre class="unit_description_description">';
     $html .= $description;
     $html .= '</pre>';
+    $html .= '<a href="/contact">Contact for Availibility</a>';
     $html .= '</div>';
     return $html;
+  }
+
+
+  //returns html for location
+
+  private function build_location_html(){
+    $html = '<div>';
+    $html .= '<h3>';
+    $html .= $this->build_bullet_html();
+    $html .= 'LOCATION';
+    $html .= '</h3>';
+    $html .= '<div class="unit_map">';
+    $html .= '</div>';
+    $html .= '</div>';
+    return $html;
+  }
+
+
+  //returns html for search
+
+  private function build_search_availibility_html(){
+    // Add the search availability form.
+      module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
+      $booking_search_form = drupal_get_form('rooms_booking_availability_search_form_page');
+      $html = '<div class = "search_box">' . drupal_render($booking_search_form) . '</div>';
+      return $html;
   }
 
 }

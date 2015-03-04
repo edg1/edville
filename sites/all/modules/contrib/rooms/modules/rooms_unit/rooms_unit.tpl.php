@@ -57,8 +57,9 @@
       echo $content['description'];
       echo $content['arrangement'];
       echo $content['gallery'];
-
-      print_r($content['node']);
+      echo $content['location'];
+      echo $content['search'];
+      //print_r($content['node']);
 
     ?>
   </div>

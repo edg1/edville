@@ -204,6 +204,13 @@ a{
   font-family: Tahoma;
 }
 
+.unit_map{
+  overflow: hidden;
+  transform: translateZ(0px);
+  background-color: rgb(229, 227, 223);
+  height:200px;
+}
+
 .rooms-availability-search{
   margin-top: 10px;
 }
