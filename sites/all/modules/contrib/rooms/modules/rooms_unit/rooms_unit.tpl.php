@@ -53,14 +53,17 @@
       //print render($content);
 
       echo $content['slider'];
-      echo $content['attributes'];
-      echo $content['description'];
-      echo $content['arrangement'];
-      echo $content['gallery'];
-      echo $content['location'];
-      echo $content['search'];
-      //print_r($content['node']);
-
     ?>
+    <div class="wrapper">
+      <?php
+        echo $content['attributes'];
+        echo $content['description'];
+        echo $content['arrangement'];
+        echo $content['gallery'];
+        echo $content['location'];
+        echo $content['search'];
+        //print_r($content['node']);
+      ?>
+    </div>
   </div>
 </div>

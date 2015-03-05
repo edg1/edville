@@ -1,5 +1,10 @@
 jQuery(document).ready(function(){
-	$('.bxslider').bxSlider();
+	$('.bxslider').bxSlider({
+	  nextSelector: '#slider-next',
+	  prevSelector: '#slider-prev',
+	  nextText: '>',
+	  prevText: '<'
+	});
 
 	var contact = {"lat":"-33.880641", "lon":"151.204298"}; //Change a map coordinate here!
 

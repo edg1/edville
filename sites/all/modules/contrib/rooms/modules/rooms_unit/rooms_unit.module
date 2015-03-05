@@ -539,7 +539,8 @@ function rooms_unit_ids($bundle = '') {
 function rooms_unit_page_view($unit, $view_mode = 'full') {
   $controller = entity_get_controller('rooms_unit');
   $content = $controller->view(array($unit->unit_id => $unit), $view_mode);
-  drupal_set_title($unit->name);
+  //drupal_set_title($unit->name);
+  drupal_set_title('');
   return $content;
 }
 
@@ -796,6 +797,9 @@ class RoomsUnitController extends EntityAPIController {
     );
 
 
+    drupal_add_css(drupal_get_path('module', 'rooms') . '/css/unit_description.css');
+
+
 
 
 
@@ -884,7 +888,7 @@ class RoomsUnitDescription{
 
     $slider = array($udimg);
     $slider = array_merge($slider, $this->get_gallery_images()); // slider images = unit image & gallery images
-    return $this->build_slider_html($slider);
+    return $this->build_title_html() . $this->build_slider_html($slider);
   }
 
   public function get_gallery(){
@@ -1072,6 +1076,14 @@ class RoomsUnitDescription{
   }
 
 
+  // returns html for title
+  private function build_title_html(){
+    $html = '<h1 class="unit_title">';
+    $html .= $this->unit->name;
+    $html .= '</h1>';
+    return $html;
+  }
+
   // returns html for slider
 
   private function build_slider_html($images){
@@ -1079,10 +1091,14 @@ class RoomsUnitDescription{
     $html .= '<ul class="bxslider">';
     foreach($images as $img){
       $html .= '<li>';
-      $html .= "<img src='" . $img['img'] . "' />";
+      //$html .= "<img src='" . $img['img'] . "' />";
+      $html .= "<div class='slider_img' style='background-image:url(" . file_create_url($img['img']) . ")'></div>";
       $html .= '</li>';
     }
-    $html .= '</ul></div>';
+    $html .= '</ul>';
+    $html .= '<div class="slider_control">';
+    $html .= '<p><span id="slider-prev"></span><span id="slider-next"></span></p>';
+    $html .= '</div>';
     return $html;
   }
 
