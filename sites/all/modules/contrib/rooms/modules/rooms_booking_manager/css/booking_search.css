@@ -216,3 +216,7 @@
 .rooms-search-result__room-description h2{
   display:none;
 }
+
+.rooms-search-result__unit_details_wrapper{
+  margin-bottom: 30px;
+}

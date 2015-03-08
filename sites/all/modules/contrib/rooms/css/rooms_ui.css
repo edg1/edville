@@ -147,10 +147,14 @@ a{
   display:none !important;
 }
 
+.unit_gallery{
+  clear:both;
+}
+
 .unit_gallery_item{
   margin-left:20px;
-  width:25%;
-  height:25%;
+  width:200px;
+  height:150px;
   display:inline-block;
 }
 
@@ -165,4 +169,47 @@ a{
 
 .rooms-availability-search{
   margin-top: 10px;
+}
+
+.search_result_unit_description_image_box{
+  position:relative;
+}
+
+.search_result_unit_price{
+  right:20px;
+  bottom:20px;
+  color:white;
+  position:absolute;
+}
+
+.search_result_unit_description_image{
+  width: 100%;
+  height: 100%;
+}
+
+.contact_btn{
+  background-color: #eee;
+  padding: 10px;
+  color: #333;
+}
+
+.contact_btn:hover,
+.contact_btn:focus{
+  text-decoration: none;
+}
+
+.btn-primary{
+  position:static;
+  float:left;
+}
+
+.unit_gallery a{
+  text-decoration: none;
+  color:black;
+}
+
+.unit_gallery a:hover,
+.unit_gallery a:focus{
+  text-decoration: none;
+  color:black;
 }

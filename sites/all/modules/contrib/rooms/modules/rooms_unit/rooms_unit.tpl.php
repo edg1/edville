@@ -62,7 +62,7 @@
         echo $content['gallery'];
         echo $content['location'];
         echo $content['search'];
-        //print_r($content['node']);
+        echo $content['other'];
       ?>
     </div>
   </div>

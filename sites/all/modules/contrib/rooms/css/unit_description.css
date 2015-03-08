@@ -14,7 +14,7 @@
 }
 
 .wrapper{
-	width:970px;
+	width:100%;
 	margin:0 auto;
 	max-width: 970px;
 }
@@ -103,4 +103,8 @@
   transform: translateZ(0px);
   background-color: rgb(229, 227, 223);
   height:200px;
+}
+
+.gallery{
+  display:none;
 }

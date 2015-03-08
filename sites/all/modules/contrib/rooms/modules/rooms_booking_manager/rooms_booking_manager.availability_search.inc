@@ -286,35 +286,29 @@ function rooms_booking_availability_search_form_submit(&$form, &$form_state) {
 
 
 function rooms_booking_availability_search_form_thumbnail(){
-  $sql =  "select         ru.unit_id, rut.label, rut.data ";
-  $sql .= "from           rooms_units ru ";
-  $sql .= "inner  join    rooms_unit_type rut ";
-  $sql .= "       on      ru.type = rut.type";
+
+  $sql = "select        l.entity_id, u.name, u.unit_id
+           from         field_data_field_unit_link l
+           inner join   rooms_units u
+                  on    (l.field_unit_link_unit_id = u.unit_id)
+           where        bundle = 'unit_description'";
 
   $result = db_query($sql);
 
   $html = '<div class="unit_gallery">';
 
   while ($record = $result->fetchObject())
-  {
-    $dt = unserialize($record->data);
-    
-    $source_ref = explode(':', $dt['rooms_description_source']);
-    $node_id = $source_ref[1];
-    $node = node_load($node_id);
-    // $node_html = '';
-    // if ($node !== FALSE) {
-    //   $node_view = node_view($node, 'rooms_list');
-    //   $node_html = render($node_view);
-    // }
-    $imgurl = file_create_url($node->unit_description_image['und'][0]['uri']);
-    $html .= '<div class="unit_gallery_item">';
-    $html .= "<img src='$imgurl' />";//$node_html;
-    $html .= '<div class="unit_gallery_item_title"><span>';
-    $html .= $record->label;
-    $html .= '</span></div>';
-    $html .= '</div>';
-  }
+    {
+      $node = node_load($record->entity_id);
+      $imgurl = file_create_url($node->unit_description_image['und'][0]['uri']);
+      $html .= '<div class="unit_gallery_item">';
+      $html .= "<a href='/unit/{$record->unit_id}'>";
+      $html .= "<img src='$imgurl' />";//$node_html;
+      $html .= '<div class="unit_gallery_item_title"><span>';
+      $html .= $record->name;
+      $html .= '</span></a></div>';
+      $html .= '</div>';
+    }
 
   $html .= "</div>";
   return $html;

@@ -822,6 +822,8 @@ class RoomsUnitController extends EntityAPIController {
 
     $content['search'] = $description->get_search();
 
+    $content['other'] = $description->get_other_places();
+
 
     if (isset($entity->data['bed_arrangement'])) {
       $content['bed_arrangement'] = array(
@@ -884,16 +886,16 @@ class RoomsUnitDescription{
   }
 
   public function get_slider(){
-    $udimg = $this->get_node_info($this->node); // detailed image of this unit type
+    //$udimg = $this->get_node_info($this->node); // detailed image of this unit type
 
-    $slider = array($udimg);
-    $slider = array_merge($slider, $this->get_gallery_images()); // slider images = unit image & gallery images
-    return $this->build_title_html() . $this->build_slider_html($slider);
+    //$slider = array($udimg);
+    //$slider = array_merge($slider, $this->get_gallery_images()); // slider images = unit image & gallery images
+    return $this->build_title_html() . $this->build_slider_html($this->contents);
   }
 
   public function get_gallery(){
-    $slider = $this->get_gallery_images();
-    return $this->build_gallery_html($slider);
+    //$slider = $this->get_gallery_images();
+    return $this->build_gallery_html($this->contents);
   }
 
   public function get_attributes(){
@@ -916,6 +918,10 @@ class RoomsUnitDescription{
   public function get_search(){
     return $this->build_search_availibility_html();
   }
+
+  public function get_other_places(){
+    return $this->build_other_places_html();
+  }
   
   // returns content for unit type
 
@@ -923,31 +929,6 @@ class RoomsUnitDescription{
 
     $unit_id = $this->unit_id;
 
-    $sql =  "select         ru.unit_id, rut.label, rut.data ";
-    $sql .= " from           rooms_units ru ";
-    $sql .= " inner  join    rooms_unit_type rut ";
-    $sql .= "       on      ru.type = rut.type";
-    $sql .= " where         ru.unit_id = $unit_id";
-
-    $result = db_query($sql);
-
-    while ($record = $result->fetchObject())
-    {
-      $dt = unserialize($record->data);
-      
-      $source_ref = explode(':', $dt['rooms_description_source']);
-      $node_id = $source_ref[1];
-      $node = node_load($node_id);
-      return $node;
-    }
-  }
-
-
-
-  // returns contents for unit for slider and gallery
-
-  private function get_unit_contents(){
-    $unit_id = $this->unit_id;
     $sql = "select        entity_id
              from         field_data_field_unit_link
              where        field_unit_link_unit_id = $unit_id";
@@ -958,7 +939,25 @@ class RoomsUnitDescription{
 
     while ($record = $result->fetchObject())
     {
-      $contents[] = node_load($record->entity_id);
+      $node = node_load($record->entity_id);
+      return $node;
+    }
+  }
+
+
+
+  // returns contents for unit for slider and gallery
+
+  private function get_unit_contents(){
+
+    $contents = array();
+
+    for ($i = 0; $i < count($this->node->unit_description_image['und']); $i++) {
+      $content = array();
+      $content['img'] = file_create_url($this->node->unit_description_image['und'][$i]['uri']);
+      $content['imgalt'] = $this->node->unit_description_image['und'][$i]['alt'];
+      $content['imgtitle'] = $this->node->unit_description_image['und'][$i]['title'];
+      $contents[] = $content;
     }
 
     return $contents;
@@ -1017,7 +1016,8 @@ class RoomsUnitDescription{
       'home' => array(
         'img' => 'public://Home.png',
         'label' => 'HOME',
-        'visible' => count($this->unit->field_home) > 0
+        'visible' => isset($this->unit->field_home) > 0
+                  && count($this->unit->field_home) > 0
                   && $this->unit->field_home['und'][0]['value'],
         ),
       'group_size' => array(
@@ -1032,44 +1032,57 @@ class RoomsUnitDescription{
         ),
       'showers' => array(
         'img' => 'public://Shower.png',
-        'label' => count($this->unit->field_showers) > 0 ? 
+        'label' => isset($this->unit->field_showers)
+                && count($this->unit->field_showers) > 0 ? 
                 $this->unit->field_showers['und'][0]['value'] . ' SHOWERS' : '',
-        'visible' => count($this->unit->field_showers) > 0,
+        'visible' => isset($this->unit->field_showers)
+                && count($this->unit->field_showers) > 0,
         ),
       'tables' => array(
         'img' => 'public://Table.png',
-        'label' => count($this->unit->field_tables) > 0 ? 
+        'label' => isset($this->unit->field_tables)
+                && count($this->unit->field_tables) > 0 ? 
                 $this->unit->field_tables['und'][0]['value'] . ' TABLES' : '',
-        'visible' => count($this->unit->field_tables) > 0,
+        'visible' => isset($this->unit->field_tables)
+                && count($this->unit->field_tables) > 0,
         ),
       'baby_beds' => array(
         'img' => 'public://Baby Bed.png',
-        'label' => count($this->unit->field_baby_beds) > 0 ? $this->unit->field_baby_beds['und'][0]['value'] . ' SHOWERS' : '',
-        'visible' => count($this->unit->field_baby_beds) > 0,
+        'label' => isset($this->unit->field_baby_beds)
+                  && count($this->unit->field_baby_beds) > 0 
+                  ? $this->unit->field_baby_beds['und'][0]['value'] . ' SHOWERS' : '',
+        'visible' => isset($this->unit->field_baby_beds)
+                  && count($this->unit->field_baby_beds) > 0 ,
         ),
       'business' => array(
         'img' => 'public://Business.png',
         'label' => 'BUSINESS APPROVED',
-        'visible' => count($this->unit->field_business_approved) > 0 &&
-                    $this->unit->field_business_approved['und'][0]['value'],
+        'visible' => isset($this->unit->field_business_approved)
+                    && count($this->unit->field_business_approved) > 0
+                    && $this->unit->field_business_approved['und'][0]['value'],
         ),
       'wc' => array(
         'img' => 'public://WC.png',
-        'label' => count($this->unit->field_wc) > 0 ? 
+        'label' => isset($this->unit->field_wc)
+                  && count($this->unit->field_wc) > 0 ? 
                   $this->unit->field_wc['und'][0]['value'] . ' WC' : '',
-        'visible' => count($this->unit->field_wc) > 0,
+        'visible' => isset($this->unit->field_wc)
+                  && count($this->unit->field_wc) > 0,
         ),
       'rooms' => array(
         'img' => 'public://Rooms.png',
-        'label' => count($this->unit->field_rooms) > 0 ? 
+        'label' => isset($this->unit->field_rooms)
+                && count($this->unit->field_rooms) > 0 ? 
                 $this->unit->field_rooms['und'][0]['value'] . ' ROOMS' : '',
-        'visible' => count($this->unit->field_rooms) > 0,
+        'visible' => isset($this->unit->field_rooms)
+                && count($this->unit->field_rooms) > 0,
         ),
       'wifi' => array(
         'img' => 'public://WIFI.png',
         'label' => 'WIFI',
-        'visible' => count($this->unit->field_wifi) > 0 &&
-                    $this->unit->field_wifi['und'][0]['value'],
+        'visible' =>isset($this->unit->field_wifi) 
+                    && count($this->unit->field_wifi) > 0
+                    && $this->unit->field_wifi['und'][0]['value'],
         ),
       );
     return $attributes;
@@ -1112,12 +1125,12 @@ class RoomsUnitDescription{
     $html .= $this->build_bullet_html();
     $html .= 'PICTURES';
     $html .= '</h3>';
-    for ($i = 0; $i < count($images); $i++)
+    for ($i = 1; $i < count($images); $i++)
     {
       $html .= '<div class="unit_gallery_item">';
       $html .= "<img src='" . $images[$i]['img'] . "' />";
       $html .= '<div class="unit_gallery_item_title"><span>';
-      $html .= $images[$i]['label'];
+      $html .= $images[$i]['imgtitle'];
       $html .= '</span></div>';
       $html .= '</div>';
     }
@@ -1162,7 +1175,8 @@ class RoomsUnitDescription{
   // returns html for description
 
   private function build_description_html(){
-    $description = count($this->unit->field_description) > 0 ?
+    $description = isset($this->unit->field_description)
+            && count($this->unit->field_description) > 0 ?
             $this->unit->field_description['und'][0]['value'] : '';
 
     $html = '<div>';
@@ -1181,7 +1195,8 @@ class RoomsUnitDescription{
   //returns html for business arrangement
 
   private function build_business_arrangement_html(){
-    $description = count($this->unit->field_business_arrangements) > 0 ?
+    $description = isset($this->unit->field_business_arrangements) > 0
+            && count($this->unit->field_business_arrangements) > 0 ?
             $this->unit->field_business_arrangements['und'][0]['value'] : '';
 
     $html = '<div>';
@@ -1192,7 +1207,7 @@ class RoomsUnitDescription{
     $html .= '<pre class="unit_description_description">';
     $html .= $description;
     $html .= '</pre>';
-    $html .= '<a href="/contact">Contact for Availibility</a>';
+    $html .= '<a class="contact_btn" href="/contact">Contact for Availibility</a>';
     $html .= '</div>';
     return $html;
   }
@@ -1219,8 +1234,53 @@ class RoomsUnitDescription{
     // Add the search availability form.
       module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
       $booking_search_form = drupal_get_form('rooms_booking_availability_search_form_page');
-      $html = '<div class = "search_box">' . drupal_render($booking_search_form) . '</div>';
+      $html = '<div class = "search_box">';
+      $html .= '<h3>';
+      $html .= $this->build_bullet_html();
+    $html .= 'SEARCH FOR AVAILABILITY';
+    $html .= '</h3>';
+      $html .= drupal_render($booking_search_form) . '</div>';
       return $html;
   }
+
+
+  // gets other places
+  private function build_other_places_html(){
+    $unit_id = $this->unit_id;
+    $sql = "select        l.entity_id, u.name, u.unit_id
+           from         field_data_field_unit_link l
+           inner join   rooms_units u
+                  on    (l.field_unit_link_unit_id = u.unit_id)
+           where        bundle = 'unit_description'
+                  and   u.unit_id != $unit_id";
+
+    $result = db_query($sql);
+
+    $html = "<div class='other_units'><h3>";
+    $html .= $this->build_bullet_html();
+    $html .= "OTHER SPACES";
+    $html .= "</h3>";
+    $html .= '<div class="unit_gallery">';
+
+    while ($record = $result->fetchObject())
+    {
+      $node = node_load($record->entity_id);
+      $imgurl = file_create_url($node->unit_description_image['und'][0]['uri']);
+      $html .= '<div class="unit_gallery_item">';
+      $html .= "<a href='/unit/{$record->unit_id}'>";
+      $html .= "<img src='$imgurl' />";//$node_html;
+      $html .= '<div class="unit_gallery_item_title"><span>';
+      $html .= $record->name;
+      $html .= '</span></a></div>';
+      $html .= '</div>';
+    }
+
+    $html .= "</div></div>";
+    return $html;
+
+  }
+
+
+  
 
 }
