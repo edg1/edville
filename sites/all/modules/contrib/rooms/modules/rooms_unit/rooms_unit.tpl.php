@@ -56,11 +56,13 @@
     ?>
     <div class="wrapper">
       <?php
+        echo $content['title'];
         echo $content['attributes'];
         echo $content['description'];
         echo $content['arrangement'];
         echo $content['gallery'];
         echo $content['location'];
+        echo $content['availability'];
         echo $content['search'];
         echo $content['other'];
       ?>

@@ -810,6 +810,8 @@ class RoomsUnitController extends EntityAPIController {
 
     $content['slider'] = $description->get_slider();
 
+    $content['title'] = $description->get_title();
+
     $content['attributes'] = $description->get_attributes();
 
     $content['description'] = $description->get_description();
@@ -819,6 +821,8 @@ class RoomsUnitController extends EntityAPIController {
     $content['gallery'] = $description->get_gallery();
 
     $content['location'] = $description->get_location();
+
+    $content['availability'] = $description->get_availability();
 
     $content['search'] = $description->get_search();
 
@@ -877,20 +881,22 @@ class RoomsUnitDescription{
   var $node;
   var $unit;
   var $contents; // for slider & gallery
+  var $price_modifiers;
 
   public function __construct($entity){
     $this->unit = $entity;
     $this->unit_id = $entity->unit_id;
     $this->node = $this->get_unit_node();
     $this->contents = $this->get_unit_contents(); // for slider & gallery
+    $this->price_modifiers = $this->get_price_modifiers();
   }
 
   public function get_slider(){
-    //$udimg = $this->get_node_info($this->node); // detailed image of this unit type
+    return $this->build_slider_html($this->contents);
+  }
 
-    //$slider = array($udimg);
-    //$slider = array_merge($slider, $this->get_gallery_images()); // slider images = unit image & gallery images
-    return $this->build_title_html() . $this->build_slider_html($this->contents);
+  public function get_title(){
+    return $this->build_title_html();
   }
 
   public function get_gallery(){
@@ -917,6 +923,10 @@ class RoomsUnitDescription{
 
   public function get_search(){
     return $this->build_search_availibility_html();
+  }
+
+  public function get_availability(){
+    return $this->build_availability_html();
   }
 
   public function get_other_places(){
@@ -964,7 +974,29 @@ class RoomsUnitDescription{
   }
 
 
-// returns image + label + description, mainly for slider & gallery
+  // returns pricing modifiers
+
+  private function get_price_modifiers(){
+    $modifiers = array();
+    $sql = "select * from field_data_rooms_booking_unit_options
+            where       entity_type = 'rooms_unit'
+                  and   entity_id = {$this->unit_id}";
+
+    $result = db_query($sql);
+    while ($record = $result->fetchObject()){
+      $modifier = array(
+          '#type' => ROOMS_DYNAMIC_MODIFIER,
+          '#op_type' => $record->rooms_booking_unit_options_operation,
+          '#amount' => $record->rooms_booking_unit_options_value,
+          '#quantity' => $record->rooms_booking_unit_options_quantity,
+        );
+      $modifiers[] = $modifier;
+    }
+    return $modifiers;
+  }
+
+
+  // returns image + label + description, mainly for slider & gallery
   private function get_node_info($node){ 
     return array(
       'img' => $this->get_image_from_node($node),
@@ -1042,7 +1074,7 @@ class RoomsUnitDescription{
         'img' => 'public://Table.png',
         'label' => isset($this->unit->field_tables)
                 && count($this->unit->field_tables) > 0 ? 
-                $this->unit->field_tables['und'][0]['value'] . ' TABLES' : '',
+                $this->unit->field_tables['und'][0]['value'] . ' TABLE' : '',
         'visible' => isset($this->unit->field_tables)
                 && count($this->unit->field_tables) > 0,
         ),
@@ -1050,7 +1082,7 @@ class RoomsUnitDescription{
         'img' => 'public://Baby Bed.png',
         'label' => isset($this->unit->field_baby_beds)
                   && count($this->unit->field_baby_beds) > 0 
-                  ? $this->unit->field_baby_beds['und'][0]['value'] . ' SHOWERS' : '',
+                  ? $this->unit->field_baby_beds['und'][0]['value'] . ' BABY BED' : '',
         'visible' => isset($this->unit->field_baby_beds)
                   && count($this->unit->field_baby_beds) > 0 ,
         ),
@@ -1089,11 +1121,143 @@ class RoomsUnitDescription{
   }
 
 
+  // check availability on specified date
+  private function check_availability_on($date){
+    $m = intval($date->format('m'));
+    $y = $date->format('Y');
+    $d = intval($date->format('d'));
+    $sql = "select * from rooms_availability 
+            where       unit_id = {$this->unit_id} 
+                and     month = $m
+                and     d$d > 1";
+    $result = db_query($sql);
+    if ($result->fetchObject())
+      return false;
+    return true;
+  }
+
+  // check availability in the range
+  private function check_availability($start, $end){
+    $diff = date_diff($start, $end);
+    $date = clone $start;
+    for ($i = 0; $i < $diff->format("%a"); $i++){
+      if (!$this->check_availability_on($date))
+        return false;
+      $date->add(new DateInterval('P1D'));
+    }
+    return true;
+  }
+
+
+  //returns availability for weekday
+  private function get_weekday_availability(){
+    $date = getdate();
+    $startdate = date_create("{$date['year']}-{$date['mon']}-{$date['mday']}");
+    $enddate = date_create("{$date['year']}-{$date['mon']}-{$date['mday']}");
+    $wday = $date['wday'];
+
+    $price_calendar = new UnitPricingCalendar($this->unit_id, $this->price_modifiers);
+
+    if ($wday == 0)
+      $wday = 7;
+
+    if ($wday >= 5) // if today is friday, start date is 3 days after.
+    {
+      $offset = 8 - $wday;
+      $startdate->add(new DateInterval("P{$offset}D")); // start weekday  of next week
+      $offset += 4;
+      $enddate->add(new DateInterval("P{$offset}D")); // end weekday of next week
+    }
+    else
+    {
+      $offset = 5 - $wday;
+      $startdate->add(new DateInterval("P1D"));
+      $enddate->add(new DateInterval("P{$offset}D")); // end weekday of this week
+    }
+
+    $result = array();
+
+    while (true)
+    {
+      if ($this->check_availability($startdate, $enddate))
+      {
+        $price = $price_calendar->calculatePrice($startdate, $enddate, $this->unit->min_sleeps, 0, array());
+        $range = array('start' => $startdate, 'end' => $enddate, 'price' => $price);
+        $result[] = $range;
+      }
+      if (count($result) == 2)
+        break;
+
+      $startdate = date_create($enddate->format('y-m-d'));
+      $startdate->add(new DateInterval('P3D')); // start weekday  of next week
+      $enddate = date_create($enddate->format('y-m-d'));
+      $enddate->add(new DateInterval('P7D')); // end weekday of next week
+    }
+    return $result;
+  }
+
+  //returns availability for weekend
+  private function get_weekend_availability(){
+    $date = getdate();
+    $startdate = date_create("{$date['year']}-{$date['mon']}-{$date['mday']}");
+    $enddate = date_create("{$date['year']}-{$date['mon']}-{$date['mday']}");
+    
+    $price_calendar = new UnitPricingCalendar($this->unit_id, $this->price_modifiers);
+
+    $wday = $date['wday'];
+    if ($wday >= 5) // if today is friday, start date is next week.
+    {
+      $startdate->add(new DateInterval('P7D')); // start friday of next week
+      $enddate->add(new DateInterval('P9D')); // end sunday of next week
+    }
+    else
+    {
+      $offset = 5 - $wday;
+      $startdate->add(new DateInterval("P{$offset}D")); // start friday of this week
+      $offset += 2;
+      $enddate->add(new DateInterval("P{$offset}D")); // end sunday of this week
+    }
+
+    $result = array();
+    while (true)
+    {
+      if ($this->check_availability($startdate, $enddate)){
+        $price = $price_calendar->calculatePrice($startdate, $enddate, $this->unit->min_sleeps, 0, array());
+        $range = array('start' => $startdate, 'end' => $enddate, 'price' => $price);
+        $result[] = $range;
+      }
+      if (count($result) == 2)
+        break;
+      $startdate = date_create($enddate->format('y-m-d'));
+      $startdate->add(new DateInterval('P5D')); // start weekday  of next week
+      $enddate = date_create($enddate->format('y-m-d'));
+      $enddate->add(new DateInterval('P7D')); // end weekday of next week
+    }
+    return $result;
+  }
+
+
   // returns html for title
   private function build_title_html(){
-    $html = '<h1 class="unit_title">';
+    $html = "<div class='unit_title_box'>";
+    $html .= '<h2 class="unit_title">';
     $html .= $this->unit->name;
-    $html .= '</h1>';
+    $html .= '</h2>';
+    $html .= '<h4 class="unit_address">';
+    $html .= isset($this->unit->field_address)?
+            $this->unit->field_address['und'][0]['value'] : '';
+    $html .= '</h4>';
+    $html .= "<div class='check_in_out_box'>";
+    $html .= "Check-in ";
+    $html .= isset($this->unit->field_checkin) ? 
+            $this->unit->field_checkin['und'][0]['value'] : '15';
+    $html .= 'h<br/>';
+    $html .= "Check-out ";
+    $html .= isset($this->unit->field_checkout) ? 
+            $this->unit->field_checkout['und'][0]['value'] : '11';
+    $html .= "h";
+    $html .= "</div>";
+    $html .= "</div>";
     return $html;
   }
 
@@ -1221,6 +1385,9 @@ class RoomsUnitDescription{
     $html .= $this->build_bullet_html();
     $html .= 'LOCATION';
     $html .= '</h3>';
+
+
+
     $html .= '<div class="unit_map">';
     $html .= '</div>';
     $html .= '</div>';
@@ -1237,8 +1404,8 @@ class RoomsUnitDescription{
       $html = '<div class = "search_box">';
       $html .= '<h3>';
       $html .= $this->build_bullet_html();
-    $html .= 'SEARCH FOR AVAILABILITY';
-    $html .= '</h3>';
+      $html .= 'SEARCH FOR AVAILABILITY';
+      $html .= '</h3>';
       $html .= drupal_render($booking_search_form) . '</div>';
       return $html;
   }
@@ -1278,6 +1445,49 @@ class RoomsUnitDescription{
     $html .= "</div></div>";
     return $html;
 
+  }
+
+
+  // returns html for availability
+
+  private function build_availability_html()
+  {
+
+    $weekend_availability = $this->get_weekend_availability();
+    $weekday_availability = $this->get_weekday_availability();
+
+    $html = "<div class='unit_availability'><h3>";
+    $html .= $this->build_bullet_html();
+    $html .= 'AVAILABILITY (Minimum Stay: 2 nights)';
+    $html .= "</h3>";
+    $html .= "<h4>Next available weekday</h4>";
+    $html .= "<p>" . $weekday_availability[0]['start']->format('d-m-y');
+    $html .= " to " . $weekday_availability[0]['end']->format('d-m-y') . " --&gt; Starting from ";
+    $html .= $weekday_availability[0]['price']['full_price'] . " for ";
+    $html .= $this->unit->min_sleeps . " guests.";
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekday_availability[0]['start']->format('d/m/y')}'," . "'{$weekday_availability[0]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= "</p>";
+    $html .= "<p>" . $weekday_availability[1]['start']->format('d-m-y');
+    $html .= " to " . $weekday_availability[1]['end']->format('d-m-y') . " --&gt; Starting from ";
+    $html .= $weekday_availability[1]['price']['full_price'] . " for ";
+    $html .= $this->unit->min_sleeps . " guests.";
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekday_availability[1]['start']->format('d/m/y')}'," . "'{$weekday_availability[1]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= "</p>";
+    $html .= "<h4>Next available weekend</h4>";
+    $html .= "<p>" . $weekend_availability[0]['start']->format('d-m-y');
+    $html .= " to " . $weekend_availability[0]['end']->format('d-m-y') . " --&gt; Starting from ";
+    $html .= $weekend_availability[0]['price']['full_price'] . " for ";
+    $html .= $this->unit->min_sleeps . " guests.";
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekend_availability[0]['start']->format('d/m/y')}'," . "'{$weekend_availability[0]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= "</p>";
+    $html .= "<p>" . $weekend_availability[1]['start']->format('d-m-y');
+    $html .= " to " . $weekend_availability[1]['end']->format('d-m-y') . " --&gt; Starting from ";
+    $html .= $weekend_availability[1]['price']['full_price'] . " for ";
+    $html .= $this->unit->min_sleeps . " guests.";
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekend_availability[1]['start']->format('d/m/y')}'," . "'{$weekend_availability[1]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= "</p>";
+    $html .= "</div>";
+    return $html;
   }
 
 

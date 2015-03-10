@@ -3,7 +3,8 @@ jQuery(document).ready(function(){
 	  nextSelector: '#slider-next',
 	  prevSelector: '#slider-prev',
 	  nextText: '>',
-	  prevText: '<'
+	  prevText: '<',
+	  pager: false
 	});
 
 	var contact = {"lat":"-33.880641", "lon":"151.204298"}; //Change a map coordinate here!
@@ -35,3 +36,10 @@ jQuery(document).ready(function(){
 	}
 
 });
+
+function set_booking_value(startdate, enddate, groupsize)
+{
+	document.getElementById("edit-rooms-start-date-datepicker-popup-0").value = (startdate);
+	document.getElementById("edit-rooms-end-date-datepicker-popup-0").value = (enddate);
+	document.getElementById("edit-group-size-adults1").value = (groupsize);
+}

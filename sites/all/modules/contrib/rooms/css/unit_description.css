@@ -7,7 +7,7 @@
 
 .unit_header_slider .slider_img{
 	width:100%;
-	height:300px;
+	height:200px;
 	background-size:cover;
 	background-repeat:no-repeat;
 	background-position:50% 50%;
@@ -19,29 +19,39 @@
 	max-width: 970px;
 }
 
-.container h1{
-	color: white;
+.unit_title_box{
+	padding-left: 30px;
+	position:relative;
+}
+
+.unit_title{
+	margin-bottom: 0px;
+}
+
+.unit_address{
+	margin-top:5px;
+}
+
+.check_in_out_box{
 	position: absolute;
-	display:inline;
-	top: 150px;
-	font-size: 36px;
-	z-index: 10;
-	width: 100%;
-	text-align: center;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	margin:0;
+	text-align: right;
+	right:0;
+	top:0;
 }
 
 .slider_control{
   position: absolute;
-  top: 150px;
+  top: 100px;
   width: 100%;
   z-index: 300;
 }
 
+.col-md-12{
+	padding:0 !important;
+}
+
 #slider-next{
-  right: 56px;
+  right: 30px;
   position: absolute;
 }
 
@@ -51,6 +61,13 @@
 }
 
 .slider_control a{
+  color:white;
+  font-size:36px;
+  text-decoration: none;
+}
+
+.slider_control a:hover,
+.slider_control a:focus{
   color:white;
   font-size:36px;
   text-decoration: none;
@@ -107,4 +124,18 @@
 
 .gallery{
   display:none;
+}
+
+.unit_availability p{
+	font-size: 16px;
+	color:black;
+	max-width: 720px;
+}
+
+.book_btn{
+	color: #fff;
+	background-color: black;
+	border-color: black;
+	cursor:pointer;
+	float:right;
 }
