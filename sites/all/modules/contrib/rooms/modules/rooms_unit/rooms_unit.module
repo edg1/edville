@@ -1386,7 +1386,17 @@ class RoomsUnitDescription{
     $html .= 'LOCATION';
     $html .= '</h3>';
 
+    $html .= "<script type='text/javascript'>";
 
+    $lat = isset($this->unit->field_latitude)
+            && count($this->unit->field_latitude) > 0 ?
+            $this->unit->field_latitude['und'][0]['value'] : '51.013678';
+    $lon = isset($this->unit->field_latitude)
+            && count($this->unit->field_latitude) > 0 ?
+            $this->unit->field_longitude['und'][0]['value'] : '3.787079';
+
+    $html .= "var contact = {'lat':'$lat', 'lon':'$lon'};";
+    $html .= "</script>";
 
     $html .= '<div class="unit_map">';
     $html .= '</div>';

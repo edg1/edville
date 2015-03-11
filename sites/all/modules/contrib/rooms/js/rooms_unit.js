@@ -7,12 +7,12 @@ jQuery(document).ready(function(){
 	  pager: false
 	});
 
-	var contact = {"lat":"-33.880641", "lon":"151.204298"}; //Change a map coordinate here!
+//	var contact = {"lat":"-33.880641", "lon":"151.204298"}; //Change a map coordinate here!
 
 	try {
 		var mapContainer = $('.unit_map');
 		var pathToTheme = Drupal.settings.basePath + "sites/all/themes/" + Drupal.settings.ajaxPageState.theme;
-    var image = pathToTheme + '/images/marker.png';
+    	var image = pathToTheme + '/images/marker.png';
 		mapContainer.gmap3({
 			action: 'addMarker',
 			markers:[

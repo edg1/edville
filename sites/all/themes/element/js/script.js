@@ -269,13 +269,13 @@ $(document).ready(function($) {
 	
 	/* ---------------------------------------------------------------------- */
 	/*	Contact Map
-	/* ---------------------------------------------------------------------- */
-	var contact = {"lat":"-33.880641", "lon":"151.204298"}; //Change a map coordinate here!
+	/* ---------------------------------,------------------------------------- */
+	var contact = {"lat":"51.013678", "lon":"3.787079"}; //Change a map coordinate here!
 
 	try {
 		var mapContainer = $('.map');
 		var pathToTheme = Drupal.settings.basePath + "sites/all/themes/" + Drupal.settings.ajaxPageState.theme;
-    var image = pathToTheme + '/images/marker.png';
+    var image = pathToTheme + '/images/marker - eg.png';
 		mapContainer.gmap3({
 			action: 'addMarker',
 			marker:{
