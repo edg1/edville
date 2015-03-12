@@ -26,10 +26,12 @@
 
 .unit_title{
 	margin-bottom: 0px;
+	min-height:37px;
 }
 
 .unit_address{
 	margin-top:5px;
+	min-height:19px;
 }
 
 .check_in_out_box{

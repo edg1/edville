@@ -967,6 +967,8 @@ class RoomsUnitDescription{
       $content['img'] = file_create_url($this->node->unit_description_image['und'][$i]['uri']);
       $content['imgalt'] = $this->node->unit_description_image['und'][$i]['alt'];
       $content['imgtitle'] = $this->node->unit_description_image['und'][$i]['title'];
+      if ($content['imgtitle'] == '')
+        $content['imgtitle'] = '&nbsp;';
       $contents[] = $content;
     }
 
@@ -1161,7 +1163,7 @@ class RoomsUnitDescription{
     if ($wday == 0)
       $wday = 7;
 
-    if ($wday >= 5) // if today is friday, start date is 3 days after.
+    if ($wday >= 4) // if today is thursday, start date is 4 days after.
     {
       $offset = 8 - $wday;
       $startdate->add(new DateInterval("P{$offset}D")); // start weekday  of next week
@@ -1170,7 +1172,7 @@ class RoomsUnitDescription{
     }
     else
     {
-      $offset = 5 - $wday;
+      $offset = 4 - $wday;
       $startdate->add(new DateInterval("P1D"));
       $enddate->add(new DateInterval("P{$offset}D")); // end weekday of this week
     }
@@ -1475,26 +1477,26 @@ class RoomsUnitDescription{
     $html .= " to " . $weekday_availability[0]['end']->format('d-m-y') . " --&gt; Starting from ";
     $html .= $weekday_availability[0]['price']['full_price'] . " for ";
     $html .= $this->unit->min_sleeps . " guests.";
-    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekday_availability[0]['start']->format('d/m/y')}'," . "'{$weekday_availability[0]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekday_availability[0]['start']->format('d/m/Y')}'," . "'{$weekday_availability[0]['end']->format('d/m/Y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
     $html .= "</p>";
     $html .= "<p>" . $weekday_availability[1]['start']->format('d-m-y');
     $html .= " to " . $weekday_availability[1]['end']->format('d-m-y') . " --&gt; Starting from ";
     $html .= $weekday_availability[1]['price']['full_price'] . " for ";
     $html .= $this->unit->min_sleeps . " guests.";
-    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekday_availability[1]['start']->format('d/m/y')}'," . "'{$weekday_availability[1]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekday_availability[1]['start']->format('d/m/Y')}'," . "'{$weekday_availability[1]['end']->format('d/m/Y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
     $html .= "</p>";
     $html .= "<h4>Next available weekend</h4>";
     $html .= "<p>" . $weekend_availability[0]['start']->format('d-m-y');
     $html .= " to " . $weekend_availability[0]['end']->format('d-m-y') . " --&gt; Starting from ";
     $html .= $weekend_availability[0]['price']['full_price'] . " for ";
     $html .= $this->unit->min_sleeps . " guests.";
-    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekend_availability[0]['start']->format('d/m/y')}'," . "'{$weekend_availability[0]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekend_availability[0]['start']->format('d/m/Y')}'," . "'{$weekend_availability[0]['end']->format('d/m/Y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
     $html .= "</p>";
     $html .= "<p>" . $weekend_availability[1]['start']->format('d-m-y');
     $html .= " to " . $weekend_availability[1]['end']->format('d-m-y') . " --&gt; Starting from ";
     $html .= $weekend_availability[1]['price']['full_price'] . " for ";
     $html .= $this->unit->min_sleeps . " guests.";
-    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekend_availability[1]['start']->format('d/m/y')}'," . "'{$weekend_availability[1]['end']->format('d/m/y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
+    $html .= '<button class="book_btn" onclick="set_booking_value(' . "'{$weekend_availability[1]['start']->format('d/m/Y')}'," . "'{$weekend_availability[1]['end']->format('d/m/Y')}'," . "{$this->unit->min_sleeps} )" . '">Book Now</button>';
     $html .= "</p>";
     $html .= "</div>";
     return $html;
