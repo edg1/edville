@@ -19,8 +19,17 @@
 	max-width: 970px;
 }
 
+.ed_logo{
+	width: 72px;
+	height: 72px;
+	position: absolute;
+	top: 100px;
+	left:15%;
+	background-size: cover;
+}
+
 .unit_title_box{
-	padding-left: 30px;
+	padding-left: 0px;
 	position:relative;
 }
 
@@ -80,9 +89,11 @@
 }
 
 .unit_attribute_item{
-  display:inline-block;
-  margin-left:20px;
+  display:block;
+  float:left;
+  margin-left:0px;
   text-align: center;
+  width:64px;
 }
 
 .unit_attribute_item img{
@@ -101,11 +112,15 @@
   height:32px;
 }
 
+.unit_description{
+	clear:both;
+}
+
 .unit_description_description{
   color:black;
   font-size:14px;
   display: block;
-  padding: 9.5px;
+  padding: 0px;
   margin: 0 0 10px;
   font-size: 14px;
   line-height: 1.42857143;
@@ -115,6 +130,10 @@
   background-color: white;
   border: 0;
   font-family: Tahoma;
+}
+
+.wrapper h3{
+	margin-left:-8px;
 }
 
 .unit_map{
@@ -128,6 +147,24 @@
   display:none;
 }
 
+.other_units .unit_gallery_item{
+  margin-right:20px;
+  width:280px;
+  height:210px;
+  display:inline-block;
+}
+
+.other_units .unit_gallery_item img{
+  width:100%;
+  height:100%;
+}
+
+.other_units .unit_gallery_item_title{
+  text-align: left;
+  font-weight: bold;
+  font-size: 20px;
+}
+
 .unit_availability p{
 	font-size: 16px;
 	color:black;
@@ -136,8 +173,8 @@
 
 .book_btn{
 	color: #fff;
-	background-color: black;
-	border-color: black;
+	background-color: #444;
+	border-color: #444;
 	cursor:pointer;
 	float:right;
 }
