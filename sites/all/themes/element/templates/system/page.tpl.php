@@ -80,7 +80,8 @@
         <div class="navbar-header">      
           <?php if ($logo): ?>
             <a class="navbar-brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
-              <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+              <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" class="inactive_logo"/>
+              <img src="<?php print $logo . '.png'; ?>" alt="<?php print t('Home'); ?>" class="active_logo"/>
             </a>
           <?php endif; ?>
           <?php if (!empty($site_name)): ?>
