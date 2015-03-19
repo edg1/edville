@@ -154,6 +154,11 @@ a{
 .unit_gallery_item{
   margin-right:20px;
   width:200px;
+  display:inline-block;
+}
+
+.unit_gallery_item_img{
+  width:200px;
   height:150px;
   display:inline-block;
 }

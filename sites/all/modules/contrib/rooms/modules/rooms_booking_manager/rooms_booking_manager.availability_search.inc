@@ -303,7 +303,9 @@ function rooms_booking_availability_search_form_thumbnail(){
       $imgurl = file_create_url($node->unit_description_image['und'][0]['uri']);
       $html .= '<div class="unit_gallery_item">';
       $html .= "<a href='/unit/{$record->unit_id}'>";
-      $html .= "<img src='$imgurl' />";//$node_html;
+      $html .= '<div class="unit_gallery_item_img">';
+      $html .= "<img src='" . $imgurl . "' />";
+      $html .= '</div>';
       $html .= '<div class="unit_gallery_item_title"><span>';
       $html .= $record->name;
       $html .= '</span></a></div>';

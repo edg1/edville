@@ -1278,7 +1278,9 @@ class RoomsUnitDescription{
     $html .= '<div class="slider_control">';
     $html .= '<p><span id="slider-prev"></span><span id="slider-next"></span></p>';
     $html .= '</div>';
-    $html .= "<div class='ed_logo' style='background-image:url(" . file_create_url('public://ed-logo.png') . ")'></div>";
+    $html .= "<div class='ed_logo_box'>";
+    $html .= "<img src = '" . file_create_url('public://edville.png') . "' width='190px' height = '61px' class='ed_logo'>";
+    $html .= '</div>';
     $html .= '</div>';
     return $html;
   }
@@ -1296,7 +1298,9 @@ class RoomsUnitDescription{
     for ($i = 1; $i < count($images); $i++)
     {
       $html .= '<div class="unit_gallery_item">';
+      $html .= '<div class="unit_gallery_item_img">';
       $html .= "<img src='" . $images[$i]['img'] . "' />";
+      $html .= '</div>';
       $html .= '<div class="unit_gallery_item_title"><span>';
       $html .= $images[$i]['imgtitle'];
       $html .= '</span></div>';

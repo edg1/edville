@@ -5,6 +5,10 @@
 	max-width: 100% !important;
 }
 
+.unit_header_slider{
+  position: relative;
+}
+
 .unit_header_slider .slider_img{
 	width:100%;
 	height:200px;
@@ -19,13 +23,64 @@
 	max-width: 970px;
 }
 
+
+@media only screen and (max-width: 640px) {
+
+  .unit_attribute_item{
+    display:block;
+    float:left;
+    margin-left:0px;
+    text-align: center;
+    width:8%;
+  }
+
+  .unit_attribute_item img{
+    width:75%;
+    height:75%;
+  }
+
+  .unit_attribute_item_title{
+    text-align: center;
+    height:30px;
+    font-size: 0.5em;
+  }
+
+}
+
+@media only screen and (min-width: 640px) {
+
+  .unit_attribute_item{
+    display:block;
+    float:left;
+    margin-left:0px;
+    text-align: center;
+    width:64px;
+  }
+
+  .unit_attribute_item img{
+    width:75%;
+    height:75%;
+  }
+
+  .unit_attribute_item_title{
+    text-align: center;
+    height:30px;
+    font-size: 10px;
+  }
+
+}
+
 .ed_logo{
-	width: 72px;
-	height: 72px;
-	position: absolute;
-	top: 100px;
-	left:15%;
-	background-size: cover;
+	width:100%;
+  height:100%;
+}
+
+.ed_logo_box{
+  height: 25%;
+  position: absolute;
+  bottom: 40px;
+  left:15%;
+  background-size: cover;
 }
 
 .unit_title_box{
@@ -62,12 +117,12 @@
 }
 
 #slider-next{
-  right: 30px;
+  right: 2.5%;
   position: absolute;
 }
 
 #slider-prev{
-  left: 30px;
+  left: 2.5%;
   position: absolute;
 }
 
@@ -86,25 +141,6 @@
 
 .unit_attribute_item_img{
   display:inline-block;
-}
-
-.unit_attribute_item{
-  display:block;
-  float:left;
-  margin-left:0px;
-  text-align: center;
-  width:64px;
-}
-
-.unit_attribute_item img{
-  width:75%;
-  height:75%;
-}
-
-.unit_attribute_item_title{
-  text-align: center;
-  height:30px;
-  font-size: 10px;
 }
 
 .unit_indent_bullet{
@@ -177,4 +213,10 @@
 	border-color: #444;
 	cursor:pointer;
 	float:right;
+}
+
+.up-footer{
+  max-width: 970px !important;
+  width:100% !important;
+  margin:0 auto !important;
 }
