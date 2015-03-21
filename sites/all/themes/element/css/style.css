@@ -471,7 +471,8 @@ header.active .inactive_logo{
   padding: 15px 20px;
   text-transform: uppercase;
   font-weight: 400;
-  background: #66cc99;
+  /*background: #66cc99;*/
+  background: black;
   margin: 0;
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -653,7 +654,8 @@ header.active .navbar-nav {
   top: 100%;
   right: 0;
   width: 200px;
-  background: #66cc99;
+  /*background: #66cc99;*/
+  background: black;
   padding: 4px;
   visibility: hidden;
   opacity: 0;
@@ -696,7 +698,8 @@ header.active .navbar-nav {
   z-index: 2;
 }
 .form-search button i {
-  color: #66cc99;
+  /*color: #66cc99;*/
+  color: black;
   font-size: 16px;
 }
 .form-search.active {
@@ -846,7 +849,8 @@ ul.portfolio-pagination li a:hover {
   letter-spacing: 1px;
 }
 .md-slide-wrap .tp-caption.large_bold_white span {
-  color: #66cc99;
+  /*color: #66cc99;*/
+  color: black;
 }
 .md-slide-wrap .tp-caption.medium_thin_grey {
   margin-top: 10px;
@@ -889,7 +893,7 @@ ul.portfolio-pagination li a:hover {
 }
 .title-section h1 {
   color: #333333;
-  font-size: 18px;
+  font-size: 24px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 600;
   margin: 0 0 30px;
@@ -988,7 +992,8 @@ ul.portfolio-pagination li a:hover {
   font-family: 'Open Sans', sans-serif;
   font-weight: 600;
   margin: 0 0 10px;
-  color: #66cc99;
+  /*color: #66cc99;*/
+  color: black;
   transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
@@ -1184,7 +1189,8 @@ ul.portfolio-pagination li a:hover {
   -o-transition: all 0.2s ease-in-out;
 }
 .portfolio-section .isotope-element .inner-project .project-hover ul li a i {
-  color: #66cc99;
+  /*color: #66cc99;*/
+  color: black;
   font-size: 24px;
   transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -1248,7 +1254,8 @@ ul.portfolio-pagination li a:hover {
   font-weight: 400;
   line-height: 20px;
   margin: 0 0 10px;
-  color: #66cc99;
+  /*color: #66cc99;*/
+  color: black;
   margin: 0;
   opacity: 0;
   transition: all 0.4s ease-in-out;
@@ -1343,7 +1350,7 @@ button.mfp-close, button.mfp-arrow {
 .title2 h1 {
   position: relative;
   margin-bottom: 0;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
 }
 .title2 h1:after {
   position: absolute;
@@ -1399,7 +1406,8 @@ button.mfp-close, button.mfp-arrow {
   -o-transition: all 0.2s ease-in-out;
 }
 .statistic-section .statistic-box .statistic-post i {
-  color: #66cc99;
+  /*color: #66cc99;*/
+  color: black;
   font-size: 0;
   margin-bottom: 20px;
 }
@@ -4776,7 +4784,7 @@ input[type=text] {
 }
 .team-section2 {
   padding: 50px 0;
-  background: url('../images/pattern1.jpg');
+  /*background: url('../images/pattern1.jpg');*/
 }
 .team-section2 .team-post {
   padding: 0 10px;
