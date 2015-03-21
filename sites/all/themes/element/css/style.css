@@ -1350,6 +1350,8 @@ button.mfp-close, button.mfp-arrow {
 .title2 h1 {
   position: relative;
   margin-bottom: 0;
+  font-size: 36px;
+  font-weight: 600;
   /*text-transform: uppercase;*/
 }
 .title2 h1:after {
@@ -4986,6 +4988,30 @@ input[type=text] {
   top: -7px;
   /*border: 3px solid #66cc99;*/
   border: 3px solid black;
+}
+.feature-post-icon{
+  font-size: 28px;
+}
+.feature-post-content h2{
+  font-size: 20px;
+  margin: 0;
+}
+.feature-box{
+  margin-bottom: 60px;
+}
+.about-page-header{
+  margin-top: -20px;
+  height: 300px;
+  text-align: center;
+  background:url('../images/title-banner7.jpg');
+  background-size: cover;
+}
+.about-page-header h1{
+  padding-top: 80px;
+}
+.about-page-header h2, 
+.about-page-header h3{
+  color:white;
 }
 /*-------------------------------------------------*/
 /* =  services page
