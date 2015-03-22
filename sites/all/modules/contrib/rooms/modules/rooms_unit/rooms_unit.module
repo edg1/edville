@@ -1183,7 +1183,9 @@ class RoomsUnitDescription{
     {
       if ($this->check_availability($startdate, $enddate))
       {
-        $price = $price_calendar->calculatePrice($startdate, $enddate, $this->unit->min_sleeps, 0, array());
+        $s = date_create($startdate->format('y-m-d'));
+        $s->add(new DateInterval("P1D"));
+        $price = $price_calendar->calculatePrice($s, $enddate, $this->unit->min_sleeps, 0, array());
         $range = array('start' => $startdate, 'end' => $enddate, 'price' => $price);
         $result[] = $range;
       }
@@ -1224,7 +1226,9 @@ class RoomsUnitDescription{
     while (true)
     {
       if ($this->check_availability($startdate, $enddate)){
-        $price = $price_calendar->calculatePrice($startdate, $enddate, $this->unit->min_sleeps, 0, array());
+        $s = date_create($startdate->format('y-m-d'));
+        $s->add(new DateInterval("P1D"));
+        $price = $price_calendar->calculatePrice($s, $enddate, $this->unit->min_sleeps, 0, array());
         $range = array('start' => $startdate, 'end' => $enddate, 'price' => $price);
         $result[] = $range;
       }

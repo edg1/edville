@@ -1824,8 +1824,8 @@ button.mfp-close, button.mfp-arrow {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
-  padding: 10px;
-  width: 160px;
+  padding: 5px;
+  /*width: 160px;*/
   text-align: center;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -5001,13 +5001,13 @@ input[type=text] {
 }
 .about-page-header{
   margin-top: -20px;
-  height: 300px;
+  height: 360px;
   text-align: center;
-  background:url('../images/title-banner7.jpg');
+  background:url('../images/title-banner9.jpg');
   background-size: cover;
 }
 .about-page-header h1{
-  padding-top: 80px;
+  padding-top: 100px;
 }
 .about-page-header h2, 
 .about-page-header h3{
@@ -7332,7 +7332,6 @@ footer .up-footer h2 {
   font-family: 'Open Sans', sans-serif;
   font-weight: 600;
   margin: 0 0 10px;
-  color: #ffffff;
   margin-bottom: 40px;
 }
 footer .up-footer ul.social-list {

@@ -76,7 +76,6 @@
 }
 
 .ed_logo_box{
-  height: 25%;
   position: absolute;
   bottom: 40px;
   left:15%;
@@ -162,7 +161,7 @@
   line-height: 1.42857143;
   word-break: break-all;
   word-wrap: break-word;
-  white-space: pre-wrap;
+  white-space: pre-line;
   background-color: white;
   border: 0;
   font-family: Tahoma;
