@@ -5013,6 +5013,12 @@ input[type=text] {
 .about-page-header h3{
   color:white;
 }
+.icon-fabric{
+  width:40px;
+  height: 40px;
+  background: url('../images/fabric.png');
+  background-size: cover;
+}
 /*-------------------------------------------------*/
 /* =  services page
 /*-------------------------------------------------*/
