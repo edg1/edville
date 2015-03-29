@@ -4127,6 +4127,11 @@ input[type=text] {
   float: left;
   margin-right: 36px;
 }
+.blog-categories-blog-page li div{
+  float: left;
+  display: inline-block;
+  margin-right: 36px;
+}
 .blog-categories-blog-page ul{
   height: 30px;
   display: inline-block;
@@ -6339,6 +6344,7 @@ input[type=text] {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
+  display: none;
 }
 .page-shop .page-banner-section {
   background: url('../images/shop-banner.jpg') center no-repeat;
