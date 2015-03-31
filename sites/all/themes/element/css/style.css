@@ -4105,14 +4105,14 @@ input[type=text] {
 
 .blog-page-header{
   margin-top: -20px;
-  height: 240px;
+  height: 204px;
   text-align: center;
   background:url('../images/title-banner10.jpg');
   background-size: cover;
   color: white;
 }
 .blog-page-header h1{
-  padding-top: 100px;
+  padding-top: 80px;
 }
 .blog-categories-blog-page{
   text-align: center;
@@ -4143,6 +4143,12 @@ input[type=text] {
 .blog-categories-blog-page a:hover{
   color: black;
   text-decoration: none;
+}
+.blog-gal .field-item{
+  margin-bottom: 10px;
+}
+.blog-gal .field-item:last-child{
+  margin-bottom: 0px;
 }
 
 /*-------------------------------------------------*/
@@ -6887,6 +6893,7 @@ ul.portfolio-pagination li a:hover {
 .page-banner-section {
   padding: 100px 0 65px;
   text-align: center;
+  height: 204px;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
