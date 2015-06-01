@@ -1,0 +1,287 @@
+<?php
+
+/**
+ * @file
+ * Social comment module.
+ */
+
+require_once 'includes/social.google.inc';
+require_once 'includes/social.facebook.inc';
+require_once 'includes/social.twitter.inc';
+
+define('SOCIAL_URL_MAX_LENGTH', 2048);
+
+/**
+ * Implements hook_menu().
+ */
+function social_menu() {
+  $items = array();
+
+  $items['admin/config/system/social-comments'] = array(
+    'title' => 'Social comments',
+    'description' => 'Configure social comments',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('social_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'includes/social.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function social_libraries_info() {
+  $libraries['acTwitterConversation'] = array(
+    'name' => 'acTwitterConversation',
+    'vendor url' => 'http://adriancrepaz.com/twitter_conversions_api',
+    'download url' => 'https://github.com/adriancrepaz/acTwitterConversation',
+    'files' => array(
+      'php' => array('acTwitterConversation.php'),
+    ),
+    'version' => '1.0',
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function social_theme() {
+  $themes = array();
+
+  $themes['social_items'] = array(
+    'variables' => array(
+      'comments' => array(),
+      'bundle' => NULL,
+      'entity_type' => NULL,
+      'type' => NULL,
+    ),
+    'template' => 'social-items',
+    'path' => drupal_get_path('module', 'social') . '/templates',
+  );
+
+  return $themes;
+}
+
+/**
+ * Prepares variables for social-items template.
+ */
+function template_preprocess_social_items(&$variables) {
+  $comments = &$variables['comments'];
+
+  if (is_array($comments)) {
+    foreach ($comments as &$comment) {
+      $comment['date'] = format_date($comment['timestamp'], 'medium');
+      $comment['userphoto'] = theme('image', array('path' => $comment['userphoto']));
+    }
+  }
+
+  $variables['theme_hook_suggestions'][] = 'social_items__' . $variables['entity_type'];
+  $variables['theme_hook_suggestions'][] = 'social_items__' . $variables['bundle'];
+  $variables['theme_hook_suggestions'][] = 'social_items__' . $variables['type'];
+  $variables['theme_hook_suggestions'][] = 'social_items__' . $variables['type'] . '__' . $variables['bundle'];
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function social_field_info() {
+  return array(
+    'social_field' => array(
+      'label' => t('Social'),
+      'description' => t('Store an URL string.'),
+      'default_widget' => 'social',
+      'default_formatter' => 'social_google',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function social_field_is_empty($item, $field) {
+  return empty($item['url']);
+}
+
+/**
+ * Implements hook_field_insert().
+ */
+function social_field_insert($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  foreach ($items as $delta => $value) {
+    trim($items[$delta]['url']);
+  }
+}
+
+/**
+ * Implements hook_field_update().
+ */
+function social_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  foreach ($items as $delta => $value) {
+    trim($items[$delta]['url']);
+  }
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function social_field_widget_info() {
+  return array(
+    'social_field' => array(
+      'label' => 'Social field',
+      'field types' => array('social_field'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function social_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $element += array(
+    '#type' => $instance['widget']['type'],
+    '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
+  );
+  return $element;
+}
+
+/**
+ * Implements hook_element_info().
+ */
+function social_element_info() {
+  $elements = array();
+  $elements['social_field'] = array(
+    '#input' => TRUE,
+    '#process' => array('social_field_process'),
+    '#theme_wrappers' => array('form_element'),
+  );
+  return $elements;
+}
+
+/**
+ * Processes the element before displaying the field.
+ */
+function social_field_process($element, $form_state, $complete_form) {
+  $element['url'] = array(
+    '#type' => 'textfield',
+    '#maxlength' => SOCIAL_URL_MAX_LENGTH,
+    '#title' => t('URL'),
+    '#default_value' => isset($element['#value']['url']) ? $element['#value']['url'] : NULL,
+  );
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function social_field_formatter_info() {
+  $formatters = array();
+
+  $formatters['social_google'] = array(
+    'label' => t('Social (Google)'),
+    'field types' => array('social_field'),
+    'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    'settings' => array(
+      'count' => 0,
+    ),
+  );
+  $formatters['social_facebook'] = array(
+    'label' => t('Social (Facebook)'),
+    'field types' => array('social_field'),
+    'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    'settings' => array(
+      'count' => 0,
+    ),
+  );
+
+  $library = libraries_detect('acTwitterConversation');
+  if ($library['installed']) {
+    $formatters['social_twitter'] = array(
+      'label' => t('Social (Twitter)'),
+      'field types' => array('social_field'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'settings' => array(
+        'count' => 0,
+      ),
+    );
+  }
+
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function social_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+  if ($display['type'] == 'social_google' || $display['type'] == 'social_facebook' || $display['type'] == 'social_twitter') {
+    $element['count'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Count'),
+      '#default_value' => $settings['count'],
+      '#description' => t('Count of items to show. Input 0 to display all.'),
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function social_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $summary = array();
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  if ($display['type'] == 'social_google' || $display['type'] == 'social_facebook' || $display['type'] == 'social_twitter') {
+    $count = $settings['count'];
+    if (!empty($count)) {
+      $summary[] = t('Display: @count items', array('@count' => $count));
+    }
+    else {
+      $summary[] = t('Display all items');
+    }
+  }
+
+  return implode('</ br>', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function social_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $elements = array();
+  $settings = $display['settings'];
+
+  if ($display['type'] == 'social_google' || $display['type'] == 'social_facebook' || $display['type'] == 'social_twitter') {
+    $type = str_replace('social_', '', $display['type']);
+    $formatter = 'Social' . drupal_ucfirst($type) . 'Formatter';
+
+    foreach ($items as $delta => $item) {
+      $count = $settings['count'];
+      $bundle = $instance['bundle'];
+
+      $comments = new $formatter();
+      $comments = $comments->getData($item['url'], $count);
+
+      if ($comments) {
+        $elements[$delta] = array(
+          '#theme' => 'social_items',
+          '#comments' => $comments,
+          '#bundle' => $bundle,
+          '#entity_type' => $entity_type,
+          '#type' => $type,
+        );
+      }
+    }
+  }
+
+  return $elements;
+}
