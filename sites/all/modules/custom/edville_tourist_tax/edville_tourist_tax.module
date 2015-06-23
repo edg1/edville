@@ -7,6 +7,6 @@
  */
 
 function edville_tourist_tax_commerce_tax_type_calculate_rates($tax_type, $line_item) {
-    dsm(commerce_order_load($line_item->order_id));
+    dsm($line_item);
     dsm($tax_type);
 }
