@@ -7,8 +7,16 @@
  */
 
 function edville_tourist_tax_commerce_tax_type_calculate_rates($tax_type, $line_item) {
-    if ($line_item->type == "rooms_booking") {
+    if ($line_item->type == "rooms_booking" && $tax_type['name'] == "tourism_tax") {
         $line_item_wrapper = entity_metadata_wrapper('commerce_line_item', $line_item);
-        dsm($line_item_wrapper);
+        $tax_rate = commerce_tax_rate_load("tourism_tax");
+        $line_item_wrapper->commerce_unit_price->data = commerce_price_component_add(
+            $wrapper->commerce_unit_price->value(), 
+            $tax_rate['price_component'], 
+            5, 
+            true
+        );
+        dsm($line_item);
+        dsm($tax_rate);
     }
 }
