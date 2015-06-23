@@ -1,0 +1,8 @@
+name = Edville Tourist Tax
+description = Adds rules to calculate Tourist tax
+package = Edville
+core = 7.x
+
+dependencies[] = commerce
+dependencies[] = rules
+dependencies[] = token
