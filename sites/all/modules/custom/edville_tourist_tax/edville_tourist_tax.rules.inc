@@ -25,7 +25,7 @@ function edville_tourist_tax_rules_action_info() {
     ),
     'group' => t('Commerce Cart'),
     'callbacks' => array(
-      'execute' => 'edville_tourist_tax_set_tax ',
+      'execute' => 'edville_tourist_tax_set_tax',
     ),
   );
 
