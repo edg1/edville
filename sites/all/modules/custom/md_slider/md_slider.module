@@ -450,7 +450,7 @@ function md_slider_view($machine_name, $type="block") {
     $content = theme('md_slider_render', array('slider' => $slider, "type" => $type));
   }
 
-  return $content;
+  return '<div>' . $content . '</div>';
 }
 
 /**
