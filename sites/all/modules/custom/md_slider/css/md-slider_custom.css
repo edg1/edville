@@ -1,0 +1,56 @@
+
+
+.mds-menu-wrapper {
+    text-align: center;
+    width: 100%;
+
+    position: absolute;
+    
+    bottom:10%;
+
+    z-index: 100;
+
+}
+
+.mds-menu{
+    
+
+    color:white;
+    display:inline-block;
+    padding:0px;
+}
+
+.mds-menu-wrapper a{
+
+}
+
+.mds-menu-item {
+
+
+    float:left;
+    list-style-type: none;
+    margin:-1px;
+}
+
+.mds-menu-item a{
+    -webkit-transition: all 0.5s ease-in-out;
+
+    text-decoration: none;
+    background-color:rgba(0, 0, 0, 0.2);
+    color: white;
+    border:1px solid white;
+    
+    padding:0.3em 0.7em 0.3em 0.7em;
+}
+
+.mds-menu-item a:hover{
+    text-decoration: none;
+    color: black;
+    background-color:rgba(255, 255, 255, 0.9);
+}
+
+.large-item a {
+    background-color:rgba(0, 0, 0, 0.2);
+    //font-size:1.40em;
+    padding:0.7em 1em 0.7em 1em;
+}

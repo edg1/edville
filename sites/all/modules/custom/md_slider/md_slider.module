@@ -440,6 +440,8 @@ function md_slider_view($machine_name, $type="block") {
     // Add css files
     drupal_add_css($module_path . '/css/animate.css');
     drupal_add_css($module_path . '/css/md-slider.css');
+    drupal_add_css($module_path . '/css/md-slider_custom.css');
+
     if (isset($slider->settings["generate_css_file"]) && !$slider->settings["generate_css_file"])
       drupal_add_css(variable_get("md_slider_{$slider->slid}_css"), "inline");
     else
@@ -450,7 +452,25 @@ function md_slider_view($machine_name, $type="block") {
     $content = theme('md_slider_render', array('slider' => $slider, "type" => $type));
   }
 
-  return '<div>' . $content . '</div>';
+  $overMenu = "<div class='mds-menu-wrapper'>
+                    <ul class='mds-menu'>
+                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>ARRIVAL DATE</a></li>
+                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>DEPARTURE DATE</a></li>
+                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>GROUP SIZE</a></li>
+                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>CHILDREN</a></li>
+                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>PURPOSE</a></li>
+                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>SEARCH</a></li>
+                    </ul>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <ul class='mds-menu'>
+                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>VIEW MORE PICTURES</a></li>
+                    </ul>
+                </div>";
+
+  return $overMenu . $content;
 }
 
 /**
