@@ -110,8 +110,8 @@
             showThumb: true, // Show thumbnail, if showBullet = true and showThumb = true, thumbnail will be shown when you hover bullet navigation
             enableDrag: true, // Enable mouse drag
             touchSensitive: 50,
-            onEndTransition: function() {  },	//this callback is invoked when the transition effect ends
-            onStartTransition: function() {  }	//this callback is invoked when the transition effect starts
+            //onEndTransition: function() {  },	//this callback is invoked when the transition effect ends
+            //onStartTransition: function() {  }	//this callback is invoked when the transition effect starts
         };
         options = $.extend({}, defaults, options);
         var self= $(this), slideItems = [], oIndex, activeIndex = -1, numItem = 0, slideWidth, slideHeight, lock = true,
@@ -665,7 +665,9 @@
             }
 			oIndex = activeIndex;
 			activeIndex = index;
-			options.onStartTransition.call(self);
+
+			options.OnTransitionStart(slideItems[index]);
+
 			if (slideItems[oIndex]) {
 				$('div.md-bullet:eq(' + oIndex + ')', buttons).removeClass('md-current');
                 $('a:eq(' + oIndex + ')', slideThumb).removeClass('md-current');
@@ -850,7 +852,8 @@
         }
         //When Animation finishes
         function transitionEnd() {
-            options.onEndTransition.call(self);
+
+            options.OnTransitionEnd(slideItems[activeIndex]);
             $('.md-strips-container', self).remove();
             slideItems[oIndex].hide();
             slideItems[activeIndex].show();
@@ -995,7 +998,7 @@
                         slice2.addClass("md-trans-elems-2");                        
                     }, 50 );
                     setTimeout(function() {
-                        options.onEndTransition.call(self);
+                        options.OnTransitionEnd.call(self);
                         $('.md-strips-container', self).remove();
                         lock = false;
                         animateTheCaptions(slideItems[activeIndex]);
@@ -1128,7 +1131,7 @@
                         setTimeout(function () {
                             strip.animate(css, speed, 'easeOutQuint', function () {
                                 if (i == options.stripRows - 1) {
-                                    options.onEndTransition.call(self);
+                                    options.OnTransitionEnd.call(self);
                                     $('.md-strips-container', self).remove();
                                     lock = false;
                                     animateTheCaptions(slideItems[activeIndex]);
@@ -1164,7 +1167,7 @@
                         setTimeout(function () {
                             strip.animate(css, speed, 'easeOutQuint', function () {
                                 if (i == options.stripCols - 1) {
-                                    options.onEndTransition.call(self);
+                                    options.OnTransitionEnd.call(self);
                                     $('.md-strips-container', self).remove();
                                     lock = false;
                                     animateTheCaptions(slideItems[activeIndex]);
