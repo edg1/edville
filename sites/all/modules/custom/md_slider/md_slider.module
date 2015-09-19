@@ -441,6 +441,7 @@ function md_slider_view($machine_name, $type="block") {
     drupal_add_css($module_path . '/css/animate.css');
     drupal_add_css($module_path . '/css/md-slider.css');
     drupal_add_css($module_path . '/css/md-slider_custom.css');
+	drupal_add_css($module_path . '/css/font-awesome-4.4.0/css/font-awesome.css');
 
     if (isset($slider->settings["generate_css_file"]) && !$slider->settings["generate_css_file"])
       drupal_add_css(variable_get("md_slider_{$slider->slid}_css"), "inline");
@@ -451,14 +452,24 @@ function md_slider_view($machine_name, $type="block") {
 
     $content = theme('md_slider_render', array('slider' => $slider, "type" => $type));
   }
+  
+	drupal_add_library('system', 'ui.datepicker');
+	drupal_add_js("(function ($) { $('#start-time').datepicker(); })(jQuery);", array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+	drupal_add_js("(function ($) { $('#end-time').datepicker(); })(jQuery);", array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+	
+	$options = "";
+	
+	for ($i=1; $i<31; $i++) {
+		$options = $options . "<option value='" . $i  . "'>" . $i . "</option>";
+	}
 
   $overMenu = "<div class='mds-menu-wrapper'>
                     <ul class='mds-menu'>
-                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>ARRIVAL DATE</a></li>
-                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>DEPARTURE DATE</a></li>
-                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>GROUP SIZE</a></li>
-                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>CHILDREN</a></li>
-                        <li class='mds-menu-item'><a href='http://www.ed.be/booking'>PURPOSE</a></li>
+                        <li class='mds-menu-item'><input id='start-time' placeholder='ARRIVAL DATE' /></li>
+						<li class='mds-menu-item'><input id='end-time' placeholder='DEPARTURE DATE' /></li>
+						<li class='mds-menu-item'><select id='end-time' /><option value='' disabled selected>ADULTS</option>" . $options . "</select></li>
+						<li class='mds-menu-item'><select id='end-time' /><option value='' disabled selected>CHILDREN</option>" . $options . "</select></li>
+                        <li class='mds-menu-item'><i style='margin-right:1em;' class='fa fa-square-o'>PURPOSE</i></li>
                         <li class='mds-menu-item'><a href='http://www.ed.be/booking'>SEARCH</a></li>
                     </ul>
                     <br>
