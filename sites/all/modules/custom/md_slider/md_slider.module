@@ -469,7 +469,7 @@ function md_slider_view($machine_name, $type="block") {
 						<li class='mds-menu-item'><input id='end-time' placeholder='DEPARTURE DATE' /></li>
 						<li class='mds-menu-item'><select id='end-time' /><option value='' disabled selected>ADULTS</option>" . $options . "</select></li>
 						<li class='mds-menu-item'><select id='end-time' /><option value='' disabled selected>CHILDREN</option>" . $options . "</select></li>
-                        <li class='mds-menu-item'><i style='margin-right:1em;' class='fa fa-square-o'>PURPOSE</i></li>
+                        <li class='mds-menu-item'><i style='line-height: 1.5em !important;' class='fa fa-check-square-o'>PURPOSE</i></li>
                         <li class='mds-menu-item'><a href='http://www.ed.be/booking'>SEARCH</a></li>
                     </ul>
                     <br>

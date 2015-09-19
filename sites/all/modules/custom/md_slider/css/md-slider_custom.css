@@ -32,6 +32,20 @@
     margin:-1px;
 }
 
+
+
+
+/*===============================================================
+	White theme
+===============================================================*/
+.mds-menu-item.white_theme *::-webkit-input-placeholder{
+	color:white;
+}
+
+.mds-menu-item.white_theme *:hover::-webkit-input-placeholder{
+	color:black;
+}
+
 .mds-menu-item.white_theme *{
     -webkit-transition: all 0.5s ease-in-out;
 
@@ -44,12 +58,24 @@
 }
 
 .mds-menu-item.white_theme *:hover{
+-webkit-transition: all 0.5s ease-in-out;
+
     text-decoration: none;
     color: black;
     background-color:rgba(255, 255, 255, 0.9);
+	border:1px solid white;
 }
 
 
+/*===============================================================
+	Black theme
+===============================================================*/
+.mds-menu-item.black_theme *::-webkit-input-placeholder {
+	color: black;
+}
+.mds-menu-item.black_theme *:hover::-webkit-input-placeholder {
+	color: white;
+}
 .mds-menu-item.black_theme *{
     -webkit-transition: all 0.5s ease-in-out;
 
@@ -57,12 +83,11 @@
     background-color:rgba(255, 255, 255, 0.2);
     color: black;
     border:1px solid black;
-    
-    padding:0.3em 0.7em 0.3em 0.7em;
+	
+	padding:0.3em 0.7em 0.3em 0.7em;
 }
 
 .mds-menu-item.black_theme *:hover{
-    text-decoration: none;
     color: white;
     background-color:rgba(0, 0, 0, 0.9);
 }
