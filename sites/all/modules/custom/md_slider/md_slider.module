@@ -474,7 +474,7 @@ function md_slider_view($machine_name, $type="block") {
                         <option value=''>business</option>
                         <option value=''>student</option>
                         </select></li>
-                        <li class='mds-menu-item'><a style='padding: 5px 15px 5px 15px;' href='http://www.ed.be/booking'>SEARCH</a></li>
+                        <li class='mds-menu-item'><a style='padding: 5px 20px 5px 20px;' href='http://www.ed.be/booking'>SEARCH</a></li>
                     </ul>
                     <br>
                     <br>
