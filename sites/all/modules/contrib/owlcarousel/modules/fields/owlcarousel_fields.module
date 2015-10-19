@@ -14,9 +14,33 @@ function owlcarousel_fields_field_formatter_info() {
       'label' => t('Owl Carousel'),
       'field types' => array('image', 'text', 'text_long', 'text_with_summary'),
       'settings'  => array(
-        'settings_group' => 'default',
+        'settings_group' => 'owlcarousel_settings_default',
         'image_style' => 'large',
         'trim_length' => '',
+      ),
+    ),
+    'owlcarousel_fc_formatter' => array(
+      'label' => t('Owl Carousel'),
+      'field types' => array('field_collection'),
+      'settings'  => array(
+        'settings_group' => 'owlcarousel_settings_default',
+        'view_mode' => 'full',
+      ),
+    ),
+    'owlcarousel_er_formatter' => array(
+      'label' => t('Owl Carousel'),
+      'field types' => array('entityreference'),
+      'settings'  => array(
+        'settings_group' => 'owlcarousel_settings_default',
+        'view_mode' => 'full',
+      ),
+    ),
+    'owlcarousel_pa_formatter' => array(
+      'label' => t('Owl Carousel'),
+      'field types' => array('paragraphs'),
+      'settings'  => array(
+        'settings_group' => 'owlcarousel_settings_default',
+        'view_mode' => 'full',
       ),
     ),
   );
@@ -58,6 +82,54 @@ function owlcarousel_fields_field_formatter_settings_form($field, $instance, $vi
     );
   }
 
+  if ($field['type'] == 'field_collection') {
+    $entity_type = entity_get_info('field_collection_item');
+    $options = array();
+    foreach ($entity_type['view modes'] as $mode => $info) {
+      $options[$mode] = $info['label'];
+    }
+
+    $element['view_mode'] = array(
+      '#type' => 'select',
+      '#title' => t('View mode'),
+      '#options' => $options,
+      '#default_value' => $settings['view_mode'],
+      '#description' => t('Select the view mode'),
+    );
+  }
+
+  if ($field['type'] == 'entityreference') {
+    $entity_type = entity_get_info($field['settings']['target_type']);
+    $options = array();
+    foreach ($entity_type['view modes'] as $mode => $info) {
+      $options[$mode] = $info['label'];
+    }
+
+    $element['view_mode'] = array(
+      '#type' => 'select',
+      '#title' => t('View mode'),
+      '#options' => $options,
+      '#default_value' => $settings['view_mode'],
+      '#description' => t('Select the view mode'),
+    );
+  }
+
+  if ($field['type'] == 'paragraphs') {
+    $entity_type = entity_get_info('paragraphs_item');
+    $options = array();
+    foreach ($entity_type['view modes'] as $mode => $info) {
+      $options[$mode] = $info['label'];
+    }
+
+    $element['view_mode'] = array(
+      '#type' => 'select',
+      '#title' => t('View mode'),
+      '#options' => $options,
+      '#default_value' => $settings['view_mode'],
+      '#description' => t('Select the view mode'),
+    );
+  }
+
   return $element;
 }
 
@@ -67,16 +139,25 @@ function owlcarousel_fields_field_formatter_settings_form($field, $instance, $vi
 function owlcarousel_fields_field_formatter_settings_summary($field, $instance, $view_mode) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
-
   $message = '@settings applied to carousel instance.';
+
   if ($field['type'] == 'image') {
     $message = '@settings with image style @style applied to carousel instance.';
   }
 
-  $summary = t($message, array(
-    '@settings' => $settings['settings_group'],
-    '@style' => $settings['image_style'],
-  ));
+  if ($field['type'] == 'field_collection' || $field['type'] == 'entityreference' || $field['type'] == 'paragraphs') {
+    $message = '@settings applied to carousel instance on @view_mode view mode.';
+    $summary = t($message, array(
+      '@settings' => $settings['settings_group'],
+      '@view_mode' => $settings['view_mode'],
+    ));
+  }
+  else {
+    $summary = t($message, array(
+      '@settings' => $settings['settings_group'],
+      '@style' => $settings['image_style'],
+    ));
+  }
 
   return $summary;
 }
@@ -92,11 +173,7 @@ function owlcarousel_fields_field_formatter_view($entity_type, $entity, $field, 
   $items_group = FALSE;
   $settings_group = array(
     'instance' => $settings['settings_group'],
-    'attributes' => array(
-      'id' => array(
-        'default' => drupal_html_id('owlcarousel_fields_' . $instance['id'])
-      ),
-    ),
+    'id' => 'owlcarousel-fields-' . $instance['id'],
   );
 
   // Format carousel items.
@@ -114,7 +191,7 @@ function owlcarousel_fields_field_formatter_view($entity_type, $entity, $field, 
             $output = text_summary($output, $instance['settings']['text_processing'] ? $item['format'] : NULL, $display['settings']['trim_length']);
           }
         }
- 
+
         $items_group[]['row'] = $output;
       }
     break;
@@ -122,8 +199,8 @@ function owlcarousel_fields_field_formatter_view($entity_type, $entity, $field, 
       foreach ($items as $item) {
         $vars = array(
           'path' => $item['uri'],
-          'width' => $item['width'],
-          'height' => $item['height'],
+          'width' => isset($item['width']) ? $item['width'] : '',
+          'height' => isset($item['height']) ? $item['height'] : '',
           'alt' => $item['alt'],
           'title' => $item['title'],
         );
@@ -137,11 +214,41 @@ function owlcarousel_fields_field_formatter_view($entity_type, $entity, $field, 
         }
       }
     break;
+    case 'field_collection':
+      $view_mode = !empty($settings['view_mode']) ? $settings['view_mode'] : 'full';
+      foreach ($items as $delta => $item) {
+        if ($field_collection = field_collection_field_get_entity($item)) {
+          $output = $field_collection->view($view_mode);
+          $items_group[$delta]['row'] = drupal_render($output);
+        }
+      }
+    break;
+    case 'entityreference':
+      $view_mode = !empty($settings['view_mode']) ? $settings['view_mode'] : 'full';
+      $entity_type = $field['settings']['target_type'];
+      foreach ($items as $delta => $item) {
+        $item_entity = entity_load($field['settings']['target_type'], array($item['target_id']));
+        if ($item_entity) {
+          $output = entity_view($field['settings']['target_type'], $item_entity, $view_mode);
+          $items_group[$delta]['row'] = drupal_render($output);
+        }
+      }
+      break;
+    case 'paragraphs':
+      $view_mode = !empty($settings['view_mode']) ? $settings['view_mode'] : 'full';
+      foreach ($items as $delta => $item) {
+        $item_entity = entity_load('paragraphs_item', array($item['value']));
+        if ($item_entity) {
+          $output = entity_view('paragraphs_item', $item_entity, $view_mode);
+          $items_group[$delta]['row'] = drupal_render($output);
+        }
+      }
+    break;
   }
 
   // Only render if we have items.
   if ($items_group) {
-    $element = array(
+    $element[] = array(
       '#theme' => 'owlcarousel',
       '#items' => $items_group,
       '#settings' => $settings_group,

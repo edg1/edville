@@ -39,13 +39,14 @@ function md_slider_field_widget_form(&$form, &$form_state, $field, $instance, $l
   if ($instance["widget"]["type"] == "md_slider_widget") {
     $options = array("-1" => t("None"));
     $sliders = MDSlider::get_all();
-
+    $fake_select = '<select class="fake-select-slider" style="display:none">';
     if ($sliders !== FALSE) {
       foreach ($sliders as $slider) {
         $options[$slider->machine_name] = $slider->title;
+        $fake_select .= '<option value="' . $slider->machine_name . '" data-sliderid="' . $slider->slid . '"></option>';
       }
     }
-
+    $fake_select .= '</select>';
     $element["md_slider_id"] = array(
       "#type" => "select",
       "#title" => t("Choose slider"),
@@ -56,7 +57,9 @@ function md_slider_field_widget_form(&$form, &$form_state, $field, $instance, $l
       "#attributes" => array("class" => array("md-slider-field-select")),
       "#field_suffix" => '<div class="md-slider-field-configure"><div><a href="#" class="configure-link" target="_blank">'.t("Configure").'</a></div><div><a href="#" class="edit-link" target="_blank">'.t("Edit").'</a></div></div>'
     );
-
+    $element['md_fake_select'] = array(
+      '#markup' => $fake_select,
+    );
     drupal_add_js(drupal_get_path("module", "md_slider") . "/js/md-slider-field-configure.js");
   }
 

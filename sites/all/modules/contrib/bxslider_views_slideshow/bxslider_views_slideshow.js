@@ -20,11 +20,16 @@
           );
 
           for (callback in Drupal.settings.viewsSlideshowBxslider[id]['callback']) {
-            Drupal.settings.viewsSlideshowBxslider[id]['callback'][callback] = eval('(' + Drupal.settings.viewsSlideshowBxslider[id]['callback'][callback] + ')');
+            Drupal.settings.viewsSlideshowBxslider[id]['callback'][callback]
+              = eval("Drupal.settings.viewsSlideshowBxslider[id]['callback'][callback] = (" + Drupal.settings.viewsSlideshowBxslider[id]['callback'][callback] + ")");
           }
           settingsBxSlider = $.extend({}, settingsBxSlider, Drupal.settings.viewsSlideshowBxslider[id]['callback']);
-
-          $(this).bxSlider(settingsBxSlider);
+          // Bind to window load, so that images are responsive.
+          $(window).bind('load', {
+            bxSlider: $(this)
+          }, function (event) {
+            event.data.bxSlider.bxSlider(settingsBxSlider);
+          });
         });
       }
     }

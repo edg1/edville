@@ -16,7 +16,7 @@
                     alert('You must choose sliders to export.');
                 }
                 else {
-                    $.post(settings.basePath+'?q=admin/structure/md-slider/export-data', {slids: selected.join(',')}, function(response) {
+                    $.post(settings.basePath + settings.pathPrefix + '?q=admin/structure/md-slider/export-data', {slids: selected.join(',')}, function(response) {
                         $('#edit-export-data', context).val(response);
                     });
                 }

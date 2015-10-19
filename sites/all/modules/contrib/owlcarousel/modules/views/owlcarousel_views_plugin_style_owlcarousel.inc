@@ -16,7 +16,7 @@ class owlcarousel_views_plugin_style_owlcarousel extends views_plugin_style {
   function option_definition() {
     $options = parent::option_definition();
 
-    $options['instance'] = array('default' => 'default');
+    $options['instance'] = array('default' => 'owlcarousel_settings_default');
     return $options;
   }
 
@@ -56,8 +56,8 @@ class owlcarousel_views_plugin_style_owlcarousel extends views_plugin_style {
    * Render display.
    */
   function render() {
-    $id = drupal_html_id('owl-carousel-' . $this->view->current_display . $this->view->vid);
-    $this->options['id']['default'] = $id;
+    $id = 'owl-carousel-' . $this->view->current_display . $this->view->vid;
+    $this->options['id'] = $id;
     // Group results.
     $rows = $this->render_grouping($this->view->result, $this->options['grouping']);
 

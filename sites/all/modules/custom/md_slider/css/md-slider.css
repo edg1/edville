@@ -4,7 +4,7 @@
 # Websites:  http://www.megadrupal.com -  Email: info@megadrupal.com
 --------------------------------------------------------------------------*/
 /* overlay */
-
+.md-overlay {position: fixed; z-index: 98; left: 0; top: 0;bottom: 0; right: 0; background: #000;opacity: 0.8}
 .md-videocontainer {position: fixed; width: 640px; height: 400px; background: #fff; z-index: 99; left: 30%; top: 30%;
     -moz-box-shadow:0px 0px 4px rgba(0,0,0,0.52);
     -webkit-box-shadow:0px 0px 4px rgba(0,0,0,0.52);
@@ -317,4 +317,12 @@
     -moz-transform: translateX(200%) rotate(25deg) scale(2);
     -ms-transform: translateX(200%) rotate(25deg) scale(2);
     transform: translateX(200%) rotate(25deg) scale(2);
+}
+.md-arrow {
+    opacity :0;
+    visibility: hidden;
+}
+.md-arrow.active {
+    opacity :1;
+    visibility: visible;
 }

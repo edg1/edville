@@ -125,6 +125,7 @@
     </select>
 
     <input type="text" name="opacity" value="100" maxlength="3" class="mdt-text mdt-input mdt-opacity"/>
+    <input type="text" value="" maxlength="24" name="mdtclass" class="mdt-text mdt-input mdt-custom-class"/>
 
     <select name="style" class="mdt-select mdt-input mdt-style">
       <option value="none">None</option>

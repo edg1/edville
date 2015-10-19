@@ -15,8 +15,12 @@
         <div class="choose-image">
           <a class="slide-choose-image-link" href="#">[Choose image]</a>
           <div id="slide-background-preview" style="position: relative">
-            <img src="" alt="" width="100" height="100">
+            <img src="" alt="" width="160" height="160">
             <a class="delete-background" href="#"></a>
+          </div>
+          <div class="custom-bg-alt-info">
+            <label for="custom-bg-alt">Custom background alt</label>
+            <input type="text" name="thumb-alt-tag" id="custom-bg-alt">
           </div>
         </div>
         <input type="hidden" id="slide-backgroundimage">
@@ -24,14 +28,22 @@
         <div class="choose-thumbnail">
           <a class="slide-choose-thumbnail-link" href="#">[Choose thumbnail]</a>
           <div id="slide-thumbnail-preview" style="position: relative">
-            <img src="" alt="" width="100" height="100">
+            <img src="" alt="" width="160" height="160">
             <a class="delete-thumbnail" href="#"></a>
+          </div>
+          <div class="custom-thumb-alt-info">
+            <label for="custom-thumb-alt">Custom thumbnail alt</label>
+            <input type="text" name="thumb-alt-tag" id="custom-thumb-alt">
           </div>
         </div>
 
         <div class="choose-slide-bg-color clearfix">
           <input type="hidden" id="slide-background-color" class="mdt-background mdt-input" value="" name="slide-background-color">
           <label style="float: left">Background Color</label>
+        </div>
+        <div class="choose-slide-bg-overlay clearfix">
+          <input type="hidden" id="slide-background-overlay" class="mdt-background mdt-input" value="" name="slide-background-overlay">
+          <label style="float: left">Background Overlay</label>
         </div>
 
         <input type="hidden" id="slide-thumbnail">

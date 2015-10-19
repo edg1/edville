@@ -30,8 +30,7 @@ function template_process_owlcarousel_views(&$vars) {
 
     // Add the slide items.
     $vars['items'] = $items;
-
-    $options['attributes']['id'] = $vars['options']['id'];
+    $options['id'] = $vars['options']['id'];
     $vars['settings'] = $options;
   }
 

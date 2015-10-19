@@ -6,7 +6,48 @@ var $ = jQuery.noConflict();
 $(document).ready(function($) {
 	"use strict";
 
-	/* global google: false */
+	/* book slider */
+	$('.book-slider').flexslider({
+    animation: "slide",
+    prevText:"",
+    nextText:"",
+    controlNav:false,
+    start: function ( slider ) {
+    	if ($('.flex-active-slide').hasClass('White')) {
+				$('header .inactive_logo').show();
+				$('header .active_logo').hide();
+				$('.navbar-nav > li > a').addClass('white');
+				$('.navbar-nav > li > a').removeClass('black');
+				console.log('white');
+			}
+			else {
+				$('header .inactive_logo').hide();
+				$('header .active_logo').show();
+				$('.navbar-nav > li > a').addClass('black');
+				$('.navbar-nav > li > a').removeClass('white');
+				console.log('black');
+			}
+    },
+    before: function ( slider ) {
+      if ($('.flex-active-slide').hasClass('White')) {
+				$('header .inactive_logo').show();
+				$('header .active_logo').hide();
+				$('.navbar-nav > li > a').addClass('white');
+				$('.navbar-nav > li > a').removeClass('black');
+				console.log('white');
+			}
+			else {
+				$('header .inactive_logo').hide();
+				$('header .active_logo').show();
+				$('.navbar-nav > li > a').addClass('black');
+				$('.navbar-nav > li > a').removeClass('white');
+				console.log('black');
+			}
+    }
+  });
+	
+	/* header color for each slide */
+	setHeaderColor();
 
 	/*-------------------------------------------------*/
 	/* =  portfolio isotope
@@ -563,3 +604,36 @@ $(document).ready(function($) {
   });  
 	
 });
+
+function setHeaderColor() {
+	if (!$('header').hasClass('active'))  {
+		if ($('.flexslider').length > 0) {
+			if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
+				$('header .inactive_logo').show();
+				$('header .active_logo').hide();
+				$('.navbar-nav > li > a').addClass('white');
+				$('.navbar-nav > li > a').removeClass('black');
+			}
+			else {
+				$('header .inactive_logo').hide();
+				$('header .active_logo').show();
+				$('.navbar-nav > li > a').addClass('black');
+				$('.navbar-nav > li > a').removeClass('white');
+			}
+			$('.flexslider').bind('before', function (slider) {
+	      if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
+					$('header .inactive_logo').show();
+					$('header .active_logo').hide();
+					$('.navbar-nav > li > a').addClass('white');
+					$('.navbar-nav > li > a').removeClass('black');
+				}
+				else {
+					$('header .inactive_logo').hide();
+					$('header .active_logo').show();
+					$('.navbar-nav > li > a').addClass('black');
+					$('.navbar-nav > li > a').removeClass('white');
+				}
+	    });
+		}
+	}
+}

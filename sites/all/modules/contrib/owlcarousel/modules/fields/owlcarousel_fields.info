@@ -5,9 +5,9 @@ package = Owl Carousel
 
 dependencies[] = owlcarousel
 
-; Information added by Drupal.org packaging script on 2014-12-10
-version = "7.x-1.3"
+; Information added by Drupal.org packaging script on 2015-09-30
+version = "7.x-1.5"
 core = "7.x"
 project = "owlcarousel"
-datestamp = "1418215392"
+datestamp = "1443596940"
 

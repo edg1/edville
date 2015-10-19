@@ -26,7 +26,7 @@ function owlcarousel_requirements($phase) {
 
     $requirements['owlcarousel'] = array(
       'title' => $t('Owl Carousel'),
-      'value' => $t('Owl Carousel library not found; the correct path should be @path.', array('@path' => $path)),
+      'value' => $t('Owl Carousel library not found; the correct path should be @path.', array('@path' => 'sites/all/libraries/owl-carousel/owl.carousel.min.js')),
       'severity' => REQUIREMENT_ERROR,
     );
 

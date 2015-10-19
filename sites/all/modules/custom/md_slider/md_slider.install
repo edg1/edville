@@ -229,3 +229,17 @@ function md_slider_update_7232() {
 
   return "Update item color properties";
 }
+
+/**
+ * Implement hook_update_N()
+ * Update weight module md_slider
+ */
+function md_slider_update_7310() {
+  $success = db_update('system')
+              ->fields(array('weight' => 999))
+              ->condition('name', 'md_slider', '=')
+              ->execute();
+  if ($success) {
+    return "Update weight module md_slider successful";
+  }
+}

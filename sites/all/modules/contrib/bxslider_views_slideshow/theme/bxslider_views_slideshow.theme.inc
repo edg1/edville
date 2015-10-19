@@ -43,13 +43,22 @@ function template_preprocess_bxslider_views_slideshow_main_frame(&$vars) {
  */
 function _bxslider_views_slideshow_theme_filter_out_width_and_heigth_attribute($item) {
   $dom = new DOMDocument();
-  $dom->loadHTML($item);
+  $dom->loadHTML(mb_convert_encoding($item, 'HTML-ENTITIES', 'UTF-8'));
 
   $domElement = $dom->documentElement;
-  $img = $domElement->getElementsByTagName('img')->item(0);
+  $img = $domElement->getElementsByTagName('img');
+
+  if ($img->length == 0) {
+    return $item;
+  }
+
+  $img = $img->item(0);
 
   $img->removeAttribute('width');
   $img->removeAttribute('height');
+
+  $dom->removeChild($dom->doctype);
+  $dom->replaceChild($dom->firstChild->firstChild->firstChild, $dom->firstChild);
 
   return $dom->saveHTML();
 }
@@ -141,31 +150,36 @@ function _bxslider_views_slideshow_add_js($options, $id) {
 
   // Callbacks.
   if (!empty($options['callback']['onSliderLoad'])) {
-    $options['callback']['onSliderLoad'] = "function(currentIndex){" . filter_xss($options['callback']['onSliderLoad']) . "}";
+    $options['callback']['onSliderLoad'] = "function(currentIndex){" .
+      bxslider_views_slideshow_filter_xss($options['callback']['onSliderLoad']) . "}";
   }
   else {
     unset($options['callback']['onSliderLoad']);
   }
   if (!empty($options['callback']['onSlideBefore'])) {
-    $options['callback']['onSlideBefore'] = "function(slideElement, oldIndex, newIndex){" . filter_xss($options['callback']['onSlideBefore']) . "}";
+    $options['callback']['onSlideBefore'] = "function(slideElement, oldIndex, newIndex){" .
+      bxslider_views_slideshow_filter_xss($options['callback']['onSlideBefore']) . "}";
   }
   else {
     unset($options['callback']['onSlideBefore']);
   }
   if (!empty($options['callback']['onSlideAfter'])) {
-    $options['callback']['onSlideAfter'] = "function(slideElement, oldIndex, newIndex){" . filter_xss($options['callback']['onSlideAfter']) . "}";
+    $options['callback']['onSlideAfter'] = "function(slideElement, oldIndex, newIndex){" .
+      bxslider_views_slideshow_filter_xss($options['callback']['onSlideAfter']) . "}";
   }
   else {
     unset($options['callback']['onSlideAfter']);
   }
   if (!empty($options['callback']['onSlideNext'])) {
-    $options['callback']['onSlideNext'] = "function(slideElement, oldIndex, newIndex){" . filter_xss($options['callback']['onSlideNext']) . "}";
+    $options['callback']['onSlideNext'] = "function(slideElement, oldIndex, newIndex){" .
+      bxslider_views_slideshow_filter_xss($options['callback']['onSlideNext']) . "}";
   }
   else {
     unset($options['callback']['onSlideNext']);
   }
   if (!empty($options['callback']['onSlidePrev'])) {
-    $options['callback']['onSlidePrev'] = "function(slideElement, oldIndex, newIndex){" . filter_xss($options['callback']['onSlidePrev']) . "}";
+    $options['callback']['onSlidePrev'] = "function(slideElement, oldIndex, newIndex){" .
+      bxslider_views_slideshow_filter_xss($options['callback']['onSlidePrev']) . "}";
   }
   else {
     unset($options['callback']['onSlidePrev']);
@@ -190,83 +204,83 @@ function _bxslider_views_slideshow_prep_settings(&$value) {
     $value = 0 + $value;
   }
   else {
-    $value = filter_xss($value);
+    $value = bxslider_views_slideshow_filter_xss($value);
   }
 }
 
-/**
- * This functions returns me the admin JS of the bxSlider.
- * @param array $autofieldset
- * autofieldset settings
- * @param array $general
- * general settings
- * @param array $carousel
- * carrousel settings
- * @param array $pagerfieldset
- * pager settings
- * @param array $controlsfieldset
- * controls settings
- * @param array $carousel
- * carrousel settings.
- * @return mixed|string
- * a string to be used to initialize bxslider js.
- */
-function _bxslider_views_slideshow_theme_get_admin_js($autofieldset,
-                                                      $general,
-                                                      $carousel,
-                                                      $pagerfieldset,
-                                                      $controlsfieldset,
-                                                      $carousel) {
-  $bx_slider_js = <<<BXSLIDERJSCONTENT
-    mode: '{$general['mode']}',
-    speed: {$general['speed']},
-    slideMargin: {$general['slideMargin']},
-    startSlide: {$general['startSlide']},
-    randomStart: {$general['randomStart']},
-    infiniteLoop: {$general['infiniteLoop']},
-    hideControlOnEnd: {$general['hideControlOnEnd']},
-    captions: {$general['captions']},
-    pager: {$pagerfieldset['pager']},
-BXSLIDERJSCONTENT;
-
-  // Add support for PagerCustom option.
-  if ($pagerfieldset['pagerType'] == 'custom') {
-    $bx_slider_js .= "\n    pagerCustom: '{$pagerfieldset['pagerCustom']}',";
-  }
-  else {
-    $bx_slider_js .= "\n    pagerType: '{$pagerfieldset['pagerType']}',";
-  }
-
-  $bx_slider_js .= <<<BXSLIDERJSCONTENT
-    controls: {$controlsfieldset['controls']},
-    auto: {$autofieldset['auto']},
-    pause: {$autofieldset['pause']},
-    minSlides: {$carousel['minSlides']},
-    maxSlides: {$carousel['maxSlides']},
-    ticker: {$general['ticker']},
-    tickerHover: {$general['tickerHover']},
-    adaptiveHeight: {$general['adaptiveHeight']},
-    adaptiveHeightSpeed: {$general['adaptiveHeightSpeed']},
-    video: {$general['video']},
-    touchEnabled: {$general['touchEnabled']},
-    preloadImages: '{$general['preloadImages']}',
-    swipeThreshold: {$general['swipeThreshold']},
-    oneToOneTouch: {$general['oneToOneTouch']},
-    preventDefaultSwipeX: {$general['preventDefaultSwipeX']},
-    preventDefaultSwipeY: {$general['preventDefaultSwipeY']},
-    pagerShortSeparator: '{$pagerfieldset['pagerShortSeparator']}',
-    nextText: '{$controlsfieldset['nextText']}',
-    prevText: '{$controlsfieldset['prevText']}',
-    startText: '{$controlsfieldset['startText']}',
-    stopText: '{$controlsfieldset['stopText']}',
-    autoControls: {$controlsfieldset['autoControls']},
-    autoControlsCombine: {$controlsfieldset['autoControlsCombine']},
-    autoHover: {$autofieldset['autoHover']},
-    autoDelay: {$autofieldset['autoDelay']},
-    moveSlides: {$carousel['moveSlides']},
-    slideWidth: {$carousel['slideWidth']},
-    useCSS: {$general['useCSS']},
-    autoDirection: '{$autofieldset['autoDirection']}',
-BXSLIDERJSCONTENT;
-  return filter_xss(trim($bx_slider_js));
-}
+///**
+// * This functions returns me the admin JS of the bxSlider.
+// * @param array $autofieldset
+// * autofieldset settings
+// * @param array $general
+// * general settings
+// * @param array $carousel
+// * carrousel settings
+// * @param array $pagerfieldset
+// * pager settings
+// * @param array $controlsfieldset
+// * controls settings
+// * @param array $carousel
+// * carrousel settings.
+// * @return mixed|string
+// * a string to be used to initialize bxslider js.
+// */
+//function _bxslider_views_slideshow_theme_get_admin_js($autofieldset,
+//                                                      $general,
+//                                                      $carousel,
+//                                                      $pagerfieldset,
+//                                                      $controlsfieldset,
+//                                                      $carousel) {
+//  $bx_slider_js = <<<BXSLIDERJSCONTENT
+//    mode: '{$general['mode']}',
+//    speed: {$general['speed']},
+//    slideMargin: {$general['slideMargin']},
+//    startSlide: {$general['startSlide']},
+//    randomStart: {$general['randomStart']},
+//    infiniteLoop: {$general['infiniteLoop']},
+//    hideControlOnEnd: {$general['hideControlOnEnd']},
+//    captions: {$general['captions']},
+//    pager: {$pagerfieldset['pager']},
+//BXSLIDERJSCONTENT;
+//
+//  // Add support for PagerCustom option.
+//  if ($pagerfieldset['pagerType'] == 'custom') {
+//    $bx_slider_js .= "\n    pagerCustom: '{$pagerfieldset['pagerCustom']}',";
+//  }
+//  else {
+//    $bx_slider_js .= "\n    pagerType: '{$pagerfieldset['pagerType']}',";
+//  }
+//
+//  $bx_slider_js .= <<<BXSLIDERJSCONTENT
+//    controls: {$controlsfieldset['controls']},
+//    auto: {$autofieldset['auto']},
+//    pause: {$autofieldset['pause']},
+//    minSlides: {$carousel['minSlides']},
+//    maxSlides: {$carousel['maxSlides']},
+//    ticker: {$general['ticker']},
+//    tickerHover: {$general['tickerHover']},
+//    adaptiveHeight: {$general['adaptiveHeight']},
+//    adaptiveHeightSpeed: {$general['adaptiveHeightSpeed']},
+//    video: {$general['video']},
+//    touchEnabled: {$general['touchEnabled']},
+//    preloadImages: '{$general['preloadImages']}',
+//    swipeThreshold: {$general['swipeThreshold']},
+//    oneToOneTouch: {$general['oneToOneTouch']},
+//    preventDefaultSwipeX: {$general['preventDefaultSwipeX']},
+//    preventDefaultSwipeY: {$general['preventDefaultSwipeY']},
+//    pagerShortSeparator: '{$pagerfieldset['pagerShortSeparator']}',
+//    nextText: '{$controlsfieldset['nextText']}',
+//    prevText: '{$controlsfieldset['prevText']}',
+//    startText: '{$controlsfieldset['startText']}',
+//    stopText: '{$controlsfieldset['stopText']}',
+//    autoControls: {$controlsfieldset['autoControls']},
+//    autoControlsCombine: {$controlsfieldset['autoControlsCombine']},
+//    autoHover: {$autofieldset['autoHover']},
+//    autoDelay: {$autofieldset['autoDelay']},
+//    moveSlides: {$carousel['moveSlides']},
+//    slideWidth: {$carousel['slideWidth']},
+//    useCSS: {$general['useCSS']},
+//    autoDirection: '{$autofieldset['autoDirection']}',
+//BXSLIDERJSCONTENT;
+//  return filter_xss(trim($bx_slider_js));
+//}

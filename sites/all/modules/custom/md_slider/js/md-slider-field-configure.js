@@ -18,10 +18,11 @@
 
                 previous = $(this).val();
             }).change(function() {
-                var sliderId = $(this).val();
+                var sliderId = $(this).val(),
+                    sliderId = $(".fake-select-slider").find("option[value=" + sliderId + "]").data('sliderid');
                 if (sliderId != -1) {
-                    $(".configure-link", $(this).next()).attr("href", settings.basePath + "?q=admin/structure/md-slider/"+sliderId+"/configure");
-                    $(".edit-link", $(this).next()).attr("href", settings.basePath + "?q=admin/structure/md-slider/"+sliderId+"/edit");
+                    $(".configure-link", $(this).next()).attr("href", settings.basePath + settings.pathPrefix + "?q=admin/structure/md-slider/"+sliderId+"/configure");
+                    $(".edit-link", $(this).next()).attr("href", settings.basePath + settings.pathPrefix + "?q=admin/structure/md-slider/"+sliderId+"/edit");
                     $(".field-suffix", $(this).parent()).show();
                 }
                 else {

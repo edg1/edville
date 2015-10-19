@@ -383,6 +383,7 @@ class MDSlide {
         static $default_settings = array(
             'background_image' => -1,
             'background_color' => "",
+            'background_overlay' => "",
             'timelinewidth' => 80,
             'custom_thumbnail' => -1,
             'disabled' => 0,

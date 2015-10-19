@@ -62,6 +62,12 @@
     $data_properties = array();
     $data_properties[] = "data-timeout='{$slide->settings['timelinewidth']}00'";
 
+    // Add data for slide settings thumbnail alt and background image alt
+    if (!isset($slide->settings["background_image_alt"]))
+      $slide->settings["background_image_alt"] = "";
+    if (!isset($slide->settings["custom_thumbnail_alt"]))
+      $slide->settings["custom_thumbnail_alt"] = "";
+
     // Add data transitions for slide
     if (!empty($slide->settings["transitions"]))
       $data_properties[] = 'data-transition="' . implode(",", $slide->settings["transitions"]) . '"';
@@ -77,13 +83,18 @@
         $variables['background_url'] = file_create_url($background->uri);
 
       // Load thumbnail image
+      $thumb = $background;
       if ($slide->settings['custom_thumbnail'] != -1)
         $thumb = file_load($slide->settings['custom_thumbnail']);
-      else
-        $thumb = $background;
+
+      // Load thumbnail alt
+      $thumb_alt = isset($slide->settings["background_image_alt"]) ? $slide->settings["background_image_alt"] : "";
+      if (isset($slide->settings["custom_thumbnail_alt"]) && $slide->settings["custom_thumbnail_alt"])
+        $thumb_alt = $slide->settings["custom_thumbnail_alt"];
 
       $thumb_data = image_style_url('md_slider_' . $slide->slid . '_thumb', $thumb->uri);
       $data_properties[] = "data-thumb-type='image'";
+      $data_properties[] = "data-thumb-alt='{$thumb_alt}'";
     }
     else {
       // use background color
@@ -113,6 +124,12 @@
         $thumb = file_load($slide->settings['custom_thumbnail']);
         $thumb_data = image_style_url('md_slider_' . $slide->slid . '_thumb', $thumb->uri);
         $data_properties[] = "data-thumb-type='image'";
+
+        // Process data for thumbnail alt
+        $thumb_alt = "";
+        if (isset($slide->settings["custom_thumbnail_alt"]) && $slide->settings["custom_thumbnail_alt"])
+          $thumb_alt = $slide->settings["custom_thumbnail_alt"];
+        $data_properties[] = "data-thumb-alt='{$thumb_alt}'";
       }
       else {
         $data_properties[] = "data-thumb-type='color'";
@@ -169,13 +186,23 @@
     if (isset($layer['style']) && $layer['style'] != 'none') {
       $class[] = $layer['style'];
     }
+    if (isset($layer['mdtclass']) && $layer['mdtclass'] != ''){
+      $class[] = $layer['mdtclass'];
+    }
     $variables['class'] = implode(' ', $class);
 
     # Generate layer link
     if (isset($layer['link']) && is_array($layer['link'])) {
       $link = $layer['link'];
-      if (strpos($link['value'], 'http') === FALSE && strpos($link["value"], "#") !== 0)
-        $variables["link"] = url($link['value'], array('absolute' => TRUE));
+      if (strpos($link['value'], 'http') === FALSE && strpos($link["value"], "#") !== 0){
+        $url = parse_url($link['value']);
+        $options = array();
+        $options['absolute'] = TRUE;
+        if (isset($url['fragment']))
+          $options['fragment'] = $url['fragment'];
+
+        $variables["link"] = url($url['path'], $options);
+      }
       else
           $variables["link"] = $link['value'];
     }
@@ -211,23 +238,18 @@
     if ($element_full['stopani'] != 'none' && $element_full['stopani'] != '') {
       $output[] = "data-easeout='{$element_full['stopani']}'";
     }
-
-    if (isset($element['paddingtop']) && $element['paddingtop'] > 0) {
-      $output[] = "data-padding-top='{$element_full['paddingtop']}'";
+    if (isset($element_full['paddingtop'])) {
+      $output[] = "data-paddingtop='{$element_full['paddingtop']}'";
     }
-
-    if (isset($element['paddingbottom']) && $element['paddingbottom'] > 0) {
-      $output[] = "data-padding-bottom='{$element['paddingbottom']}'";
+    if (isset($element_full['paddingright'])) {
+      $output[] = "data-paddingright='{$element_full['paddingright']}'";
     }
-
-    if (isset($element['paddingleft']) && $element['paddingleft'] > 0) {
-      $output[] = "data-padding-left='{$element['paddingleft']}'";
+    if (isset($element_full['paddingbottom'])) {
+      $output[] = "data-paddingbottom='{$element_full['paddingbottom']}'";
     }
-
-    if (isset($element['paddingright']) && $element['paddingright'] > 0) {
-      $output[] = "data-padding-right='{$element['paddingright']}'";
+    if (isset($element_full['paddingleft'])) {
+      $output[] = "data-paddingleft='{$element_full['paddingleft']}'";
     }
-
     return implode(' ', $output);
   }
 

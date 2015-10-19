@@ -7,10 +7,10 @@
 
   Drupal.behaviors.owlcarousel = {
     attach: function(context, settings) {
-    
+
       for (var carousel in settings.owlcarousel) {
         // Carousel instance.
-        var owl = $('#' + carousel);
+        var owl = $('.' + carousel);
 
         // lazyLoad support.
         if (settings.owlcarousel[carousel].settings.lazyLoad) {
@@ -29,7 +29,7 @@
         // Set an inline height if custom AJAX pagination is enabled;
         // otherwise replacement of carousel element causes scrolling effect.
         if (settings.owlcarousel[carousel].views.ajax_pagination) {
-          var owlnav = $('#' + carousel);
+          var owlnav = $('.' + carousel);
           owlnav.parent().css('height', owlnav.height());
 
           var view = owlnav.parent().parent();

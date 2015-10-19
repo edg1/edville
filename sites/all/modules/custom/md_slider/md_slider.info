@@ -6,6 +6,6 @@ files[] = md_slider.module
 dependencies[] = media
 
 project status url = http://updates.megadrupal.com/release-history
-version = "7.x-2.15"
+version = "7.x-2.18"
 core = "7.x"
 project = "md_slider"

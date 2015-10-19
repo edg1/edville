@@ -34,6 +34,10 @@
           <img src="<?php print $slide->background_url;?>" />
           <?php endif;?>
         </div>
+        <?php if(isset($slide->settings['background_overlay']) && $slide->settings['background_overlay'] != ''): ?>
+        <div class="md-slide-overlay" style="background: <?php print $slide->settings['background_overlay']; ?>">
+        </div>
+        <?php endif; ?>
         <div class="md-objects" style="width: <?php print $slider->settings['width'];?>px; height: <?php print $slider->settings['height'];?>px;">
         	<?php foreach ($slide->layers as $layer) { print theme('admin_layers_render', array('layer' => $layer));}?>
         </div>
@@ -61,6 +65,8 @@
           <input type="hidden" autocomplete="off" class="panelsettings" value='{"slide_id": -1, "background_image": -1, "custom_thumbnail": -1, "transitions": [], "background_color": "", "disabled": 0}' /></div>
         <div class="md-slidewrap<?php print $class_fullwidth;?>" style="height: <?php print $slider->settings['height'];?>px;<?php if(!$slider->settings['full_width']): print 'width:' . $slider->settings['width'] . 'px'; endif; ?>">
             <div class="md-slide-image" style="height: <?php print $slider->settings['height'];?>px;<?php if(!$slider->settings['full_width']): print 'width:' . $slider->settings['width'] . 'px'; endif; ?>"></div>
+            <div class="md-slide-overlay">
+            </div>
             <div class="md-objects" style="width: <?php print $slider->settings['width'];?>px; height: <?php print $slider->settings['height'];?>px;">
             </div>
         </div>

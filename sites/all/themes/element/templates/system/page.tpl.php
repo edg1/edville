@@ -194,24 +194,26 @@
   </div>
   <?php endif; ?>
   <footer>
-    <div class="up-footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3 col-sm-6">
-            <?php print render($page['footer1']); ?>
-          </div>
-          <div class="col-md-3 col-sm-6">
-            <?php print render($page['footer2']); ?>
-          </div>
-          <div class="col-md-3 col-sm-6">
-            <?php print render($page['footer3']); ?>
-          </div>
-          <div class="col-md-3 col-sm-6">
-            <?php print render($page['footer4']); ?>
+    <?php if (!empty($page['footer1']) || !empty($page['footer2']) || !empty($page['footer3']) || !empty($page['footer4'])): ?>
+      <div class="up-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-6">
+              <?php print render($page['footer1']); ?>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <?php print render($page['footer2']); ?>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <?php print render($page['footer3']); ?>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <?php print render($page['footer4']); ?>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    <?php endif; ?>
     <div class="footer-line">
       <div class="container">
         <?php print render($page['footer_line']); ?>

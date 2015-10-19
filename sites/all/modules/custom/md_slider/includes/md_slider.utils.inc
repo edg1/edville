@@ -13,7 +13,8 @@ function get_video_data($type, $fid) {
     switch ($type) {
         case 'youtube':
             $output['type'] = 'youtube';
-            $url = "http://gdata.youtube.com/feeds/api/videos/{$fid}?v=2&alt=jsonc";
+            $output['fid'] = $fid;
+            $url = "http://www.youtube.com/oembed?url=https://youtu.be/{$fid}&format=json";
             $data = drupal_http_request($url);
             if ($data->code == '200') {
                 $output['data'] = json_decode($data->data);
@@ -29,7 +30,7 @@ function get_video_data($type, $fid) {
                 $output['data'] = (object)$info[0];
             }
             break;
-    }
+    };
 
     return $output;
 }
@@ -109,7 +110,7 @@ function process_layer_style($layer) {
             $output[] = "border: {$layer->borderwidth}px {$border_style} {$color};\n";
         } else {
             foreach ($positions as $position) {
-                $output[] = "border-{$position}: {$layer->borderwidth}px {$border_style} #{$color};\n";
+                $output[] = "border-{$position}: {$layer->borderwidth}px {$border_style} {$color};\n";
             }
         }
     }
@@ -129,6 +130,19 @@ function process_layer_style($layer) {
     if (isset($layer->borderbottomrightradius) && $layer->borderbottomrightradius > 0) {
         $output[] = "-webkit-border-bottom-right-radius: {$layer->borderbottomrightradius}px; -moz-border-radius-bottomright: {$layer->borderbottomrightradius}px; border-bottom-right-radius: {$layer->borderbottomrightradius}px;\n";
     }
+
+    // Process for padding settings
+    if (isset($layer->paddingtop) && $layer->paddingtop > 0)
+      $output[] = "padding-top: {$layer->paddingtop}px;\n";
+
+    if (isset($layer->paddingright) && $layer->paddingright > 0)
+      $output[] = "padding-right: {$layer->paddingright}px;\n";
+
+    if (isset($layer->paddingbottom) && $layer->paddingbottom > 0)
+      $output[] = "padding-bottom: {$layer->paddingbottom}px;\n";
+
+    if (isset($layer->paddingleft) && $layer->paddingleft > 0)
+      $output[] = "padding-left: {$layer->paddingleft}px;\n";
 
     # Process styles for text layer
     if ($layer->type == 'text') {
@@ -267,3 +281,4 @@ function _md_slider_recast($className, stdClass &$object) {
 
     return $new;
 }
+
