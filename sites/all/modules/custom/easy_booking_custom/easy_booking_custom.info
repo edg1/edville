@@ -1,0 +1,21 @@
+name = Easy Booking Custom
+description = A shortened version of booking for drupal rooms
+core = 7.x
+package = Easy Booking
+
+dependencies[] = rooms_booking
+dependencies[] = rooms_booking_manager
+dependencies[] = rooms_unit
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.0-beta1"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428487686"
+

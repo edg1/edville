@@ -1,0 +1,286 @@
+<?php
+
+/**
+ * @file
+ * Easy booking custom adds a block that makes checkout process easier.
+ *
+ * We need a bit another functionality of rooms availability search block.
+ * We need to direct user to the checkout page from the room page.
+ * Below code just create a copy of original rooms availability search block (easy_booking_custom_form_block_submit).
+ * We made it to no to hack rooms module.
+ *
+ * Also we rebuild a bit original rooms search page.
+ * We have added pagination to this page and remove logic from tpl file.
+ *
+ */
+
+/**
+ * Implements hook_help().
+ */
+function easy_booking_custom_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/administration/admin_menu':
+      return '<p>' . t('This module adds a block that checks if the rooms is available for booking or not.') . '</p>';
+
+    case 'admin/help#admin_menu':
+      $output = '';
+      $output .= '<p>' . t('This module adds a block that checks if the rooms is available for booking or not.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function easy_booking_custom_block_info() {
+  $blocks = array();
+  $blocks['easy_booking_custom'] = array(
+    'info' => t('Availability check'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function easy_booking_custom_block_view($block_name = '') {
+  if ($block_name == 'easy_booking_custom') {
+    $block = array(
+      'subject' => t('Availability check'),
+      'content' => drupal_get_form('easy_booking_custom_form_block'),
+    );
+    return $block;
+  }
+}
+
+/**
+ * Describes block behaviour, implements hook_form().
+ */
+function easy_booking_custom_form_block($form, $form_state) {
+  if (arg(0) != 'unit') {
+    return;
+  }
+  $unit_id = arg(1);
+  $unit_obj = rooms_unit_load($unit_id);
+  $min_sleeps = $unit_obj->min_sleeps;
+  $max_sleeps = $unit_obj->max_sleeps;
+  $min_children = $unit_obj->min_children;
+  $max_children = $unit_obj->max_children;
+  $adult_options = array_combine(range($min_sleeps, $max_sleeps, 1), range($min_sleeps, $max_sleeps, 1));
+  $children_options = array_combine(range($min_children, $max_children, 1), range($min_children, $max_children, 1));
+  $form['easy_booking_custom_start_date'] = array(
+    '#type' => 'date_popup',
+    '#attributes' => array('class' => array('easy-booking-datepicker-start-date')),
+    '#title' => t('Check In'),
+    '#date_type' => 'datetime',
+    '#date_format' => 'd/m/Y',
+    '#date_increment' => '1',
+    '#date_year_range'=> '-1:+3',
+    '#datepicker_options' => array(
+      'dateFormat' => 'dd/mm/yy',
+      'minDate' => '+1d',
+      'endDateSelector' => '#datepicker-start-date .form-text',
+    ),
+    '#required' => TRUE,
+  );
+  $form['easy_booking_custom_adults'] = array(
+    '#type' => 'select',
+    '#title' => t('Adults'),
+    '#options' => $adult_options,
+  );
+  $form['easy_booking_custom_end_date'] = array(
+    '#type' => 'date_popup',
+    '#attributes' => array('class' => array('easy-booking-datepicker-end-date')),
+    '#title' => t('Check Out'),
+    '#date_type' => 'datetime',
+    '#date_format' => 'd/m/Y',
+    '#date_increment' => '1',
+    '#date_year_range'=> '-1:+3',
+    '#datepicker_options' => array(
+      'dateFormat' => 'dd/mm/yy',
+      'minDate' => '+1d',
+      'endDateSelector' => '#datepicker-start-date .form-text',
+    ),
+    '#required' => TRUE,
+  );
+  $form['easy_booking_custom_children'] = array(
+    '#type' => 'select',
+    '#title' => t('Children (0-4 yrs)'),
+    '#options' => $children_options,
+  );
+  $form['easy_booking_custom_submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('BOOK NOW'),
+  );
+  return $form;
+}
+
+/**
+ * Implements hook_form_validate().
+ */
+function easy_booking_custom_form_block_validate($form, &$form_state) {
+  $start_date = $form_state['values']['easy_booking_custom_start_date'];
+  $end_date = $form_state['values']['easy_booking_custom_end_date'];
+  if (($start_date == $end_date) || ($start_date > $end_date)) {
+    form_set_error('easy_booking_custom_end_date', t('Check Out date must be after Check In date.'));
+  }
+}
+
+/**
+ * Implements hook_form_submit().
+ */
+function easy_booking_custom_form_block_submit($form, &$form_state) {
+  global $user;
+  if (arg(0) != 'unit') {
+    return;
+  }
+  $unit_id = arg(1);
+  $start_date = $form_state['values']['easy_booking_custom_start_date'];
+  $end_date = $form_state['values']['easy_booking_custom_end_date'];
+  $group_size = $form_state['values']['easy_booking_custom_adults'] + $form_state['values']['easy_booking_custom_children'];
+  $sd = start_date_load($start_date);
+  $ed = end_date_load($end_date);
+  $booking_units = 1;
+  $unit_types = array();
+  $booking_parameters = array();
+  //The following $agent searches for all the bookable objects that are available from $start_date till $end_date
+  $agent = new AvailabilityAgent($sd, $ed, $booking_parameters, $booking_units, variable_get('rooms_valid_availability_states', array(ROOMS_AVAILABLE, ROOMS_ON_REQUEST, ROOMS_UNCONFIRMED_BOOKINGS)), $unit_types);
+  $units_per_type = $agent->checkAvailability();
+  if ($units_per_type == ROOMS_NO_ROOMS) {
+    drupal_set_message('This room is unavailable, please try another room or choose different dates.', 'error');
+    return;
+  }
+  //then we load the unit according to the unit_id in the adress bar of the browser, and using it's name we are checking if that unit is available.
+  $unit_obj = rooms_unit_load($unit_id);
+  $name = $unit_obj->name;
+  $max_sleeps = $unit_obj->max_sleeps;
+  // $units_per_type is an array that contains a unit object.
+  // We convert that object into an array to be able to recursively search a $name inside of it.
+  $array = json_decode(json_encode($units_per_type), TRUE);
+  $results = easy_booking_custom_recursive_array_search($name, $array);
+  if ($group_size > $max_sleeps) {
+    drupal_set_message('This room can only place ' . $max_sleeps . ' persons. There are not enough beds for ' . $group_size . ' people.', 'error');
+  }
+  elseif ($results == FALSE) {
+    drupal_set_message('This room is unavailable, please try another room or choose different dates.', 'error');
+  }
+  else {
+    //then goes what contrib rooms module usually does with the chosen search result
+    $checkout_agent = new AvailabilityAgent($sd, $ed, $group_size);
+    $checkout_agent->setValidStates(variable_get('rooms_valid_availability_states', array(ROOMS_AVAILABLE, ROOMS_ON_REQUEST)));
+    $available_units = $checkout_agent->checkAvailabilityForUnit($unit_id);
+    if (count($available_units) > 0) {
+      if (variable_get('rooms_checkout_style', ROOMS_COMMERCE_CHECKOUT) == ROOMS_COMMERCE_CHECKOUT) {
+        $unit = array_pop($available_units);
+        $price_modifiers = array();
+        if (isset($form_state['values']['options'])) {
+          // Convert Price options in Price modifiers.
+          foreach (rooms_unit_get_unit_options($unit['unit']) as $option) {
+            $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+            if (isset($form_state['values']['options'][$option_name])) {
+              if ($form_state['values']['options'][$option_name] == 1) {
+                $quantity = 1;
+                if (isset($form_state['values']['options'][$option_name . ':quantity']) && $option['operation'] != ROOMS_REPLACE) {
+                  $quantity = $form_state['values']['options'][$option_name . ':quantity'] + 1;
+                }
+                $price_modifiers[$option_name] = array(
+                  '#name' => $option['name'],
+                  '#type' => ROOMS_DYNAMIC_MODIFIER,
+                  '#op_type' => $option['operation'],
+                  '#amount' => $option['value'],
+                  '#quantity' => $quantity,
+                );
+              }
+            }
+          }
+        }
+        // Create line item.
+        $line_item = rooms_create_line_item($unit, $checkout_agent, array('adults' => $group_size, 'children' => 0), $price_modifiers);
+        $line_item->bookable_unit_reference[LANGUAGE_NONE]['0']['target_id'] = $unit_id;
+        $line_item->line_item_label  .= '. Unit: ' . $unit_obj->name;
+        // Add line item to cart.
+        $line_item = commerce_cart_product_add($user->uid, $line_item, FALSE);
+        commerce_cart_order_refresh(commerce_cart_order_load($user->uid));
+        // Send user to search page.
+        $form_state['redirect'] = 'bookings';
+      }
+      elseif (variable_get('rooms_checkout_style', ROOMS_COMMERCE_CHECKOUT) == ROOMS_ENQ_CHECKOUT) {
+        $booking_parameters = array();
+        $options = array();
+        if (isset($form_state['values']['options'])) {
+          foreach ($form_state['values']['options'] as $option => $value) {
+            if (strpos($option, ':quantity') === FALSE && $value) {
+              if (isset($form_state['values']['options'][$option . ':quantity'])) {
+                $options[$option] = ($form_state['values']['options'][$option . ':quantity'] + 1);
+              }
+              else {
+                $options[$option] = 1;
+              }
+            }
+          }
+          $booking_parameters['options'] = $options;
+        }
+        $form_state['redirect'] = array(
+          'enquiry/' . $start_date . '/' . $end_date . '/' . $unit_id,
+          array(
+            'query' => $booking_parameters,
+          ),
+        );
+      }
+    }
+    else {
+      drupal_set_message(t('We apologize for the inconvenience; this unit is no longer available.'));
+      $form_state['redirect'] = '<front>';
+    }
+  }
+}
+
+/**
+ * Looks for a specific room name within an array of available rooms.
+ */
+function easy_booking_custom_recursive_array_search($name, $array) {
+  foreach ($array as $key=>$value) {
+    if ($name === $value OR (is_array($value) && easy_booking_custom_recursive_array_search($name, $value) !== false)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Preprocess booking results including those fields, which were not present in the original drupal rooms version.
+ */
+function easy_booking_custom_preprocess_rooms_booking_results(&$variables) {
+  if ($variables['booking_results'] == 1) {
+    $variables['easy_booking_results'] = array();
+    foreach ($variables['units_per_type'] as $type_name => $units_per_price_level) {
+      foreach ($units_per_price_level as $price => $units) {
+        foreach ($units as $unit_id => $unit){
+          $unit_obj = rooms_unit_load($unit_id);
+          $price = $unit_obj->base_price;
+          $price = (int)$price;
+          $price = '$ ' . $price;
+          $base_price = array(
+            '#prefix' => '<div class="rooms-search-result__unit-base-price">',
+            '#markup' => '<label>Base price:</label> <span class="rooms-search-result__base-price-amount">' . $price . '</span>',
+            '#suffix' => '</div>',
+          );
+          $photos = render($unit['unit']['rooms_unit'][$unit_id]['field_room_photos']);
+          $base_price = render($base_price);
+          $name = $unit['unit']['rooms_unit'][$unit_id]['field_room_body']['#object']->name;
+          $name = truncate_utf8($name, 22, $wordsafe = TRUE, $add_ellipsis = TRUE, $min_wordsafe_length = 1);
+          $name = l(t($name), 'unit/' . $unit_id, array('attributes' => array('id' => $unit_id, 'class' => 'rooms_search_result_unit')));
+          $room = array(
+            'unit_id' => $unit_id,
+            'name' => $name,
+            'price' => $base_price,
+            'photos' => $photos,
+          );
+          array_push($variables['easy_booking_results'], $room);
+        }
+      }
+    }
+  }
+}

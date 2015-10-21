@@ -6330,6 +6330,60 @@ input[type=text] {
   margin-right: 10px;
 }
 /*-------------------------------------------------*/
+/* =  book pages
+/*-------------------------------------------------*/
+.rooms-availability-search {
+  text-align: center;
+  margin-top: 40px;
+  border-bottom: 1px dashed;
+  padding-bottom: 10px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.rooms-availability-search > div {
+  display: inline-block;
+}
+.rooms-availability-search .form-item label {
+  text-align: left;
+  font-weight: bold;
+}
+.rooms-availability-search .btn-primary {
+  margin-top: 22px;
+}
+.rooms-availability-search .rooms-date-range {
+  margin-bottom: 10px;
+}
+.view-book-a-room .view-content {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 80px;
+}
+
+.view-book-a-room .view-content img {
+  width: 100%;
+  height: auto;
+}
+.view-book-a-room .views-row {
+  margin-bottom: 30px;
+}
+.view-book-a-room .views-field-name {
+  margin-bottom: 10px;
+}
+.view-book-a-room .views-field-name a {
+  color: #000;
+  opacity: 0.8;
+  font-size: 20px;
+  font-weight: bold;
+}
+.view-book-a-room .views-field-name a:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+.view-book-a-room .views-row:hover a {
+  opacity: 1;
+}
+
+/*-------------------------------------------------*/
 /* =  portfolio pages
 /*-------------------------------------------------*/
 .page-portfolio .page-banner-section,
@@ -8131,5 +8185,10 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   }
   .statistic-section .statistic-box .statistic-post {
     border-left: none !important;
+  }
+}
+@media (max-width: 420px) {
+  .rooms-date-range .start-date, .rooms-date-range .end-date {
+    float: left;
   }
 }

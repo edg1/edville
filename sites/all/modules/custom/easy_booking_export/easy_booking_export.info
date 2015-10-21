@@ -1,0 +1,20 @@
+name = Easy booking export
+description = exporting settings, views, variables.
+core = 7.x
+package = Easy Booking
+version = 7.x-1.4
+dependencies[] = easy_booking_custom
+dependencies[] = views
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.0-beta1"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428487686"
+
