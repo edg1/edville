@@ -269,7 +269,7 @@ function easy_booking_custom_preprocess_rooms_booking_results(&$variables) {
           );
           $photos = render($unit['unit']['rooms_unit'][$unit_id]['field_room_photos']);
           $base_price = render($base_price);
-          $name = $unit['unit']['rooms_unit'][$unit_id]['field_room_body']['#object']->name;
+          $name = $unit['unit']['rooms_unit'][$unit_id]['field_description']['#object']->name;
           $name = truncate_utf8($name, 22, $wordsafe = TRUE, $add_ellipsis = TRUE, $min_wordsafe_length = 1);
           $name = l(t($name), 'unit/' . $unit_id, array('attributes' => array('id' => $unit_id, 'class' => 'rooms_search_result_unit')));
           $room = array(
