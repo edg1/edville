@@ -19,3 +19,10 @@ dependencies[] = commerce_order
 dependencies[] = commerce_order_ui
 dependencies[] = commerce_checkout
 dependencies[] = entityreference
+
+; Information added by Drupal.org packaging script on 2015-03-27
+version = "7.x-1.7"
+core = "7.x"
+project = "rooms"
+datestamp = "1427482983"
+

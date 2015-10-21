@@ -16,10 +16,7 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
   form_load_include($form_state, 'inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
 
   $form['#attributes']['class'][] = 'rooms-management-form rooms-availability-search';
-  $form['#attached']['css'] = array(
-    drupal_get_path('module', 'rooms_booking_manager') . '/css/booking_search.css',
-    drupal_get_path('module', 'rooms_booking_manager') . '/css/newcss.css'
-    );
+  $form['#attached']['css'] = array(drupal_get_path('module', 'rooms_booking_manager') . '/css/rooms_booking_search.css');
 
   $rooms_number = 1;
 
@@ -52,8 +49,6 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
     '#options' => rooms_assoc_range(1, variable_get('rooms_booking_manager_search_form_units', 6)),
     '#default_value' => $rooms_number,
   );
-
-  
 
   // Create an AJAX wrapper id depending on the form caller to avoid duplicates.
   $ajax_wrapper_id = 'rooms-group-' . substr($form_state['build_info']['form_id'], strlen('rooms_booking_availability_search_form_'));
@@ -94,7 +89,7 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
       $form['rooms_fieldset']['group_size_adults:' . $i] = array(
         '#type' => 'select',
         '#options' => rooms_assoc_range(1, variable_get('rooms_booking_manager_search_form_max_group_size', 8)),
-        '#default_value' => isset($booking_parameters[$i]['adults']) ? $booking_parameters[$i]['adults'] : '8',
+        '#default_value' => isset($booking_parameters[$i]['adults']) ? $booking_parameters[$i]['adults'] : '2',
         '#prefix' => '<td class="rooms-group-size__people">',
         '#suffix' => '</td>',
       );
@@ -102,7 +97,7 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
       if (variable_get('rooms_display_children', ROOMS_DISPLAY_CHILDREN_NO) == ROOMS_DISPLAY_CHILDREN) {
         $form['rooms_fieldset']['group_size_children:' . $i] = array(
           '#type' => 'select',
-          '#options' => rooms_assoc_range(0, variable_get('rooms_booking_manager_search_form_max_group_size', 8) - 1),
+          '#options' => rooms_assoc_range(0, 3),
           '#default_value' => isset($booking_parameters[$i]['children']) ? $booking_parameters[$i]['children'] : '0',
           '#prefix' => '<td class="rooms-group-size__children">',
           '#suffix' => '</td>',
@@ -138,13 +133,12 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
   if (variable_get('rooms_booking_manager_type_selector', ROOMS_DISPLAY_TYPE_SELECTOR_NO) == ROOMS_DISPLAY_TYPE_SELECTOR) {
     $searchable_unit_types = variable_get('rooms_unit_type_selector', array());
     if (!empty($searchable_unit_types)) {
-      $unit_types = variable_get('rooms_unit_type_selector', array());
 
       $form['unit_type'] = array(
         '#title' => variable_get_value('rooms_booking_manager_select_type'),
         '#type' => 'select',
         '#empty_option' => t('Select All'),
-        '#options' => $unit_types,
+        '#options' => _rooms_booking_manager_get_unit_type_labels($searchable_unit_types),
         '#default_value' => 0,
       );
 
@@ -184,18 +178,6 @@ function rooms_booking_availability_search_form_builder($form, &$form_state) {
     '#value' => variable_get_value('rooms_booking_manager_button_search_for_availability'),
     '#submit' => $submit + array('rooms_booking_availability_search_form_submit'),
   );
-
-  $form['actions']['submit']['#attributes']['class'][] = 'mybtn';
-
-
-  $form['gallery'] = array(
-    '#prefix' => '<div class="gallery">',
-    '#suffix' => '</div>',
-    '#markup' => rooms_booking_availability_search_form_thumbnail(),
-    '#weight' => 500,
-    '#tree' => FALSE,
-    );
-
 
   // We append the validate handler to #validate in case a form callback_wrapper
   // is used to add validate handlers earlier.
@@ -242,9 +224,7 @@ function rooms_booking_availability_search_form_validate(&$form, &$form_state) {
  * Submit callback for rooms_booking_availability_search_form form.
  */
 function rooms_booking_availability_search_form_submit(&$form, &$form_state) {
-
-  $start_date = new DateTime($form_state['values']['rooms_start_date']);
-  $end_date = new DateTime($form_state['values']['rooms_end_date']);
+  list($start_date, $end_date) = rooms_form_input_get_start_end_dates($form_state);
 
   $units = $form_state['values']['rooms'];
 
@@ -257,6 +237,11 @@ function rooms_booking_availability_search_form_submit(&$form, &$form_state) {
     else {
       $rooms_query['type'] = 'all';
     }
+  }
+
+  // Get parameter for AvailabilityAgentSingleUnitFilter.
+  if (isset($form_state['values']['rooms_id'])) {
+    $rooms_query['rooms_id'] = $form_state['values']['rooms_id'];
   }
 
   $rooms_query += rooms_booking_manager_get_plugin_parameters($form_state);
@@ -283,35 +268,23 @@ function rooms_booking_availability_search_form_submit(&$form, &$form_state) {
   );
 }
 
+/**
+ * Returns the actual labels of for the given rooms unit types.
+ *
+ * @param array $unit_type_ids
+ *   A list of machine names to get the labels for.
+ *
+ * @return array
+ *   A list of labels keys by machine name.
+ */
+function _rooms_booking_manager_get_unit_type_labels($unit_type_ids) {
+  // Get all labels
+  $unit_types = rooms_unit_get_types();
 
+  $unit_type_labels = array();
+  foreach ($unit_type_ids as $label) {
+    $unit_type_labels[$label] = $unit_types[$label]->label;
+  }
 
-function rooms_booking_availability_search_form_thumbnail(){
-
-  $sql = "select        l.entity_id, u.name, u.unit_id
-           from         field_data_field_unit_link l
-           inner join   rooms_units u
-                  on    (l.field_unit_link_unit_id = u.unit_id)
-           where        bundle = 'unit_description'";
-
-  $result = db_query($sql);
-
-  $html = '<div class="unit_gallery">';
-
-  while ($record = $result->fetchObject())
-    {
-      $node = node_load($record->entity_id);
-      $imgurl = file_create_url($node->unit_description_image['und'][0]['uri']);
-      $html .= '<div class="unit_gallery_item">';
-      $html .= "<a href='/unit/{$record->unit_id}'>";
-      $html .= '<div class="unit_gallery_item_img">';
-      $html .= "<img src='" . $imgurl . "' />";
-      $html .= '</div>';
-      $html .= '<div class="unit_gallery_item_title"><span>';
-      $html .= $record->name;
-      $html .= '</span></a></div>';
-      $html .= '</div>';
-    }
-
-  $html .= "</div>";
-  return $html;
+  return $unit_type_labels;
 }
