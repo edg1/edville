@@ -293,6 +293,10 @@ class AvailabilityAgent {
       return array();
     }
 
+    // Apply AvailabilityAgentSingleUnitFilter.
+    $av_singleunitfilter = new AvailabilityAgentSingleUnitFilter($units, array('start_date' => $this->start_date, 'end_date' => $this->end_date));
+    $units = $av_singleunitfilter->applyFilter();
+
     // Apply AvailabilityAgentDateFilter.
     $av_datefilter = new AvailabilityAgentDateFilter($units, array('start_date' => $this->start_date, 'end_date' => $this->end_date, 'valid_states' => $this->valid_states, 'confirmed' => $confirmed));
     $units = $av_datefilter->applyFilter();
@@ -361,16 +365,20 @@ class AvailabilityAgent {
         $price_calendar = new UnitPricingCalendar($unit->unit_id, $price_modifiers);
 
         if (variable_get('rooms_price_calculation', ROOMS_PER_NIGHT) == ROOMS_PER_PERSON && count($this->booking_parameters) == 1 && isset($this->booking_parameters[0]) && is_array($this->booking_parameters)) {
-          $price = $price_calendar->calculatePrice($this->start_date, $this->end_date, $this->booking_parameters[0]['adults'], $this->booking_parameters[0]['children'], $this->booking_parameters[0]['childrens_age']);
+          $price_log = $price_calendar->calculatePrice($this->start_date,
+            $this->end_date, $this->booking_parameters[0]['adults'], $this->booking_parameters[0]['children'], $this->booking_parameters[0]['childrens_age']);
         }
         else {
-          $price = $price_calendar->calculatePrice($this->start_date, $this->end_date);
+          $price_log = $price_calendar->calculatePrice($this->start_date,
+            $this->end_date);
         }
-        $full_price = $price['full_price'];
+        $full_price = $price_log['full_price'];
 
         $units[$unit->type][$full_price][$unit->unit_id]['unit'] = $unit;
         $units[$unit->type][$full_price][$unit->unit_id]['price'] = $full_price;
-        $units[$unit->type][$full_price][$unit->unit_id]['booking_price'] = $price['booking_price'];
+        $units[$unit->type][$full_price][$unit->unit_id]['booking_price'] = $price_log['booking_price'];
+        $units[$unit->type][$full_price][$unit->unit_id]['price_log'] = $price_log['log'];
+
 
         if (in_array(ROOMS_ON_REQUEST, $states)) {
           $units[$unit->type][$full_price][$unit->unit_id]['state'] = ROOMS_ON_REQUEST;

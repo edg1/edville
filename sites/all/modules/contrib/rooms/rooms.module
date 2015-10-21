@@ -229,7 +229,7 @@ function rooms_entity_access($op, $entity, $account, $entity_type) {
   }
 
   // Grant generic administrator level access.
-  if (user_access('bypass ' . $entity_type . ' entities', $account)) {
+  if (user_access('bypass ' . $entity_type . ' entities access', $account)) {
     $rights[$account->uid][$cid][$op] = TRUE;
     return TRUE;
   }
@@ -907,8 +907,17 @@ function rooms_date_range_fields($year = NULL, $month = NULL) {
  * instantiate and return DateTime objects.
  */
 function rooms_form_input_get_start_end_dates($form_state) {
-  $start = DateTime::createFromFormat('d/m/Y', $form_state['input']['rooms_start_date']['date']);
-  $end = DateTime::createFromFormat('d/m/Y', $form_state['input']['rooms_end_date']['date']);
+  // If form_state['values']['rooms_X_date'] is not set it is an empty array
+  // hence the need to check and set values so that _constructor below will not
+  // fail.
+  if (is_array($form_state['values']['rooms_start_date']) || is_array($form_state['values']['rooms_end_date'])) {
+    $form_state['values']['rooms_start_date'] = '';
+    $form_state['values']['rooms_end_date'] = '';
+  }
+
+  $start = new DateTime($form_state['values']['rooms_start_date']);
+  $end = new DateTime($form_state['values']['rooms_end_date']);
+
   return array($start, $end);
 }
 
@@ -1069,7 +1078,7 @@ function _rooms_select_rooms_validation($form_state) {
   }
 }
 
-function rooms_filter_month_form($form, &$form_state, $month, $year) {
+function rooms_filter_month_form($form, &$form_state, $month, $year, $unit_types = NULL) {
 
   $form['#attributes']['class'][] = 'rooms-management-form rooms-filter-month-form';
 
@@ -1104,12 +1113,10 @@ function rooms_filter_month_form($form, &$form_state, $month, $year) {
     '#default_value' => $year - date('Y', time()) + 2,
   );
 
-  $query = db_select('rooms_unit_type', 'n')->fields('n', array('type', 'label'));
-  $unit_type = $query->execute()->fetchAll();
-
   $type_options['all'] = t('All types');
-  foreach ($unit_type as $unit) {
-    $type_options[$unit->type] = $unit->label;
+  $unit_types = isset($unit_types) ? $unit_types : rooms_unit_get_types();
+  foreach ($unit_types as $unit_type_name => $unit_type) {
+    $type_options[$unit_type_name] = $unit_type->label;
   }
 
   $form['rooms_availability_filter_month']['type'] = array(
@@ -1231,4 +1238,26 @@ function rooms_element_validate_integer_positive_less_than_100($element, &$form_
       form_error($element, t('%name must be less than 100.', array('%name' => $element['#title'])));
     }
   }
+}
+
+/**
+ * A string transformation function specific to Rooms to allow modules to use
+ * contextual information about bookings to change what is shown to the user.
+ *
+ * @param $string - The string to be altered.
+ * @param $context - Contextual information about the string.
+ *
+ * @return mixed
+ */
+function rooms_string($string, $context) {
+
+  // The string_suggestions array will hold information about all the
+  // suggestions coming from modules. The default behaviour now is to simply
+  // return the suggestion made by the module with the highest weight.
+  $string_suggestions = array();
+  $string_suggestions[] = $string;
+  drupal_alter('rooms_string', $string_suggestions, $context);
+
+  // Return the highest option string.
+  return max($string_suggestions);
 }

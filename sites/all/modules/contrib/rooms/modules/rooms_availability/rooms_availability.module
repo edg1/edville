@@ -174,7 +174,7 @@ function rooms_availability_bulk_unit_management($year = '', $month = '', $type 
   if ($type != 'all') {
     $efq->entityCondition('bundle', $type, '=');
   }
-  $efq->pager(32);
+  $efq->pager(20);
   $rooms_units = $efq->execute();
 
   $rooms_id = $units = array();
@@ -470,6 +470,8 @@ function update_availability_calendar_form_submit(&$form, &$form_state) {
   $event_id = $form_state['values']['unit_state'];
   $unit_id = $form_state['values']['unit_id'];
 
+  // Consider right START DATE and END DATE for all events.
+  $end_date->sub(new DateInterval('P1D'));
   // Create a new Booking Event.
   $be = new BookingEvent($unit_id, $event_id, $start_date, $end_date);
   $events = array($be);
@@ -552,6 +554,7 @@ function rooms_availability_generate_json($unit, $start_year = '', $start_month 
   $events = $rc->getEvents($start_date, $end_date);
   $event_style = rooms_availability_get_style($event_style, $unit);
   foreach ($events as $event) {
+    $event->end_date->add(new DateInterval('P1D'));
     $json_events[] = $event->formatJson($event_style, $unit->name);
   }
 
@@ -859,7 +862,7 @@ function rooms_availability_form_rooms_booking_settings_alter(&$form, &$form_sta
     '#title' => t('"@availability_status" color', array('@availability_status' => t('Unavailable'))),
     '#size' => 10,
     '#maxlength' => 7,
-    '#default_value' => variable_get('rooms_not_available_color', '#FF0000'),
+    '#default_value' => variable_get('rooms_not_available_color', '#CC2727'),
     '#element_validate' => array('rooms_availability_validate_hex_color'),
     '#dependency' => array('edit-row-options-colors-legend' => array('type')),
     '#prefix' => '<div class="rooms-colorpicker-wrapper form-wrapper">',
@@ -888,7 +891,7 @@ function rooms_availability_form_rooms_booking_settings_alter(&$form, &$form_sta
     '#title' => t('"@availability_status" color', array('@availability_status' => t('Available'))),
     '#size' => 10,
     '#maxlength' => 7,
-    '#default_value' => variable_get('rooms_available_color', '#8CBF62'),
+    '#default_value' => variable_get('rooms_available_color', '#8ba175'),
     '#element_validate' => array('rooms_availability_validate_hex_color'),
     '#dependency' => array('edit-row-options-colors-legend' => array('type')),
     '#prefix' => '<div class="rooms-colorpicker-wrapper">',

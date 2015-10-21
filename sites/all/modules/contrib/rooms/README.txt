@@ -5,7 +5,7 @@ B&Bs and vacation rentals.
 
 It builds on the Drupal CMS (drupal.org) and its modules.
 
-For more extensive documentation and examples check out http://www.drupalrooms.com/docs
+For more extensive documentation and examples check out http://roomify.us/documentation/rooms-module
 
 
 INSTALLATION
@@ -75,8 +75,8 @@ For a more complete set of documentation visit http://www.drupalrooms.com
 
 PHP REQUIREMENTS & DATE REQUIREMENTS
 --------------------------------------
-The use of the DateInterval class means that we require PHP version 5.3
-or greater.
+The use of the DateInterval class and other bugs found in PHP means
+that we require PHP version 5.3.9 or greater.
 
 In general, this module makes use of latest Date functionality in PHP, so
 ensure that it is enabled in your PHP setup. We may scale back on this

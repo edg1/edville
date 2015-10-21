@@ -79,11 +79,6 @@ tbody {
   clear: both;
 }
 
-/* Single-Row Month */
-.rooms-month-manager td {
-  margin: 0;
-  padding: 0 0 10px;
-}
 .rooms-month-manager .unit-name,
 .rooms-month-manager .unit-days {
   border-bottom: 1px solid #ccc !important;
@@ -114,107 +109,4 @@ tbody {
 }
 .commerce-line-item-actions {
   margin: 20px 1em 20px 0;
-}
-
-.booking-params{
-  margin-top:10px;
-}
-
-.right-button-box{
-  text-align:right;
-  margin-top:10px;
-}
-
-button{
-border-radius:0 !important;
-}
-
-a{
-  border-radius: 0 !important;
-}
-
-.gallery{
-  margin-top:20px;
-  margin-bottom:10px;
-}
-
-.gallery h2{
-  display:none !important;
-}
-
-.gallery .contextual-links-processed,
-.gallery .field-name-unit-description-description{
-  display:none !important;
-}
-
-.unit_gallery{
-  clear:both;
-}
-
-.unit_gallery_item{
-  margin-right:20px;
-  width:280px;
-  display:inline-block;
-}
-
-.unit_gallery_item_img{
-  width:280px;
-  height:210px;
-  display:inline-block;
-}
-
-.unit_gallery_item img{
-  width:100%;
-  height:100%;
-}
-
-.unit_gallery_item_title{
-  text-align: left;
-}
-
-.rooms-availability-search{
-  margin-top: 10px;
-}
-
-.search_result_unit_description_image_box{
-  position:relative;
-}
-
-.search_result_unit_price{
-  right:20px;
-  bottom:20px;
-  color:white;
-  position:absolute;
-}
-
-.search_result_unit_description_image{
-  width: 100%;
-  height: 100%;
-}
-
-.contact_btn{
-  background-color: #eee;
-  padding: 10px;
-  color: #333;
-}
-
-.contact_btn:hover,
-.contact_btn:focus{
-  text-decoration: none;
-}
-
-.btn-primary{
-  position:static;
-  float:left;
-}
-
-.unit_gallery a{
-  text-decoration: none;
-  color:black;
-}
-
-.unit_gallery a:hover,
-.unit_gallery a:focus{
-  text-decoration: none;
-  color:black;
 }
