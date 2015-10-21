@@ -6347,6 +6347,9 @@ input[type=text] {
   text-align: left;
   font-weight: bold;
 }
+.rooms-availability-search .form-type-textfield > label {
+  display: none;
+}
 .rooms-availability-search .btn-primary {
   margin-top: 22px;
 }
