@@ -158,7 +158,6 @@
         <?php endif; ?>
         <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
         <a id="main-content"></a>        
-        <?php print $messages; ?>
         <?php if (!empty($tabs)): ?>
           <?php print render($tabs); ?>
         <?php endif; ?>

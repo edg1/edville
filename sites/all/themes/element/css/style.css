@@ -1370,6 +1370,15 @@ button.mfp-close, button.mfp-arrow {
   left: 50%;
   margin-left: -11px;
 }
+.page-about-us .title2 h1 {
+  text-transform: uppercase;
+}
+.page-about-us .title2 h1:after {
+  display: none;
+}
+.page-about-us .horizontal-tabs-section2 .title-section {
+  margin-bottom: 40px;
+}
 .team-section .title-section {
   position: relative;
   z-index: 2;
@@ -1833,10 +1842,6 @@ button.mfp-close, button.mfp-arrow {
   padding: 5px;
   /*width: 160px;*/
   text-align: center;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -o-border-radius: 20px;
-  border-radius: 20px;
   border: 1px solid black;
   background-color: black;
 }
@@ -4654,6 +4659,31 @@ input[type=text] {
 .page-about-us .team-section .title-section h1 {
   color: #333333;
 }
+.page-about-us a.view-more {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  padding: 3px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 13px;
+} 
+.page-about-us a.view-more:hover {
+  cursor: pointer;
+  text-decoration: none;
+  background: #000;
+  color: #fff;
+}
+.page-about-us .feature-post-content {
+  margin-top: 10px;
+}
+.page-about-us .feature-post-content p {
+  margin-top: 15px;
+}
+.page-about-us .horizontal-tabs-section2 .title-section.no-background{
+  background: none;
+  margin-bottom: 0;
+}
 .feature-section2.pattern-back {
   padding: 60px 0;
   background: url('../images/pattern2.jpg') repeat;
@@ -7083,6 +7113,7 @@ ul.portfolio-pagination li a:hover {
 }
 .page-contact .region-content .contact-form {
   padding-top: 15px;
+  padding-bottom: 70px;
 }
 .page-contact .region-content .contact-form input[type="text"], .page-contact .region-content .contact-form textarea {
   width: 100%;
@@ -7121,10 +7152,6 @@ ul.portfolio-pagination li a:hover {
   font-family: 'Open Sans', sans-serif;
   background: transparent;
   font-weight: 300;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -o-border-radius: 20px;
-  border-radius: 20px;
   /*border: 1px solid #66cc99;*/
   border: 1px solid black;
   transition: all 0.2s ease-in-out;
@@ -7157,7 +7184,8 @@ ul.portfolio-pagination li a:hover {
 }
 .page-contact .contact-content {
   text-align: center;
-  margin: 60px 20px 0;
+  padding: 60px 20px;
+  background: url('../images/pattern1.jpg');
 }
 .page-contact .contact-content h3 {
   text-transform: uppercase;
@@ -7181,6 +7209,16 @@ ul.portfolio-pagination li a:hover {
 .page-contact .contact-content ul li i {
   font-size: 25px;
   margin-right: 15px;
+}
+.page-contact .contact-content ul li a {
+  text-decoration: none;
+  color: #333;
+}
+.page-contact .contact-content ul li a:hover {
+  color: #aaa;
+}
+.page-contact .pane-block-24 {
+  padding-top: 50px; 
 }
 /*-------------------------------------------------*/
 /* =  faqs page
