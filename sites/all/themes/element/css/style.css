@@ -326,6 +326,7 @@ website:    http://www.themepunch.com
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
   background: none;
+  font-weight: bold;
 }
 .navbar-nav {
   margin-top: 20px;
