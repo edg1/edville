@@ -6367,7 +6367,7 @@ input[type=text] {
   text-align: center;
   margin-top: 40px;
   border-bottom: 1px dashed;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
   margin-left: 40px;
   margin-right: 40px;
 }
@@ -6382,11 +6382,110 @@ input[type=text] {
   display: none;
 }
 .rooms-availability-search .btn-primary {
-  margin-top: 22px;
+  margin-top: 0;
+  text-transform: uppercase;
 }
 .rooms-availability-search .rooms-date-range {
   margin-bottom: 10px;
 }
+.rooms-availability-search .rooms-date-range, .rooms-availability-search .rooms-date-range .start-date,
+.rooms-availability-search .form-type-select {
+  margin: 0;
+}
+.rooms-availability-search .form-control {
+  border-radius: 0;
+  border-right: 0;
+  text-transform: uppercase;
+}
+.rooms-availability-search .form-control:hover {
+  cursor: pointer;
+}
+.rooms-availability-search .form-wrapper {
+  margin: 0;
+}
+.rooms-date-range .container-inline-date .form-item input {
+  text-align: center;
+  width: 11em;
+}
+.rooms-availability-search select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+.front .region-content-top-full {
+  position: relative;
+}
+.front .slide-link {
+  margin-top: 300px;
+}
+.front #block-rooms-booking-manager-rooms-availability-search{
+  position: absolute;
+  z-index: 8;
+  top: 55%;
+  width: 100%;
+}
+.front .rooms-availability-search {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.front .rooms-availability-search .form-control {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  border-right: 0;
+}
+.front .rooms-availability-search .form-control.black {
+  color: #000;
+  border: 1px solid #000;
+  border-right: 0;
+}
+.front .rooms-availability-search .btn-primary, .front .rooms-availability-search .btn-primary.white {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+.front .rooms-availability-search .btn-primary.black {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+.front .rooms-date-range .container-inline-date .form-item input::-webkit-input-placeholder {
+  color: #fff;
+}
+ 
+.front .rooms-date-range .container-inline-date .form-item input:-moz-placeholder { /* Firefox 18- */
+  color: #fff;
+}
+ 
+.front .rooms-date-range .container-inline-date .form-item input::-moz-placeholder {  /* Firefox 19+ */
+  color: #fff;
+}
+ 
+.front .rooms-date-range .container-inline-date .form-item input:-ms-input-placeholder {  
+  color: #fff;
+}
+
+.front .rooms-date-range .container-inline-date .form-item input.black::-webkit-input-placeholder {
+  color: #000;
+}
+ 
+.front .rooms-date-range .container-inline-date .form-item input.black:-moz-placeholder { /* Firefox 18- */
+  color: #000;
+}
+ 
+.front .rooms-date-range .container-inline-date .form-item input.black::-moz-placeholder {  /* Firefox 19+ */
+  color: #000;
+}
+ 
+.front .rooms-date-range .container-inline-date .form-item input.black:-ms-input-placeholder {  
+  color: #000;
+}
+.front .rooms-availability-search select option {
+  color: #000;
+}
+
 .view-book-a-room .view-content {
   margin-left: 20px;
   margin-right: 20px;

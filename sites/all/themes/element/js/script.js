@@ -47,6 +47,44 @@ $(document).ready(function($) {
 	    }
 	  });
 	}
+
+	if ($('body').hasClass('front')) {
+		if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
+			$('.front .rooms-availability-search .form-control').addClass('white');
+			$('.front .rooms-availability-search .form-control').removeClass('black');
+			$('.front .rooms-date-range .container-inline-date .form-item input').addClass('white');
+			$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('black');
+			$('.front .rooms-availability-search .btn-primary').addClass('white');
+			$('.front .rooms-availability-search .btn-primary').removeClass('black');
+		}
+		else {
+			$('.front .rooms-availability-search .form-control').addClass('black');
+			$('.front .rooms-availability-search .form-control').removeClass('white');
+			$('.front .rooms-date-range .container-inline-date .form-item input').addClass('black');
+			$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('white');
+			$('.front .rooms-availability-search .btn-primary').addClass('black');
+			$('.front .rooms-availability-search .btn-primary').removeClass('white');
+		}
+		$('.flexslider').bind('before', function (slider) {console.log(slider);
+	    if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
+				$('.front .rooms-availability-search .form-control').addClass('white');
+				$('.front .rooms-availability-search .form-control').removeClass('black');
+				$('.front .rooms-date-range .container-inline-date .form-item input').addClass('white');
+				$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('black');
+				$('.front .rooms-availability-search .btn-primary').addClass('white');
+				$('.front .rooms-availability-search .btn-primary').removeClass('black');
+			}
+			else {
+				$('.front .rooms-availability-search .form-control').addClass('black');
+				$('.front .rooms-availability-search .form-control').removeClass('white');
+				$('.front .rooms-date-range .container-inline-date .form-item input').addClass('black');
+				$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('white');
+				$('.front .rooms-availability-search .btn-primary').addClass('black');
+				$('.front .rooms-availability-search .btn-primary').removeClass('white');
+			}
+	  });	
+	}
+	
 	
 	
 	/* header color for each slide */
