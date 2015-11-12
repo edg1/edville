@@ -6435,11 +6435,15 @@ input[type=text] {
   color: #fff;
   border: 1px solid #fff;
   border-right: 0;
+  height: 34px;
 }
 .front .rooms-availability-search .form-control.black {
   color: #000;
   border: 1px solid #000;
   border-right: 0;
+}
+.front .rooms-availability-search .form-control.error, .front .rooms-availability-search .form-control.error.black {
+  border-color: red;
 }
 .front .rooms-availability-search .btn-primary, .front .rooms-availability-search .btn-primary.white {
   background: #fff;
@@ -8066,6 +8070,21 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   }
 }
 @media (max-width: 767px) {
+  .front .slide-link {
+    margin-top: 0;
+  }
+  .slide-text h1 {
+    margin: 0;
+    font-size: 40px;
+  }
+  .slide-description {
+    margin: 20px 0 100px;
+  }
+  .rooms-availability-search .form-control {
+    font-size: 12px;
+    height: 34px;
+    padding: 6px;
+  }
   .navbar-toggle {
     margin-top: 12px;
     margin-bottom: 12px;
@@ -8073,6 +8092,8 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   .navbar-default {
     background: #222222;
     padding: 0 15px;
+    margin-bottom: 0;
+    position: relative;
   }
   .navbar-brand {
     padding: 20px 15px 10px;
@@ -8257,8 +8278,47 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   .md-slide-wrap .tp-caption.medium_thin_grey {
     margin-top: 15px;
   }
+  .rooms-availability-search .form-control {
+    font-size: 10px;
+  }
+  .not-front .rooms-availability-search .form-control {
+    font-size: 14px;
+    border: 1px solid #ccc;
+  }
+  .not-front .rooms-availability-search .form-wrapper, 
+  .not-front .rooms-availability-search .rooms-date-range .start-date,
+  .not-front .rooms-availability-search .rooms-date-range .end-date,
+  .not-front .rooms-date-range .container-inline-date .form-item input,
+  .not-front .rooms-availability-search .form-type-select {
+    width: 100%;
+    text-align: left;
+  }
+  .not-front .rooms-availability-search .rooms-date-range .start-date > div,
+  .not-front .rooms-availability-search .rooms-date-range .end-date > div,
+  .not-front .rooms-availability-search .form-type-select select,
+  .not-front .rooms-availability-search .btn-primary {
+    width: 200px;
+    margin: 0 auto;
+  }
+
+  .not-front .rooms-availability-search .rooms-date-range .start-date,
+  .not-front .rooms-availability-search .rooms-date-range .end-date,
+  .not-front .rooms-availability-search .form-type-select {
+    margin-bottom: 10px;
+  }
+
 }
 @media (max-width: 581px) {
+  .front #block-rooms-booking-manager-rooms-availability-search {
+    display: none;
+  }
+  .slide-description {
+    margin-bottom: 30px;
+    font-size: 14px;
+  }
+  .slide-text h1 {
+    font-size: 30px;
+  }
   .md-slide-wrap .tp-caption.medium_thin_grey {
     margin-top: 20px;
   }
