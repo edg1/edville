@@ -100,7 +100,7 @@ class UnitPricingCalendar extends RoomsCalendar implements UnitPricingCalendarIn
         }
       }
       else {
-        $price = $price + ($days * $event->amount);
+        $price = $price + ($days * $event->amount * $persons);
       }
     }
 

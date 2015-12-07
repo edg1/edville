@@ -1,0 +1,8 @@
+name = Edville custom
+package = Edville
+description = Special for Edville
+
+version = "7.x-1.0"
+core = "7.x"
+project = "edville"
+datestamp = "1398607428"
