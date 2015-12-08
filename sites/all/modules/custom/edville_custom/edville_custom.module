@@ -77,11 +77,17 @@ function edville_custom_form_rooms_booking_availability_search_form_page_alter(&
     -1 => $form['rooms_fieldset']['group_size_adults:1']['#title']
     ) + $form['rooms_fieldset']['group_size_adults:1']['#options'];
   unset($form['rooms_fieldset']['group_size_adults:1']['#title']);
+  if (!isset($_GET['rooms_group_size1'])) {
+    $form['rooms_fieldset']['group_size_adults:1']['#default_value'] = -1;
+  }
 
   $form['rooms_fieldset']['group_size_children:1']['#options'] = array(
     -1 => $form['rooms_fieldset']['group_size_children:1']['#title']
     ) + $form['rooms_fieldset']['group_size_children:1']['#options'];
   unset($form['rooms_fieldset']['group_size_children:1']['#title']);
+  if (!isset($_GET['rooms_children1'])) {
+    $form['rooms_fieldset']['group_size_children:1']['#default_value'] = -1;
+  }
   
   $form['actions']['submit']['#value'] = t('Search');
 

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Unit Type feature.
+ */
+
+include_once 'unit_type.features.inc';

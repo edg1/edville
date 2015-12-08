@@ -27,21 +27,64 @@
  * @see template_preprocess_entity()
  * @see template_process()
  */
+  module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
+  $search_form = drupal_get_form('rooms_booking_availability_search_form_page');
+  $unit_object = isset($content['rooms_booking_unit_options']['#object']) ?  $content['rooms_booking_unit_options']['#object'] : null;
+  $theme_path = drupal_get_path('theme', 'element');
 ?>
+<?php if (!is_null($unit_object)): ?>
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <?php if (!$page): ?>
-    <h2<?php print $title_attributes; ?>>
-       <?php print $title; ?>
-    </h2>
-  <?php endif; ?>
-
   <div class="content"<?php print $content_attributes; ?>>
+    <h2><?php print $title; ?></h2>
+    <?php print render($content['field_address']); ?>
+    <ul>
+      <?php if ($unit_object->field_home['und'][0]['value'] == 1): ?>
+      <li><img src="<?php print $theme_path . '/images/icon-home.png'; ?>" /><span><?php print t('Home'); ?></span></li>
+      <?php endif; ?>
+      <li><img src="<?php print $theme_path . '/images/icon-group-size.png'; ?>" /><span><?php print t('Group size ') . $unit_object->max_sleeps; ?></span></li>
+      <li><img src="<?php print $theme_path . '/images/icon-bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['doubles'] . t(' doubles'); ?></span></li>
+      <li><img src="<?php print $theme_path . '/images/icon-bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['singles'] . t(' singles'); ?></span></li>
+      <li><img src="<?php print $theme_path . '/images/icon-shower.png'; ?>" /><span><?php print $unit_object->field_showers['und'][0]['value'] . t(' shower'); ?></span></li>
+      <?php if (isset($unit_object->field_student_approved['und'][0]['value']) && $unit_object->field_student_approved['und'][0]['value']): ?>
+      <li><img src="<?php print $theme_path . '/images/icon-student-approved.png'; ?>" /><span><?php print t('Student approved'); ?></span></li>
+      <?php endif; ?>
+      <li><img src="<?php print $theme_path . '/images/icon-wc.png'; ?>" /><span><?php print $unit_object->field_wc['und'][0]['value'] . t(' WC'); ?></span></li>
+      <li><img src="<?php print $theme_path . '/images/icon-rooms.png'; ?>" /><span><?php print $unit_object->field_rooms['und'][0]['value'] . t(' rooms'); ?></span></li>
+      <?php if (isset($unit_object->field_wifi['und'][0]['value']) && $unit_object->field_wifi['und'][0]['value']): ?>
+      <li><img src="<?php print $theme_path . '/images/icon-wifi.png'; ?>" /><span><?php print t('WIFI'); ?></span></li>
+      <?php endif; ?>
+    </ul>
+    <?php print render($search_form); ?>
+    <?php print render($content['field_room_photos']); ?>
+    <?php print render($content['field_description']); ?>
+    <?php print render($content['field_student_arrangements']); ?>
+    <?php print render($content['field_business_arrangements']); ?>
+    
     <?php
       unset ($content['state']);
       unset ($content['type']);
       unset ($content['sleeps']);
       unset ($content['bed_arrangement']);
-      print render($content);
+      // print render($content);
     ?>
   </div>
 </div>
+<?php else: ?>
+  <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+    <?php if (!$page): ?>
+      <h2<?php print $title_attributes; ?>>
+         <?php print $title; ?>
+      </h2>
+    <?php endif; ?>
+
+    <div class="content"<?php print $content_attributes; ?>>
+      <?php
+        unset ($content['state']);
+        unset ($content['type']);
+        unset ($content['sleeps']);
+        unset ($content['bed_arrangement']);
+        print render($content);
+      ?>
+    </div>
+  </div>
+<?php endif; ?>
