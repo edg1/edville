@@ -30,6 +30,7 @@
   module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
   $search_form = drupal_get_form('rooms_booking_availability_search_form_page');
   $unit_object = isset($content['rooms_booking_unit_options']['#object']) ?  $content['rooms_booking_unit_options']['#object'] : null;
+
   $theme_path = drupal_get_path('theme', 'element');
 ?>
 <?php if (!is_null($unit_object)): ?>
@@ -59,7 +60,39 @@
     <?php print render($content['field_description']); ?>
     <?php print render($content['field_student_arrangements']); ?>
     <?php print render($content['field_business_arrangements']); ?>
-    
+    <?php
+
+      $year = date('Y'); $month = date('m');
+      
+      rooms_availability_modal_style();
+
+      // Get the current page's URL, striped of the year and month args.
+      // This allows us to place this page anywhere, including at
+      // unit/%/availability  or  admin/rooms/units/unit/%/availability
+      list($url) = explode('/' . $year . '/' . $month, current_path());
+
+      $calendar = array(
+        '#theme' => 'rooms_one_month_calendar',
+        '#url' => $url,
+        '#form' => drupal_get_form('update_availability_calendar_form', $unit_object->unit_id, $year, $month),
+        '#year' => $year,
+        '#month' => $month,
+        '#attached' => array(
+          'css' => array(
+            drupal_get_path('module', 'rooms_availability') . '/css/rooms_availability.css',
+          ),
+          'js' => array(
+            drupal_get_path('module', 'rooms_availability') . '/js/rooms_availability.js',
+            array(
+              'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id)),
+              'type' => 'setting',
+            ),
+          ),
+        ),
+      );
+
+      print render($calendar);
+    ?>
     <?php
       unset ($content['state']);
       unset ($content['type']);
