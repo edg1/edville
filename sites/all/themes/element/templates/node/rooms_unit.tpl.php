@@ -29,30 +29,31 @@
  */
   module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
   $search_form = drupal_get_form('rooms_booking_availability_search_form_page');
+  $search_form2 = drupal_get_form('rooms_booking_availability_search_form_block');
   $unit_object = isset($content['rooms_booking_unit_options']['#object']) ?  $content['rooms_booking_unit_options']['#object'] : null;
 
   $theme_path = drupal_get_path('theme', 'element');
 ?>
 <?php if (!is_null($unit_object)): ?>
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <div class="content"<?php print $content_attributes; ?>>
+  <div class="unit-detail-content content"<?php print $content_attributes; ?>>
     <h2><?php print $title; ?></h2>
     <?php print render($content['field_address']); ?>
-    <ul>
+    <ul class="room-features">
       <?php if ($unit_object->field_home['und'][0]['value'] == 1): ?>
-      <li><img src="<?php print $theme_path . '/images/icon-home.png'; ?>" /><span><?php print t('Home'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/home.png'; ?>" /><span><?php print t('Home'); ?></span></li>
       <?php endif; ?>
-      <li><img src="<?php print $theme_path . '/images/icon-group-size.png'; ?>" /><span><?php print t('Group size ') . $unit_object->max_sleeps; ?></span></li>
-      <li><img src="<?php print $theme_path . '/images/icon-bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['doubles'] . t(' doubles'); ?></span></li>
-      <li><img src="<?php print $theme_path . '/images/icon-bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['singles'] . t(' singles'); ?></span></li>
-      <li><img src="<?php print $theme_path . '/images/icon-shower.png'; ?>" /><span><?php print $unit_object->field_showers['und'][0]['value'] . t(' shower'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/group-size.png'; ?>" /><span><?php print t('Group size ') . $unit_object->max_sleeps; ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['doubles'] . t(' doubles'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['singles'] . t(' singles'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/shower.png'; ?>" /><span><?php print $unit_object->field_showers['und'][0]['value'] . t(' shower'); ?></span></li>
       <?php if (isset($unit_object->field_student_approved['und'][0]['value']) && $unit_object->field_student_approved['und'][0]['value']): ?>
-      <li><img src="<?php print $theme_path . '/images/icon-student-approved.png'; ?>" /><span><?php print t('Student approved'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/student-approved.png'; ?>" /><span><?php print t('Student approved'); ?></span></li>
       <?php endif; ?>
-      <li><img src="<?php print $theme_path . '/images/icon-wc.png'; ?>" /><span><?php print $unit_object->field_wc['und'][0]['value'] . t(' WC'); ?></span></li>
-      <li><img src="<?php print $theme_path . '/images/icon-rooms.png'; ?>" /><span><?php print $unit_object->field_rooms['und'][0]['value'] . t(' rooms'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/wc.png'; ?>" /><span><?php print $unit_object->field_wc['und'][0]['value'] . t(' WC'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/rooms.png'; ?>" /><span><?php print $unit_object->field_rooms['und'][0]['value'] . t(' rooms'); ?></span></li>
       <?php if (isset($unit_object->field_wifi['und'][0]['value']) && $unit_object->field_wifi['und'][0]['value']): ?>
-      <li><img src="<?php print $theme_path . '/images/icon-wifi.png'; ?>" /><span><?php print t('WIFI'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/wifi.png'; ?>" /><span><?php print t('WIFI'); ?></span></li>
       <?php endif; ?>
     </ul>
     <?php print render($search_form); ?>
@@ -60,11 +61,17 @@
     <?php print render($content['field_description']); ?>
     <?php print render($content['field_student_arrangements']); ?>
     <?php print render($content['field_business_arrangements']); ?>
+    <?php print render($search_form2); ?>
+    <div class="col-md-5">
+      <?php 
+        print_r(get_avaiable_in_current_month($unit_object->unit_id)); 
+      ?>
+    </div>
     <?php
 
       $year = date('Y'); $month = date('m');
       
-      rooms_availability_modal_style();
+      // rooms_availability_modal_style();
 
       // Get the current page's URL, striped of the year and month args.
       // This allows us to place this page anywhere, including at
@@ -74,7 +81,6 @@
       $calendar = array(
         '#theme' => 'rooms_one_month_calendar',
         '#url' => $url,
-        '#form' => drupal_get_form('update_availability_calendar_form', $unit_object->unit_id, $year, $month),
         '#year' => $year,
         '#month' => $month,
         '#attached' => array(
@@ -82,7 +88,7 @@
             drupal_get_path('module', 'rooms_availability') . '/css/rooms_availability.css',
           ),
           'js' => array(
-            drupal_get_path('module', 'rooms_availability') . '/js/rooms_availability.js',
+            drupal_get_path('module', 'edville_custom') . '/js/edville_rooms_availability.js',
             array(
               'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id)),
               'type' => 'setting',
@@ -90,9 +96,8 @@
           ),
         ),
       );
-
-      print render($calendar);
     ?>
+    <div class="col-md-7"><?php print render($calendar); ?></div>
     <?php
       unset ($content['state']);
       unset ($content['type']);

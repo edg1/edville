@@ -7842,6 +7842,31 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   margin: 0;
   color: #666666;
 }
+
+/*-------------------------------------------------*/
+/* =  Unit detail page
+/*-------------------------------------------------*/
+
+.unit-detail-content .room-features img {
+  width: 50px;
+}
+
+.unit-detail-content ul.room-features {
+  list-style: none;
+}
+.unit-detail-content ul.room-features li {
+  display: inline-block;
+  text-align: center;
+}
+.unit-detail-content ul.room-features li > span {
+  width: 100%;
+  float: left;
+}
+
+.unit-detail-content .rooms-three-month-calendar .month1 {
+  width: 100%;
+  height: auto;
+}
 /*-------------------------------------------------*/
 /* =  Responsive Part
 /*-------------------------------------------------*/

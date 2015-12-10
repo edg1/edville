@@ -122,6 +122,11 @@ function edville_custom_theme() {
  */
 function edville_custom_preprocess_rooms_one_month_calendar(&$vars) {
 
+  if (!empty(arg(3))) {
+    $vars['month'] = arg(3);
+    $vars['year'] = arg(2);
+    $vars['url'] = url('unit/' . arg(1));
+  }
   // Load FullCalendar.
   rooms_fullcalendar_loaded();
 
@@ -162,4 +167,66 @@ function edville_custom_preprocess_rooms_one_month_calendar(&$vars) {
   $vars['forward_link'] = l(t('Forward'), $forward_path, $vars['link_options']);
   $vars['backward_link'] = l(t('Back'), $backward_path, $vars['link_options']);
   $vars['current_link'] = l(t('Current'), $current_path, $vars['link_options']);
+}
+
+function get_avaiable_in_current_month($unit_id) {
+  $query = db_select('rooms_availability', 'a');
+  $query->fields('a');
+  $query->condition('a.unit_id', $unit_id);
+  $query->condition('a.year', date("Y"));
+  $query->condition('a.month', date("m"));
+
+  $months = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+  $data = reset($months);
+
+  $dt_min = new DateTime("last monday");
+  $dt_max = clone($dt_min);
+  $dt_max->modify('+4 days');
+  
+  $min_day = Date('d');
+  $max_day = $dt_max->format('d');
+
+
+
+  $result = array();
+
+  // Begin test
+  $min_day = 7;
+  $data['d10'] = 12;
+  $data['d11'] = 12;
+  // End test
+
+  $j = $min_day;
+  $k = 0;
+  for ($i = $min_day; $i <= $max_day;) {
+    if ($data['d' . $i] == 1) {
+      if (($i > $j + 1) || ($i == $j)) {
+        $result['rang_in_week'][$k]['start'] = $i; 
+      }
+      else {
+        $end = $i;
+        if ($i == $max_day) {
+          $result['rang_in_week'][$k]['end'] = $end; 
+        }
+      }
+      $j = $i;
+    }
+    else {
+      if (isset($result['rang_in_week'][$k]['start'])) {
+        $result['rang_in_week'][$k]['end'] = $end;   
+        $k++;
+      }
+      
+      $j = $i;
+      $j++;
+    }
+    
+    $i++; 
+  }
+
+  // print_r($result);die;
+}
+
+function isWeekend($date) {
+  return (date('N', strtotime($date)) >= 6);
 }
