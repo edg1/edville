@@ -122,7 +122,7 @@ function edville_custom_theme() {
  */
 function edville_custom_preprocess_rooms_one_month_calendar(&$vars) {
 
-  if (!empty(arg(3))) {
+  if (arg(3) != '') {
     $vars['month'] = arg(3);
     $vars['year'] = arg(2);
     $vars['url'] = url('unit/' . arg(1));
