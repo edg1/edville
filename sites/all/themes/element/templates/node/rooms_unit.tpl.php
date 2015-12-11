@@ -31,6 +31,63 @@
   $search_form = drupal_get_form('rooms_booking_availability_search_form_page');
   $search_form2 = drupal_get_form('rooms_booking_availability_search_form_block');
   $unit_object = isset($content['rooms_booking_unit_options']['#object']) ?  $content['rooms_booking_unit_options']['#object'] : null;
+  if (empty($unit_object) || arg(0) != 'unit') return;
+  $availability = get_avaiable_in_current_month($unit_object->unit_id); 
+  $weekday_forms = array();
+  if (isset($availability['weekday_availability']['data'])) {
+    $i = 0;  
+    foreach ($availability['weekday_availability']['data'] as $key => $item) {
+      $date_from = new Datetime(($item['start']) . '-' . Date('m-Y')); 
+      if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
+        $item['end'] = $item['start']; 
+      }
+      $date_to = new Datetime(($item['end'] + 1) . '-' . Date('m-Y'));
+      $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
+      $booking_parameters = array(
+        '1' => array(
+          'adults' => 10,
+          'children' => 0
+        )
+      );
+      
+      $night = $date_to->diff($date_from)->days;
+      $price = $unit_object->base_price * $unit_object->max_sleeps * $night;
+
+      $weekday_forms[$i]['date_from'] = $date_from;
+      $weekday_forms[$i]['date_to'] = $date_to;
+      $weekday_forms[$i]['form'] = drupal_get_form($form, $unit_object, $date_from, $date_to, $booking_parameters, 1, $price);
+      $i++;
+    }  
+  }
+
+  if (isset($availability['weekend_availability']['data'])) {
+    $i = 0;  
+    foreach ($availability['weekend_availability']['data'] as $key => $item) {
+      $date_from = new Datetime(($item['start']) . '-' . Date('m-Y')); 
+      if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
+        $item['end'] = $item['start']; 
+      }
+      $date_to = new Datetime(($item['end'] + 1) . '-' . Date('m-Y'));
+      $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
+      $booking_parameters = array(
+        '1' => array(
+          'adults' => 10,
+          'children' => 0
+        )
+      );
+      
+      $night = $date_to->diff($date_from)->days;
+      $price = $unit_object->base_price * $unit_object->max_sleeps * $night;
+      
+      $weekend_forms[$i]['date_from'] = $date_from;
+      $weekend_forms[$i]['date_to'] = $date_to;
+      $weekend_forms[$i]['form'] = drupal_get_form($form, $unit_object, $date_from, $date_to, $booking_parameters, 1, $price);
+      $i++;
+    }  
+  }
+  
+  
+  
 
   $theme_path = drupal_get_path('theme', 'element');
 ?>
@@ -64,7 +121,35 @@
     <?php print render($search_form2); ?>
     <div class="col-md-5">
       <?php 
-        print_r(get_avaiable_in_current_month($unit_object->unit_id)); 
+        foreach ($weekday_forms as $weekday_form) {
+          $weekday_form['form']['persons']['#default_value'] = 0;
+          $weekday_form['form']['persons']['#value'] = 0;
+          unset($weekday_form['form']['price']);
+          unset($weekday_form['form']['options']);
+          unset($weekday_form['form']['persons']);
+          unset($weekday_form['form']['children']);
+          $date_to_display = $weekday_form['date_to'];
+          $date_to_display->sub(new DateInterval('P1D'));
+
+          print t('From @from to @to', array('@from' => $weekday_form['date_from']->format('d-m-Y'), '@to' => $date_to_display->format('d-m-Y')));
+          print render($weekday_form['form']);
+        }
+      ?>
+
+      <?php 
+        foreach ($weekend_forms as $weekend_form) {
+          $weekend_form['form']['persons']['#default_value'] = 0;
+          $weekend_form['form']['persons']['#value'] = 0;
+          unset($weekend_form['form']['price']);
+          unset($weekend_form['form']['options']);
+          unset($weekend_form['form']['persons']);
+          unset($weekend_form['form']['children']);
+          $date_to_display = $weekend_form['date_to'];
+          $date_to_display->sub(new DateInterval('P1D'));
+
+          print t('From @from to @to', array('@from' => $weekend_form['date_from']->format('d-m-Y'), '@to' => $date_to_display->format('d-m-Y')));
+          print render($weekend_form['form']);
+        }
       ?>
     </div>
     <?php
