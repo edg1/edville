@@ -53,6 +53,72 @@ function unit_type_field_default_field_instances() {
   );
 
   // Exported field_instance:
+  // 'rooms_unit-holiday_home_edville_melle-field_arrangments_file'.
+  $field_instances['rooms_unit-holiday_home_edville_melle-field_arrangments_file'] = array(
+    'bundle' => 'holiday_home_edville_melle',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'download_file',
+        'settings' => array(),
+        'type' => 'direct_download_icon',
+        'weight' => 20,
+      ),
+      'token' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'rooms_unit',
+    'field_name' => 'field_arrangments_file',
+    'label' => 'Arrangments File',
+    'required' => 0,
+    'settings' => array(
+      'description_field' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'pdf',
+      'max_filesize' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'file',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 0,
+            'plupload' => 0,
+            'reference' => 0,
+            'remote' => 0,
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 0,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+            'search_all_fields' => 0,
+          ),
+        ),
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'file_generic',
+      'weight' => 36,
+    ),
+  );
+
+  // Exported field_instance:
   // 'rooms_unit-holiday_home_edville_melle-field_baby_beds'.
   $field_instances['rooms_unit-holiday_home_edville_melle-field_baby_beds'] = array(
     'bundle' => 'holiday_home_edville_melle',
@@ -102,6 +168,72 @@ function unit_type_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'rooms_unit-holiday_home_edville_melle-field_brochu_file'.
+  $field_instances['rooms_unit-holiday_home_edville_melle-field_brochu_file'] = array(
+    'bundle' => 'holiday_home_edville_melle',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'download_file',
+        'settings' => array(),
+        'type' => 'direct_download_icon',
+        'weight' => 21,
+      ),
+      'token' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'rooms_unit',
+    'field_name' => 'field_brochu_file',
+    'label' => 'Brochu file',
+    'required' => 0,
+    'settings' => array(
+      'description_field' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'pdf',
+      'max_filesize' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'file',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 0,
+            'plupload' => 0,
+            'reference' => 0,
+            'remote' => 0,
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 0,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+            'search_all_fields' => 0,
+          ),
+        ),
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'file_generic',
+      'weight' => 37,
     ),
   );
 
@@ -407,6 +539,167 @@ function unit_type_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 24,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'rooms_unit-holiday_home_edville_melle-field_location'.
+  $field_instances['rooms_unit-holiday_home_edville_melle-field_location'] = array(
+    'bundle' => 'holiday_home_edville_melle',
+    'default_value' => array(
+      0 => array(
+        'location_settings' => array(
+          'display' => array(
+            'hide' => array(
+              'additional' => 0,
+              'city' => 0,
+              'coords' => 0,
+              'country' => 0,
+              'country_name' => 0,
+              'locpick' => 0,
+              'map_link' => 0,
+              'name' => 0,
+              'postal_code' => 0,
+              'province' => 0,
+              'province_name' => 0,
+              'street' => 0,
+            ),
+          ),
+          'form' => array(
+            'fields' => array(
+              'additional' => array(
+                '#parents' => array(
+                  0 => 'field_location',
+                  1 => 'und',
+                  2 => 0,
+                ),
+                'collect' => 1,
+                'default' => '',
+                'weight' => 6,
+              ),
+              'city' => array(
+                'collect' => 0,
+                'default' => '',
+                'weight' => 8,
+              ),
+              'country' => array(
+                '#parents' => array(
+                  0 => 'field_location',
+                  1 => 'und',
+                  2 => 0,
+                ),
+                'collect' => 1,
+                'default' => 'us',
+                'weight' => 14,
+              ),
+              'delete_location' => array(
+                'default' => FALSE,
+                'nodiff' => TRUE,
+              ),
+              'is_primary' => array(
+                'default' => 0,
+              ),
+              'latitude' => array(
+                'default' => 0,
+              ),
+              'lid' => array(
+                'default' => FALSE,
+              ),
+              'locpick' => array(
+                '#parents' => array(
+                  0 => 'field_location',
+                  1 => 'und',
+                  2 => 0,
+                ),
+                'collect' => 1,
+                'default' => FALSE,
+                'nodiff' => TRUE,
+                'weight' => 20,
+              ),
+              'longitude' => array(
+                'default' => 0,
+              ),
+              'name' => array(
+                '#parents' => array(
+                  0 => 'field_location',
+                  1 => 'und',
+                  2 => 0,
+                ),
+                'collect' => 1,
+                'default' => '',
+                'weight' => 2,
+              ),
+              'postal_code' => array(
+                'collect' => 0,
+                'default' => '',
+                'weight' => 12,
+              ),
+              'province' => array(
+                'collect' => 0,
+                'default' => '',
+                'weight' => 10,
+                'widget' => 'autocomplete',
+              ),
+              're_geocode_location' => array(
+                'default' => FALSE,
+                'nodiff' => TRUE,
+              ),
+              'source' => array(
+                'default' => 0,
+              ),
+              'street' => array(
+                '#parents' => array(
+                  0 => 'field_location',
+                  1 => 'und',
+                  2 => 0,
+                ),
+                'collect' => 1,
+                'default' => '',
+                'weight' => 4,
+              ),
+            ),
+          ),
+        ),
+        'name' => 'Ha Noi',
+        'street' => 'Duc Dien',
+        'additional' => '',
+        'country' => 'vn',
+        'locpick' => array(
+          'user_latitude' => 21.0506718,
+          'user_longitude' => 105.7541526,
+        ),
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'location_cck',
+        'settings' => array(),
+        'type' => 'location_map',
+        'weight' => 22,
+      ),
+      'token' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'rooms_unit',
+    'field_name' => 'field_location',
+    'label' => 'Location',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'location_cck',
+      'settings' => array(),
+      'type' => 'location',
+      'weight' => 38,
     ),
   );
 
@@ -988,6 +1281,66 @@ function unit_type_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance:
+  // 'rooms_unit-studio_center_ghent-field_arrangments_file'.
+  $field_instances['rooms_unit-studio_center_ghent-field_arrangments_file'] = array(
+    'bundle' => 'studio_center_ghent',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
+        'weight' => 20,
+      ),
+    ),
+    'entity_type' => 'rooms_unit',
+    'field_name' => 'field_arrangments_file',
+    'label' => 'Arrangments File',
+    'required' => 0,
+    'settings' => array(
+      'description_field' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'pdf',
+      'max_filesize' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'file',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 0,
+            'plupload' => 0,
+            'reference' => 0,
+            'remote' => 0,
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 0,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+            'search_all_fields' => 0,
+          ),
+        ),
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'file_generic',
+      'weight' => 40,
+    ),
+  );
+
   // Exported field_instance: 'rooms_unit-studio_center_ghent-field_baby_beds'.
   $field_instances['rooms_unit-studio_center_ghent-field_baby_beds'] = array(
     'bundle' => 'studio_center_ghent',
@@ -1025,6 +1378,66 @@ function unit_type_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'rooms_unit-studio_center_ghent-field_brochu_file'.
+  $field_instances['rooms_unit-studio_center_ghent-field_brochu_file'] = array(
+    'bundle' => 'studio_center_ghent',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
+        'weight' => 21,
+      ),
+    ),
+    'entity_type' => 'rooms_unit',
+    'field_name' => 'field_brochu_file',
+    'label' => 'Brochu file',
+    'required' => 0,
+    'settings' => array(
+      'description_field' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'pdf',
+      'max_filesize' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'file',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 0,
+            'plupload' => 0,
+            'reference' => 0,
+            'remote' => 0,
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 0,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+            'search_all_fields' => 0,
+          ),
+        ),
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'file_generic',
+      'weight' => 42,
     ),
   );
 
@@ -1724,7 +2137,9 @@ function unit_type_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Address');
+  t('Arrangments File');
   t('Baby Beds');
+  t('Brochu file');
   t('Business Approved');
   t('Business Arrangements');
   t('CheckIn');
@@ -1732,6 +2147,7 @@ function unit_type_field_default_field_instances() {
   t('Description');
   t('Home');
   t('Latitude');
+  t('Location');
   t('Longitude');
   t('Options');
   t('Room Photos');

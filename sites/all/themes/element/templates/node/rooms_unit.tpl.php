@@ -118,6 +118,8 @@
     <?php print render($content['field_description']); ?>
     <?php print render($content['field_student_arrangements']); ?>
     <?php print render($content['field_business_arrangements']); ?>
+    <?php print render($content['field_arrangments_file']); ?>
+    <?php print render($content['field_brochu_file']); ?>
     <?php print render($search_form2); ?>
     <div class="col-md-5">
       <?php 
@@ -151,6 +153,8 @@
           print render($weekend_form['form']);
         }
       ?>
+      <?php print render($content['field_checkin']); ?>
+      <?php print render($content['field_checkout']); ?>
     </div>
     <?php
 
@@ -183,6 +187,7 @@
       );
     ?>
     <div class="col-md-7"><?php print render($calendar); ?></div>
+    <?php print render($content['field_location']); ?>
     <?php
       unset ($content['state']);
       unset ($content['type']);

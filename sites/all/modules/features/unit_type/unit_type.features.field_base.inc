@@ -31,6 +31,29 @@ function unit_type_field_default_field_bases() {
     'type' => 'text',
   );
 
+  // Exported field_base: 'field_arrangments_file'.
+  $field_bases['field_arrangments_file'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_arrangments_file',
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'file',
+    'settings' => array(
+      'display_default' => 0,
+      'display_field' => 0,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'file',
+  );
+
   // Exported field_base: 'field_baby_beds'.
   $field_bases['field_baby_beds'] = array(
     'active' => 1,
@@ -44,6 +67,29 @@ function unit_type_field_default_field_bases() {
     'settings' => array(),
     'translatable' => 0,
     'type' => 'number_integer',
+  );
+
+  // Exported field_base: 'field_brochu_file'.
+  $field_bases['field_brochu_file'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_brochu_file',
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'file',
+    'settings' => array(
+      'display_default' => 0,
+      'display_field' => 0,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'file',
   );
 
   // Exported field_base: 'field_business_approved'.
@@ -243,6 +289,90 @@ function unit_type_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'number_float',
+  );
+
+  // Exported field_base: 'field_location'.
+  $field_bases['field_location'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_location',
+    'indexes' => array(
+      'lid' => array(
+        0 => 'lid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'location_cck',
+    'settings' => array(
+      'gmap_macro' => '[gmap |id=usermap|center=40,0|zoom=13|width=100%|height=300px]',
+      'gmap_marker' => 'edville',
+      'location_settings' => array(
+        'display' => array(
+          'hide' => array(
+            'additional' => 0,
+            'city' => 0,
+            'coords' => 0,
+            'country' => 0,
+            'country_name' => 0,
+            'locpick' => 0,
+            'map_link' => 0,
+            'name' => 0,
+            'postal_code' => 0,
+            'province' => 0,
+            'province_name' => 0,
+            'street' => 0,
+          ),
+        ),
+        'form' => array(
+          'fields' => array(
+            'additional' => array(
+              'collect' => 1,
+              'default' => '',
+              'weight' => 6,
+            ),
+            'city' => array(
+              'collect' => 0,
+              'default' => '',
+              'weight' => 8,
+            ),
+            'country' => array(
+              'collect' => 1,
+              'default' => 'us',
+              'weight' => 14,
+            ),
+            'locpick' => array(
+              'collect' => 1,
+              'weight' => 20,
+            ),
+            'name' => array(
+              'collect' => 1,
+              'default' => '',
+              'weight' => 2,
+            ),
+            'postal_code' => array(
+              'collect' => 0,
+              'default' => '',
+              'weight' => 12,
+            ),
+            'province' => array(
+              'collect' => 0,
+              'default' => '',
+              'weight' => 10,
+              'widget' => 'autocomplete',
+            ),
+            'street' => array(
+              'collect' => 1,
+              'default' => '',
+              'weight' => 4,
+            ),
+          ),
+        ),
+      ),
+    ),
+    'translatable' => 0,
+    'type' => 'location',
   );
 
   // Exported field_base: 'field_longitude'.

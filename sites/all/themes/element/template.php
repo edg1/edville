@@ -26,7 +26,10 @@ function element_preprocess_page(&$variables) {
   else {
     $variables['content_column_class'] = ' class="col-md-12"';
   } 
-  drupal_add_js('http://maps.google.com/maps/api/js?sensor=false', array('type' => 'external'));
+  if (current_path() == 'contact') {
+    drupal_add_js('http://maps.google.com/maps/api/js?sensor=false', array('type' => 'external'));
+  }
+  
 }
 
 function element_theme() {
