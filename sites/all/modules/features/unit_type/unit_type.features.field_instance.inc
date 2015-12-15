@@ -60,7 +60,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'download_file',
         'settings' => array(),
         'type' => 'direct_download_icon',
@@ -179,7 +179,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'download_file',
         'settings' => array(),
         'type' => 'direct_download_icon',
@@ -291,7 +291,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -333,7 +333,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
@@ -372,7 +372,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
@@ -411,7 +411,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -674,7 +674,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'location_cck',
         'settings' => array(),
         'type' => 'location_map',
@@ -690,7 +690,7 @@ function unit_type_field_default_field_instances() {
     'entity_type' => 'rooms_unit',
     'field_name' => 'field_location',
     'label' => 'Location',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -1027,7 +1027,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -1255,7 +1255,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -1289,7 +1289,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
@@ -1389,7 +1389,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
@@ -1488,7 +1488,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -1585,7 +1585,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -1688,6 +1688,37 @@ function unit_type_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'rooms_unit-studio_center_ghent-field_location'.
+  $field_instances['rooms_unit-studio_center_ghent-field_location'] = array(
+    'bundle' => 'studio_center_ghent',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'location_cck',
+        'settings' => array(),
+        'type' => 'location_map',
+        'weight' => 22,
+      ),
+    ),
+    'entity_type' => 'rooms_unit',
+    'field_name' => 'field_location',
+    'label' => 'Location',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'location_cck',
+      'settings' => array(),
+      'type' => 'location',
+      'weight' => 44,
+    ),
+  );
+
   // Exported field_instance: 'rooms_unit-studio_center_ghent-field_longitude'.
   $field_instances['rooms_unit-studio_center_ghent-field_longitude'] = array(
     'bundle' => 'studio_center_ghent',
@@ -1736,7 +1767,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'flexslider_fields',
         'settings' => array(
           'caption' => 0,
@@ -1960,7 +1991,7 @@ function unit_type_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',

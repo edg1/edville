@@ -86,15 +86,12 @@
     }  
   }
   
-  
-  
-
   $theme_path = drupal_get_path('theme', 'element');
 ?>
 <?php if (!is_null($unit_object)): ?>
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="unit-detail-content content"<?php print $content_attributes; ?>>
-    <h2><?php print $title; ?></h2>
+    <h2 class="title"><?php print $title; ?></h2>
     <?php print render($content['field_address']); ?>
     <ul class="room-features">
       <?php if ($unit_object->field_home['und'][0]['value'] == 1): ?>
@@ -107,6 +104,9 @@
       <?php if (isset($unit_object->field_student_approved['und'][0]['value']) && $unit_object->field_student_approved['und'][0]['value']): ?>
       <li><img src="/<?php print $theme_path . '/images/icons/student-approved.png'; ?>" /><span><?php print t('Student approved'); ?></span></li>
       <?php endif; ?>
+      <?php if (isset($unit_object->field_business_approved['und'][0]['value']) && $unit_object->field_business_approved['und'][0]['value']): ?>
+      <li><img src="/<?php print $theme_path . '/images/icons/business-approved.png'; ?>" /><span><?php print t('Business approved'); ?></span></li>
+      <?php endif; ?>
       <li><img src="/<?php print $theme_path . '/images/icons/wc.png'; ?>" /><span><?php print $unit_object->field_wc['und'][0]['value'] . t(' WC'); ?></span></li>
       <li><img src="/<?php print $theme_path . '/images/icons/rooms.png'; ?>" /><span><?php print $unit_object->field_rooms['und'][0]['value'] . t(' rooms'); ?></span></li>
       <?php if (isset($unit_object->field_wifi['und'][0]['value']) && $unit_object->field_wifi['und'][0]['value']): ?>
@@ -115,79 +115,109 @@
     </ul>
     <?php print render($search_form); ?>
     <?php print render($content['field_room_photos']); ?>
-    <?php print render($content['field_description']); ?>
-    <?php print render($content['field_student_arrangements']); ?>
-    <?php print render($content['field_business_arrangements']); ?>
-    <?php print render($content['field_arrangments_file']); ?>
-    <?php print render($content['field_brochu_file']); ?>
-    <?php print render($search_form2); ?>
-    <div class="col-md-5">
-      <?php 
-        foreach ($weekday_forms as $weekday_form) {
-          $weekday_form['form']['persons']['#default_value'] = 0;
-          $weekday_form['form']['persons']['#value'] = 0;
-          unset($weekday_form['form']['price']);
-          unset($weekday_form['form']['options']);
-          unset($weekday_form['form']['persons']);
-          unset($weekday_form['form']['children']);
-          $date_to_display = $weekday_form['date_to'];
-          $date_to_display->sub(new DateInterval('P1D'));
+    <?php if (isset($unit_object->field_description['und'][0]['value'])): ?>
+      <div class="content-item">
+        <img class="icon" src="<?php print url($theme_path . '/images/icons/home.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Description'); ?></h2>
+        <?php print render($content['field_description']); ?>
+      </div>
+    <?php endif; ?>
+    <?php if (isset($unit_object->field_student_arrangements['und'][0]['value'])): ?>
+      <div class="content-item">
+        <img class="icon icon-student-arrangment" src="<?php print url($theme_path . '/images/icons/student-arrangments.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Student Arrangments'); ?></h2>
+        <?php print render($content['field_student_arrangements']); ?>
+        </div>
+    <?php endif; ?>
+    <?php if (isset($unit_object->field_business_arrangements['und'][0]['value'])): ?>
+      <div class="content-item">
+        <img class="icon icon-business-arrangments" src="<?php print url($theme_path . '/images/icons/business-arrangments.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Business Arrangments'); ?></h2>
+        <?php print render($content['field_business_arrangements']); ?>
+        
+          <?php if (isset($unit_object->field_arrangments_file['und'][0]['fid'])): ?>
+            <div class="download-link">
+            <?php print l(t('View Arrangments'), '/download/file/fid/' . $unit_object->field_arrangments_file['und'][0]['fid']); ?>
+            </div>
+          <?php endif; ?> 
+          <?php if (isset($unit_object->field_brochu_file['und'][0]['fid'])): ?>
+            <div class="download-link">
+            <?php print l(t('Download Our Brochure'), '/download/file/fid/' . $unit_object->field_brochu_file['und'][0]['fid']); ?>
+            </div>
+          <?php endif; ?> 
+      </div>
+    <?php endif; ?>
+    <div class="content-item">
+      <img class="icon icon-office" src="<?php print url($theme_path . '/images/icons/office.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Search for availability'); ?></h2>
+      <?php print render($search_form2); ?>
+      <div class="row">
+        <div class="col-md-5">
+          <span class="date-title"><?php print t('Next available weekday'); ?></span>
+          <div class="weekday">
+          <?php 
+            foreach ($weekday_forms as $weekday_form) {
+              $weekday_form['form']['persons']['#default_value'] = 0;
+              $weekday_form['form']['persons']['#value'] = 0;
+              unset($weekday_form['form']['price']);
+              unset($weekday_form['form']['options']);
+              unset($weekday_form['form']['persons']);
+              unset($weekday_form['form']['children']);
+             
+              print render($weekday_form['form']);
+            }
+          ?>
+          </div>
+          <span class="date-title"><?php print t('Next available weekend'); ?></span>
+            <div class="weekday">
+            <?php 
+              foreach ($weekend_forms as $weekend_form) {
+                $weekend_form['form']['persons']['#default_value'] = 0;
+                $weekend_form['form']['persons']['#value'] = 0;
+                unset($weekend_form['form']['price']);
+                unset($weekend_form['form']['options']);
+                unset($weekend_form['form']['persons']);
+                unset($weekend_form['form']['children']);
+                
+                print render($weekend_form['form']);
+              }
+            ?>
+            </div>
+          <div class="check-in"><?php print t('Check-in @check-in', array('@check-in' => $unit_object->field_checkin['und'][0]['value'] . 'h')); ?></div>
+          <div class="check-out"><?php print t('Check-out @check-out', array('@check-out' => $unit_object->field_checkout['und'][0]['value'] . 'h')); ?></div>
+        </div>
+        <?php
 
-          print t('From @from to @to', array('@from' => $weekday_form['date_from']->format('d-m-Y'), '@to' => $date_to_display->format('d-m-Y')));
-          print render($weekday_form['form']);
-        }
-      ?>
+          $year = date('Y'); $month = date('m');
+          
+          // rooms_availability_modal_style();
 
-      <?php 
-        foreach ($weekend_forms as $weekend_form) {
-          $weekend_form['form']['persons']['#default_value'] = 0;
-          $weekend_form['form']['persons']['#value'] = 0;
-          unset($weekend_form['form']['price']);
-          unset($weekend_form['form']['options']);
-          unset($weekend_form['form']['persons']);
-          unset($weekend_form['form']['children']);
-          $date_to_display = $weekend_form['date_to'];
-          $date_to_display->sub(new DateInterval('P1D'));
+          // Get the current page's URL, striped of the year and month args.
+          // This allows us to place this page anywhere, including at
+          // unit/%/availability  or  admin/rooms/units/unit/%/availability
+          list($url) = explode('/' . $year . '/' . $month, current_path());
 
-          print t('From @from to @to', array('@from' => $weekend_form['date_from']->format('d-m-Y'), '@to' => $date_to_display->format('d-m-Y')));
-          print render($weekend_form['form']);
-        }
-      ?>
-      <?php print render($content['field_checkin']); ?>
-      <?php print render($content['field_checkout']); ?>
-    </div>
-    <?php
-
-      $year = date('Y'); $month = date('m');
-      
-      // rooms_availability_modal_style();
-
-      // Get the current page's URL, striped of the year and month args.
-      // This allows us to place this page anywhere, including at
-      // unit/%/availability  or  admin/rooms/units/unit/%/availability
-      list($url) = explode('/' . $year . '/' . $month, current_path());
-
-      $calendar = array(
-        '#theme' => 'rooms_one_month_calendar',
-        '#url' => $url,
-        '#year' => $year,
-        '#month' => $month,
-        '#attached' => array(
-          'css' => array(
-            drupal_get_path('module', 'rooms_availability') . '/css/rooms_availability.css',
-          ),
-          'js' => array(
-            drupal_get_path('module', 'edville_custom') . '/js/edville_rooms_availability.js',
-            array(
-              'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id)),
-              'type' => 'setting',
+          $calendar = array(
+            '#theme' => 'rooms_one_month_calendar',
+            '#url' => $url,
+            '#year' => $year,
+            '#month' => $month,
+            '#attached' => array(
+              'css' => array(
+                drupal_get_path('module', 'rooms_availability') . '/css/rooms_availability.css',
+              ),
+              'js' => array(
+                drupal_get_path('module', 'edville_custom') . '/js/edville_rooms_availability.js',
+                array(
+                  'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id)),
+                  'type' => 'setting',
+                ),
+              ),
             ),
-          ),
-        ),
-      );
-    ?>
-    <div class="col-md-7"><?php print render($calendar); ?></div>
-    <?php print render($content['field_location']); ?>
+          );
+        ?>
+      <div class="col-md-7"><?php print render($calendar); ?></div>
+    </div>
+    <div class="content-item">
+      <img class="icon icon-office" src="<?php print url($theme_path . '/images/icons/office.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Location'); ?></h2>
+      <?php print render($content['field_location']); ?>
+    </div>
     <?php
       unset ($content['state']);
       unset ($content['type']);

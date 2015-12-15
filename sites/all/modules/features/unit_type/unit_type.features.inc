@@ -14,6 +14,37 @@ function unit_type_ctools_plugin_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function unit_type_views_api($module = NULL, $api = NULL) {
+  return array("api" => "3.0");
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function unit_type_image_default_styles() {
+  $styles = array();
+
+  // Exported image style: other_space.
+  $styles['other_space'] = array(
+    'label' => 'Other Space',
+    'effects' => array(
+      29 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 400,
+          'height' => 300,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  return $styles;
+}
+
+/**
  * Implements hook_default_rooms_unit_type().
  */
 function unit_type_default_rooms_unit_type() {

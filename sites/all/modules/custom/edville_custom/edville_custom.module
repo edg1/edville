@@ -573,12 +573,13 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
     }
 
     $form['new_price'] = array(
-      '#prefix' => '<div class="rooms-search-result__new-price" id="unit_' . $unit->unit_id . '_price">',
-      '#markup' => '<label>' . t('Cost') . ':</label> <span class="rooms-search-result__new-price-amount">' .
-        t('@currency_symbol @amount', array( // TODO: replace with a proper currency formatter
+      '#prefix' => '<div class="price-result" id="unit_' . $unit->unit_id . '_price">',
+      '#markup' => t('From @start_date to @end_date > Starting from @currency_symbol @amount for 10 guests', array( // TODO: replace with a proper currency formatter
           '@currency_symbol' => $currency_symbol,
           '@amount' => $new_price['full_price'],
-        )) . '</span>',
+          '@start_date' => $start_date->format('d-m-Y'),
+          '@end_date' => $temp_end_date->format('d-m-Y'),
+        )),
       '#suffix' => '</div>',
     );
   }
@@ -598,7 +599,7 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
   );
   $form['actions']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Book This'),
+    '#value' => t('Book Now'),
     '#submit' => $submit + array('edville_book_unit_form_submit'),
   );
 

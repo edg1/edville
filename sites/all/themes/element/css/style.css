@@ -7846,26 +7846,130 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
 /*-------------------------------------------------*/
 /* =  Unit detail page
 /*-------------------------------------------------*/
-
+.unit-detail-content {
+  margin: 60px 0 40px 0;
+}
+.unit-detail-content h2.title {
+  font-size: 23px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0;
+}
+.unit-detail-content .content-item {
+  margin-top: 60px;
+}
+.unit-detail-content h2.title.nomarl {
+  font-weight: normal;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+.unit-detail-content .icon {
+  width: 28px;
+  height: auto;
+  margin-right: 15px;
+  float: left;
+}
+.unit-detail-content .icon-student-arrangment {
+  width: 15px;
+  margin-top: -11px;
+}
+.unit-detail-content .icon-business-arrangments {
+  width: 22px;
+}
+.unit-detail-content .icon-office {
+  width: 16px;
+}
 .unit-detail-content .room-features img {
-  width: 50px;
+  width: 40px;
 }
 
 .unit-detail-content ul.room-features {
   list-style: none;
+  margin: 30px 0;
+  padding: 0;
 }
 .unit-detail-content ul.room-features li {
   display: inline-block;
   text-align: center;
+  max-width: 90px;
 }
 .unit-detail-content ul.room-features li > span {
   width: 100%;
   float: left;
+  margin-top: 4px;
 }
-
+.unit-detail-content .rooms-availability-search {
+  margin: 30px 0;
+  padding: 0;
+  border: none;
+}
 .unit-detail-content .rooms-three-month-calendar .month1 {
   width: 100%;
   height: auto;
+}
+.unit-detail-content .download-link {
+  margin: 20px 0;
+}
+.unit-detail-content .calendar-navigation {
+  margin-top: 5px;
+}
+.unit-detail-content .fc-toolbar .fc-left {
+  float: none;
+}
+.unit-detail-content .fc .fc-toolbar>*>* {
+  float: none;
+}
+.unit-detail-content .download-link a, .calendar-navigation a {
+  border: 1px solid #222;
+  padding: 2px 10px;
+  color: #222;
+}
+.unit-detail-content .download-link a:hover, .calendar-navigation a:hover {
+  text-decoration: none;
+}
+.unit-detail-content span.date-title {
+  font-size: 16px;
+}
+.unit-detail-content .price-result {
+  margin: 5px 0;
+  font-size: 12px;
+}
+.unit-detail-content .weekday {
+  margin: 10px 0 30px;
+}
+.unit-detail-content .btn-default {
+  background: #000;
+  padding: 4px 10px;
+  color: #fff;
+}
+.check-in, .check-out {
+  font-size: 16px;
+}
+.rooms-three-month-calendar .month1 {
+  padding: 0;
+}
+.unit-detail-content.row .view-content {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.view-other-spaces .view-content img {
+  width: 100%;
+  height: auto;
+}
+.view-other-spaces .views-field-name {
+  margin-top: 10px;
+}
+.view-other-spaces .views-field-name a {
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+}
+.view-other-spaces .views-field-name a:hover {
+  opacity: 0.7;
+  text-decoration: none;
+}
+.flexslider .flex-direction-nav a {
+  font-size: 0;
 }
 /*-------------------------------------------------*/
 /* =  Responsive Part
