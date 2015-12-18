@@ -87,9 +87,13 @@
   }
   
   $theme_path = drupal_get_path('theme', 'element');
+
 ?>
 <?php if (!is_null($unit_object)): ?>
-  <div class="section-content page-banner-section">
+  <?php
+    $first_img = file_create_url($unit_object->field_room_photos['und'][0]['uri']); 
+  ?>
+  <div class="section-content page-banner-section" style="background:url(<?php print $first_img; ?>) center no-repeat; background-size:cover;">
     
   </div>
   <div class="container">
