@@ -120,11 +120,13 @@
   <?php if (!empty($title)): ?>
     <!-- page-banner-section
     ================================================== -->
+    <?php if (strpos(current_path(), 'unit') === false): ?>
     <div class="section-content page-banner-section">
       <div class="container">
         <h1><?php print $title; ?></h1>
       </div>
     </div>
+    <?php endif; ?>
   <?php endif; ?>
   <?php print render($title_suffix); ?>
   <!-- Content top fullwidth -->
@@ -133,7 +135,7 @@
     <?php print render($page['content_top_full']); ?>  
   </div>
   <?php endif; ?>
-  <div id="content" class="main-container container">        
+  <div id="content" class="main-container <?php if (strpos(current_path(), 'unit') === false) print 'container'; ?>">        
     <header role="banner" id="page-header">
       <?php if (!empty($site_slogan)): ?>
         <p class="lead"><?php print $site_slogan; ?></p>
