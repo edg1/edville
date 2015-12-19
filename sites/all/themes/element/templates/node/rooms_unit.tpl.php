@@ -41,7 +41,8 @@
       if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
         $item['end'] = $item['start']; 
       }
-      $date_to = new Datetime(($item['end'] + 1) . '-' . Date('m-Y'));
+      $date_to = new Datetime(($item['end']) . '-' . Date('m-Y'));
+      $date_to->modify('+1 day');
       $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
       $booking_parameters = array(
         '1' => array(
@@ -67,7 +68,8 @@
       if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
         $item['end'] = $item['start']; 
       }
-      $date_to = new Datetime(($item['end'] + 1) . '-' . Date('m-Y'));
+      $date_to = new Datetime(($item['end']) . '-' . Date('m-Y'));
+      $date_to->modify('+1 day');
       $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
       $booking_parameters = array(
         '1' => array(
