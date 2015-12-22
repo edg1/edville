@@ -65,7 +65,7 @@ $(document).ready(function($) {
 			$('.front .rooms-availability-search .btn-primary').addClass('black');
 			$('.front .rooms-availability-search .btn-primary').removeClass('white');
 		}
-		$('.flexslider').bind('before', function (slider) {console.log(slider);
+		$('.flexslider').bind('after', function (slider) {
 	    if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 				$('.front .rooms-availability-search .form-control').addClass('white');
 				$('.front .rooms-availability-search .form-control').removeClass('black');
@@ -661,7 +661,7 @@ function setHeaderColor() {
 				$('.navbar-nav > li > a').addClass('black');
 				$('.navbar-nav > li > a').removeClass('white');
 			}
-			$('.flexslider').bind('before', function (slider) {
+			$('.flexslider').bind('after', function (slider) {
 	      if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 					$('header .inactive_logo').show();
 					$('header .active_logo').hide();

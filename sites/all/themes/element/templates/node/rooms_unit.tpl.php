@@ -27,67 +27,70 @@
  * @see template_preprocess_entity()
  * @see template_process()
  */
-  module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
-  $search_form = drupal_get_form('rooms_booking_availability_search_form_page');
-  $search_form2 = drupal_get_form('rooms_booking_availability_search_form_block');
   $unit_object = isset($content['rooms_booking_unit_options']['#object']) ?  $content['rooms_booking_unit_options']['#object'] : null;
-  if (empty($unit_object) || arg(0) != 'unit') return;
-  $availability = get_avaiable_in_current_month($unit_object->unit_id); 
-  $weekday_forms = array();
-  if (isset($availability['weekday_availability']['data'])) {
-    $i = 0;  
-    foreach ($availability['weekday_availability']['data'] as $key => $item) {
-      $date_from = new Datetime(($item['start']) . '-' . Date('m-Y')); 
-      if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
-        $item['end'] = $item['start']; 
-      }
-      $date_to = new Datetime(($item['end']) . '-' . Date('m-Y'));
-      $date_to->modify('+1 day');
-      $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
-      $booking_parameters = array(
-        '1' => array(
-          'adults' => 10,
-          'children' => 0
-        )
-      );
-      
-      $night = $date_to->diff($date_from)->days;
-      $price = $unit_object->base_price * $unit_object->max_sleeps * $night;
 
-      $weekday_forms[$i]['date_from'] = $date_from;
-      $weekday_forms[$i]['date_to'] = $date_to;
-      $weekday_forms[$i]['form'] = drupal_get_form($form, $unit_object, $date_from, $date_to, $booking_parameters, 1, $price);
-      $i++;
-    }  
-  }
-
-  if (isset($availability['weekend_availability']['data'])) {
-    $i = 0;  
-    foreach ($availability['weekend_availability']['data'] as $key => $item) {
-      $date_from = new Datetime(($item['start']) . '-' . Date('m-Y')); 
-      if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
-        $item['end'] = $item['start']; 
-      }
-      $date_to = new Datetime(($item['end']) . '-' . Date('m-Y'));
-      $date_to->modify('+1 day');
-      $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
-      $booking_parameters = array(
-        '1' => array(
-          'adults' => 10,
-          'children' => 0
-        )
-      );
-      
-      $night = $date_to->diff($date_from)->days;
-      $price = $unit_object->base_price * $unit_object->max_sleeps * $night;
-      
-      $weekend_forms[$i]['date_from'] = $date_from;
-      $weekend_forms[$i]['date_to'] = $date_to;
-      $weekend_forms[$i]['form'] = drupal_get_form($form, $unit_object, $date_from, $date_to, $booking_parameters, 1, $price);
-      $i++;
-    }  
-  }
+  module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
+  $search_form = drupal_get_form('rooms_booking_availability_search_form_page_' . $unit_object->unit_id);
+  $search_form2 = drupal_get_form('rooms_booking_availability_search_form_block_' . $unit_object->unit_id);
   
+  if (empty($unit_object) || (arg(0) != 'unit' && arg(0) != 'booking')) return;
+  if (arg(0) == 'unit') {
+    $availability = get_avaiable_in_current_month($unit_object->unit_id); 
+    $weekday_forms = array();
+    if (isset($availability['weekday_availability']['data'])) {
+      $i = 0;  
+      foreach ($availability['weekday_availability']['data'] as $key => $item) {
+        $date_from = new Datetime(($item['start']) . '-' . Date('m-Y')); 
+        if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
+          $item['end'] = $item['start']; 
+        }
+        $date_to = new Datetime(($item['end']) . '-' . Date('m-Y'));
+        $date_to->modify('+1 day');
+        $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
+        $booking_parameters = array(
+          '1' => array(
+            'adults' => 10,
+            'children' => 0
+          )
+        );
+        
+        $night = $date_to->diff($date_from)->days;
+        $price = $unit_object->base_price * $unit_object->max_sleeps * $night;
+
+        $weekday_forms[$i]['date_from'] = $date_from;
+        $weekday_forms[$i]['date_to'] = $date_to;
+        $weekday_forms[$i]['form'] = drupal_get_form($form, $unit_object, $date_from, $date_to, $booking_parameters, 1, $price);
+        $i++;
+      }  
+    }
+
+    if (isset($availability['weekend_availability']['data'])) {
+      $i = 0;  
+      foreach ($availability['weekend_availability']['data'] as $key => $item) {
+        $date_from = new Datetime(($item['start']) . '-' . Date('m-Y')); 
+        if (!isset($item['end']) || (isset($item['end']) && $item['end'] == 0)) {
+          $item['end'] = $item['start']; 
+        }
+        $date_to = new Datetime(($item['end']) . '-' . Date('m-Y'));
+        $date_to->modify('+1 day');
+        $form = 'edville_book_unit_form_' . $unit_object->unit_id . '_' . $key;
+        $booking_parameters = array(
+          '1' => array(
+            'adults' => 10,
+            'children' => 0
+          )
+        );
+        
+        $night = $date_to->diff($date_from)->days;
+        $price = $unit_object->base_price * $unit_object->max_sleeps * $night;
+        
+        $weekend_forms[$i]['date_from'] = $date_from;
+        $weekend_forms[$i]['date_to'] = $date_to;
+        $weekend_forms[$i]['form'] = drupal_get_form($form, $unit_object, $date_from, $date_to, $booking_parameters, 1, $price);
+        $i++;
+      }  
+    }
+  }
   $theme_path = drupal_get_path('theme', 'element');
 
 ?>
@@ -95,9 +98,11 @@
   <?php
     $first_img = file_create_url($unit_object->field_room_photos['und'][0]['uri']); 
   ?>
+  <?php if (arg(0) == 'unit'): ?>
   <div class="section-content page-banner-section" style="background:url(<?php print $first_img; ?>) center no-repeat; background-size:cover;">
     
   </div>
+  <?php endif; ?>
   <div class="container">
   <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
     <div class="unit-detail-content content"<?php print $content_attributes; ?>>
@@ -123,7 +128,7 @@
         <li><img src="/<?php print $theme_path . '/images/icons/wifi.png'; ?>" /><span><?php print t('WIFI'); ?></span></li>
         <?php endif; ?>
       </ul>
-      <?php print render($search_form); ?>
+      <?php if (arg(0) == 'unit') print render($search_form); ?>
       <?php print render($content['field_room_photos']); ?>
       <?php if (isset($unit_object->field_description['und'][0]['value'])): ?>
         <div class="content-item">
@@ -154,6 +159,7 @@
             <?php endif; ?> 
         </div>
       <?php endif; ?>
+      <?php if (arg(0) == 'unit'): ?>
       <div class="content-item">
         <img class="icon icon-office" src="<?php print url($theme_path . '/images/icons/office.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Search for availability'); ?></h2>
         <?php print render($search_form2); ?>
@@ -224,10 +230,14 @@
           ?>
         <div class="col-md-5"><?php print render($calendar); ?></div>
       </div>
+    </div>
+    <?php endif; ?>
+      <?php if (isset($unit_object->field_location['und'][0])): ?>
       <div class="content-item">
         <img class="icon icon-office" src="<?php print url($theme_path . '/images/icons/office.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Location'); ?></h2>
         <?php print render($content['field_location']); ?>
       </div>
+      <?php endif; ?>
       <?php
         unset ($content['state']);
         unset ($content['type']);
@@ -235,8 +245,8 @@
         unset ($content['bed_arrangement']);
         // print render($content);
       ?>
-    </div>
   </div>
+</div>
 </div>
   <?php else: ?>
     <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>

@@ -318,7 +318,7 @@ website:    http://www.themepunch.com
 }
 .navbar-brand {
   height: auto;
-  padding: 35px 15px 10px;
+  padding: 13px 15px 10px;
   transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
@@ -558,10 +558,10 @@ header.active .navbar-nav > li > a:hover, .navbar-nav > li > a.active {
   color: #aaa !important;
 }
 header.active .navbar-brand {
-  padding: 20px 15px 10px;
+  padding: 20px 15px 20px;
 }
 header.active .navbar-nav {
-  margin-top: 3px;
+  margin-top: 24px;
 }
 .dark-boxed .navbar-default {
   background: #f7f7f7;
@@ -7090,7 +7090,7 @@ ul.portfolio-pagination li a:hover {
 .slide.White, .slide.White a {
   color: #fff;
 }
-.slide.black, .slide.black a {
+.slide.black, .slide.black a, .slide.Black, .slide.Black a {
   color: #333;
 }
 .slide-content {
@@ -7131,6 +7131,9 @@ ul.portfolio-pagination li a:hover {
 }
 .slide-link a:hover {
   text-decoration: none;
+}
+.flex-control-thumbs li {
+  width: 20%;
 }
 /*-------------------------------------------------*/
 /* =  contact page
@@ -7834,7 +7837,7 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   border-left: none;
 }
 .footer-line {
-  background: #333222;
+  background: #222222;
   padding: 20px 0;
   text-align: center;
 }
@@ -7973,10 +7976,16 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   margin-top: 10px;
 }
 .flex-control-thumbs img {
-  width: 175px;
+  width: 100%;
 }
 .flex-control-thumbs li:hover {
   cursor: pointer;
+}
+.flex-control-thumbs li:first-child {
+  margin-left: 0;
+}
+.flex-control-thumbs li:last-child {
+  margin-right: 0;
 }
 .view-other-spaces .view-content img {
   width: 100%;
@@ -8019,6 +8028,35 @@ input[type=text]::-moz-placeholder {  /* Firefox 19+ */
  
 input[type=text]:-ms-input-placeholder {  
   color: #333;
+}
+
+/*-------------------------------------------------*/
+/* =  Booking result page
+/*-------------------------------------------------*/
+form#rooms-booking-manager-change-search-form {
+    margin-top: 40px;
+}
+.rooms-current-search__info {
+  padding: 0 10px 10px;
+}
+.radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {
+  margin-left: 0;
+}
+.page-booking .unit-detail-content .price-result {
+  margin: 15px 0; 
+}
+.page-booking .unit-detail-content .rooms-search-result__unit-embedded .rooms-search-result__actions {
+  margin-top: -38px;
+}
+.rooms-book-unit-form .rooms-search-result__select-childrensage {
+  width: 100%;
+  float: left;
+}
+.rooms-book-unit-form .rooms-search-result__select-childrensage .form-control {
+  width: auto;
+}
+.rooms-search-result__unit-type {
+  border-top: 1px solid #ddd;
 }
 /*-------------------------------------------------*/
 /* =  Responsive Part
@@ -8248,6 +8286,12 @@ input[type=text]:-ms-input-placeholder {
   }
 }
 @media (max-width: 767px) {
+  header .active_logo {
+    display: none !important;
+  }
+  header .inactive_logo {
+    display: block !important;
+  }
   .front .slide-link {
     margin-top: 0;
   }
@@ -8264,17 +8308,18 @@ input[type=text]:-ms-input-placeholder {
     padding: 6px;
   }
   .navbar-toggle {
-    margin-top: 12px;
-    margin-bottom: 12px;
+    margin-top: 36px;
+    margin-bottom: 28px;
+    border: none;
   }
   .navbar-default {
-    background: #333222;
+    background: #222222;
     padding: 0 15px;
     margin-bottom: 0;
     position: relative;
   }
   .navbar-brand {
-    padding: 20px 15px 10px;
+    padding: 15px 15px 15px;
   }
   .navbar-nav > li > a {
     padding: 5px 15px;

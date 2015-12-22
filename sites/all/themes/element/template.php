@@ -15,6 +15,7 @@ function element_js_alter(&$js) {
 }
 
 function element_preprocess_page(&$variables) {
+  $theme_path = drupal_get_path('theme', 'element');
   $variables['show_title'] = FALSE;
   // Add information about the number of sidebars.
   if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
@@ -29,6 +30,39 @@ function element_preprocess_page(&$variables) {
   if (current_path() == 'contact') {
     drupal_add_js('http://maps.google.com/maps/api/js?sensor=false', array('type' => 'external'));
   }
+
+  // $detect = mobile_detect_get_object();
+
+  // $is_mobile = $detect->isMobile();
+  // $is_tablet = $detect->isTablet();
+
+  // if ($is_mobile || $is_tablet) {
+  //   drupal_add_js('$ = jQuery;', 'inline');
+    
+  //   drupal_add_css($theme_path . '/mobipick/jquery.mobile-1.3.2.min.css');
+  //   drupal_add_css($theme_path . '/mobipick/mobipick.css');
+  //   drupal_add_js($theme_path . '/mobipick/xdate.js');
+  //   drupal_add_js($theme_path . '/mobipick/xdate.i18n.js');
+  //   drupal_add_js($theme_path . '/mobipick/jquery.mobile-1.3.2.min.js');
+  //   drupal_add_js($theme_path . '/mobipick/mobipick.js');
+  //   drupal_add_js('
+      
+  //       $( document ).ready(function(){
+  //           var picker = $("input[type=text]").filter(function() {
+  //             return this.name.match(/_date/);
+  //           });
+  //           picker.mobipick();
+  //           picker.on( "change", function() {
+  //               // formatted date, like yyyy-mm-dd              
+  //               var date = $( this ).val();
+             
+  //               // JavaScript Date object
+  //               var dateObject = $( this ).mobipick( "option", "date" );
+  //           });
+  //       });
+      
+  //   ', 'inline');
+  // }
   
 }
 
