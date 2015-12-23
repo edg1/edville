@@ -1,9 +1,23 @@
 <?php
 
-function edville_custom_form_rooms_booking_availability_search_form_block_alter(&$form, &$form_state, $form_id) {
+function edville_custom_form_alter(&$form, &$form_state, $form_id) {
+  if (strpos($form_id, 'rooms_booking_availability_search_form') === FALSE)  return;
   $form['rooms_date_range']['rooms_start_date']['#attributes']['placeholder'] = $form['rooms_date_range']['rooms_start_date']['#title'];
   unset($form['rooms_date_range']['rooms_start_date']['#title']);
 
+  // $mobile_object = mobile_detect_get_object();
+
+  // $detect = mobile_detect_get_object();
+
+  // $is_mobile = $detect->isMobile();
+  // $is_tablet = $detect->isTablet();
+
+  // if ($is_mobile || $is_tablet) {
+  //   $form['rooms_date_range']['rooms_start_date']['#type'] = 'textfield';
+  //   unset($form['rooms_date_range']['rooms_start_date']['#attached']);
+  //   $form['rooms_date_range']['rooms_end_date']['#type'] = 'textfield';
+  //   unset($form['rooms_date_range']['rooms_end_date']['#attached']);
+  // }
   $form['rooms_date_range']['rooms_end_date']['#attributes']['placeholder'] = $form['rooms_date_range']['rooms_end_date']['#title'];
   unset($form['rooms_date_range']['rooms_end_date']['#title']);
 
@@ -36,7 +50,9 @@ function edville_custom_form_rooms_booking_availability_search_form_block_alter(
   $form['#validate'][] = 'edville_custom_room_search_validate';
   $form['conditions']['rooms']['#default_value'] = 1;
   $form['conditions']['rooms']['#attributes']['class'] = array('hide');
-  
+  drupal_add_js("jQuery(document).ready(function() {
+    jQuery('#edit-rooms').closest('.form-type-select').hide();
+  })", 'inline');
 }
 
 function edville_custom_room_search_validate($form, &$form_state) {
@@ -60,48 +76,6 @@ function edville_custom_form_rooms_booking_manager_change_search_form_alter(&$fo
     $form['info']['units']['#markup'] = '<label>People</label> <span class="info">' . $booking_parameters['adults'] . '</span>';
   }
 
-}
-
-function edville_custom_form_rooms_booking_availability_search_form_page_alter(&$form, &$form_state, $form_id) {
-   $form['rooms_date_range']['rooms_start_date']['#attributes']['placeholder'] = $form['rooms_date_range']['rooms_start_date']['#title'];
-  unset($form['rooms_date_range']['rooms_start_date']['#title']);
-
-  $form['rooms_date_range']['rooms_end_date']['#attributes']['placeholder'] = $form['rooms_date_range']['rooms_end_date']['#title'];
-  unset($form['rooms_date_range']['rooms_end_date']['#title']);
-
-
-  $form['conditions']['rooms']['#options'] = array(
-    -1 => $form['conditions']['rooms']['#title']
-    ) + $form['conditions']['rooms']['#options'];
-  $form['conditions']['rooms']['#default_value'] = -1;
-  unset($form['conditions']['rooms']['#title']);
-  $form['conditions']['#weight'] = 99;
-
-  $max_peoples = get_max_peoples_allowed();
-
-  $form['rooms_fieldset']['group_size_adults:1']['#options'] = rooms_assoc_range(1, $max_peoples);
-
-  $form['rooms_fieldset']['group_size_adults:1']['#options'] = array(
-    -1 => $form['rooms_fieldset']['group_size_adults:1']['#title']
-    ) + $form['rooms_fieldset']['group_size_adults:1']['#options'];
-  $form['rooms_fieldset']['group_size_adults:1']['#default_value'] = -1;
-  unset($form['rooms_fieldset']['group_size_adults:1']['#title']);
-
-  $form['rooms_fieldset']['group_size_children:1']['#options'] = array(
-    -1 => $form['rooms_fieldset']['group_size_children:1']['#title']
-    ) + $form['rooms_fieldset']['group_size_children:1']['#options'];
-  $form['rooms_fieldset']['group_size_children:1']['#default_value'] = -1;
-  unset($form['rooms_fieldset']['group_size_children:1']['#title']);
-  
-  $form['actions']['submit']['#value'] = t('Search');
-
-  $form['#validate'][] = 'edville_custom_room_search_validate';
-  $form['conditions']['rooms']['#default_value'] = 1;
-  $form['conditions']['rooms']['#attributes']['class'] = array('hide');
-  
-  drupal_add_js("jQuery(document).ready(function() {
-    jQuery('#edit-rooms').closest('.form-type-select').hide();
-  })", 'inline');
 }
 
 function edville_custom_theme() {
@@ -732,4 +706,11 @@ function get_max_peoples_allowed() {
     return $max;
   }
   return variable_get('rooms_booking_manager_search_form_max_group_size', 8);
+}
+
+function mobile_detect_get_object() {
+  module_load_include('php', 'edville_custom', 'includes/Mobile_Detect/Mobile_Detect');
+  $mobile_detect_object = new Mobile_Detect();
+
+  return $mobile_detect_object;
 }
