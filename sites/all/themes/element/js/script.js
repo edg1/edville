@@ -48,7 +48,7 @@ $(document).ready(function($) {
 	  });
 	}
 
-	if ($('body').hasClass('front')) {
+	if ($('body').hasClass('front') && $(window).width() >= 768) {
 		if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 			$('.front .rooms-availability-search .form-control').addClass('white');
 			$('.front .rooms-availability-search .form-control').removeClass('black');

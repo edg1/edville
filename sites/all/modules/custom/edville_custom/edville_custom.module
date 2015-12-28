@@ -714,3 +714,11 @@ function mobile_detect_get_object() {
 
   return $mobile_detect_object;
 }
+
+function edville_custom_menu_alter(&$items) {
+  $items['cart']['page callback'] = 'edville_custom_cart_redirect';
+}
+
+function edville_custom_cart_redirect() {
+  drupal_goto('bookings');
+}
