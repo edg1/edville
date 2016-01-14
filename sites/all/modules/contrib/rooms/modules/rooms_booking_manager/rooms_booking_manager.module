@@ -779,7 +779,7 @@ function rooms_booking_manager_forms($form_id, $args) {
 
   if (strpos($form_id, 'book_unit_form_') === 0) {
     $forms[$form_id] = array(
-      'callback' => 'book_unit_form_builder',
+      'callback' => 'edville_book_unit_form_builder2',
     );
   }
   elseif (strpos($form_id, 'rooms_booking_availability_search_form_') === 0) {

@@ -6,6 +6,17 @@ var $ = jQuery.noConflict();
 $(document).ready(function($) {
 	"use strict";
 
+	$('.rooms-book-unit-form input[type=checkbox]').click();
+
+	$(document).ajaxStop(function () {
+      setTimeout(function(){
+           $('.rooms-book-unit-form input[type=checkbox]').attr('disabled', 'disabled');
+      }, 1000);
+  });
+	
+	$('.element-calendar .calendar-forward a').html('<i class="fa fa-caret-right"></i>');
+	$('.element-calendar .calendar-back a').html('<i class="fa fa-caret-left"></i>');
+	
 	/* book slider */
 	if ($('.book-slider').length > 0) {
 		$('.book-slider').flexslider({
