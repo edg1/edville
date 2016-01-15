@@ -6,6 +6,27 @@ var $ = jQuery.noConflict();
 $(document).ready(function($) {
 	"use strict";
 
+	// $('#edville-calendar-back a').click(function(e) {
+	// 	e.preventDefault();
+	// 	// $.ajax({
+	// 	//   url: "/edville-calendar/2016/1/1",
+	// 	//   context: document.body
+	// 	// }).done(function(calendar) {
+	// 	// 	var result = $(calendar).filter("#theme-calendar");
+	// 	//   $('#theme-calendar').html(result);
+	// 	// });
+
+	// 	// $.ajax({
+	//  //    url: "/edville-calendar/2016/1/1",
+	//  //    cache: false,
+	//  //    success: function(response) {
+	//  //        var result = $("#theme-calendar", response);
+	//  //        console.log(result);
+	//  //    }
+	// 	// });
+	// });
+	
+
 	$('.rooms-book-unit-form input[type=checkbox]').click();
 
 	$(document).ajaxStop(function () {

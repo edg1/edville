@@ -39,6 +39,10 @@ Drupal.behaviors.rooms_availability = {
     var calendars = [];
     calendars[0] = new Array('#calendar', month1, year1);
 
+    $('#edville-calendar-back a').click(function(e) {
+      calendars[0][1] = month1 - 1;
+    });
+
     // refresh the events once the modal is closed
     $("#modalContent a.close").once().bind('click', function(e) {
       $.each(calendars, function(key, value) {

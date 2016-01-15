@@ -228,7 +228,7 @@
               ),
             );
           ?>
-        <div class="col-md-5"><?php print render($calendar); ?></div>
+        <div class="col-md-5"><div id="theme-calendar"><?php print render($calendar); ?></div></div>
       </div>
     </div>
     <?php endif; ?>

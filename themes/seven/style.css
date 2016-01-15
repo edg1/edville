@@ -988,3 +988,19 @@ div.add-or-remove-shortcuts {
   -webkit-border-radius: 8px;
   border-radius: 8px;
 }
+
+.rooms-unit-edit-form .form-wrapper {
+  max-width: 100%;
+  width: 100%;
+}
+.rooms-management-form > div > div {
+  width: 100%;
+  float: left;
+}
+.location-current-coordinates-fieldset {
+  background: none;
+}
+#field-location-add-more-wrapper .form-item {
+  width: 100%;
+  float: left;
+}

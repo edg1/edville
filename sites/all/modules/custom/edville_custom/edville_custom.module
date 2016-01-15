@@ -2,9 +2,11 @@
 
 function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   if (strpos($form_id, 'book_unit_form') !== FALSE) {
+    $person_default = array_search($form['rooms_group_size']['#value'], $form['persons']['#options']);
+    $children_default = array_search($form['rooms_children']['#value'], $form['children']['#options']);
 
-    $form['persons']['#default_value'] = 0;
-    $form['children']['#default_value'] = 0;
+    $form['persons']['#default_value'] = $person_default;
+    $form['children']['#default_value'] = $children_default;
   }
 
   if (strpos($form_id, 'rooms_booking_availability_search_form') === FALSE)  return;
@@ -178,7 +180,7 @@ function isWeekend($date) {
 }
 
 function get_availability_weekday($data) {
-  $min_day = Date('d');
+  $min_day = Date('d', strtotime(' +1 day'));
   $max_day = Date('t');
 
   $result = array();
@@ -403,6 +405,7 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
 
     // Show quantity field selector if in option quantity is set.
     if (is_numeric($option['quantity'])) {
+      $form_state['values']['options'][$option_name] = 1;
       if (isset($form_state['values']['options'][$option_name]) &&
         $form_state['values']['options'][$option_name] == 1 && $option['quantity'] > 1) {
 
@@ -709,6 +712,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
 
     // Show quantity field selector if in option quantity is set.
     if (is_numeric($option['quantity'])) {
+      $form_state['values']['options'][$option_name] = 1;
       if (isset($form_state['values']['options'][$option_name]) &&
         $form_state['values']['options'][$option_name] == 1 && $option['quantity'] > 1) {
 
@@ -896,7 +900,6 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
   // We append the validate handler to #validate in case a form callback_wrapper
   // is used to add validate handlers earlier.
   $form['#validate'][] = 'book_unit_form_validate';
-  $form['#submit'][] = 'edville_book_unit_form_submit';
   return $form;
 }
 
@@ -912,7 +915,8 @@ function edville_book_unit_form_submit(&$form, &$form_state) {
   $unit_id = $form_state['values']['unit_id'];
   $start_date = $form_state['values']['start_date'];
   $end_date = $form_state['values']['end_date'];
-  $group_size = (isset($form_state['values']['persons'])) ? $form_state['values']['persons'] : $form_state['values']['rooms_group_size'];
+  $group_size = (isset($form_state['values']['persons'])) ? $form['persons']['#options'][$form_state['values']['persons']] : $form_state['values']['rooms_group_size'];
+
   $status = $form_state['values']['status'];
 
   // This is very inefficient right now but we need to create date objects
@@ -937,6 +941,7 @@ function edville_book_unit_form_submit(&$form, &$form_state) {
         // Convert Price options in Price modifiers.
         foreach (rooms_unit_get_unit_options($unit['unit']) as $option) {
           $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+          $form_state['values']['options'][$option_name] = 1;
           if (isset($form_state['values']['options'][$option_name])) {
             if ($form_state['values']['options'][$option_name] == 1) {
               $quantity = 1;
@@ -957,7 +962,7 @@ function edville_book_unit_form_submit(&$form, &$form_state) {
 
       // Create line item.
       if (isset($form_state['values']['children'])) {
-        $children = $form_state['values']['children'];
+        $children = $form['children']['#options'][$form_state['values']['children']];
         if (isset($form_state['values']['childrens_age'])) {
           $childrens_age = $form_state['values']['childrens_age'];
           $line_item = rooms_create_line_item($unit, $agent, array('adults' => $group_size, 'children' => $children, 'childrens_age' => $childrens_age), $price_modifiers);
@@ -969,7 +974,8 @@ function edville_book_unit_form_submit(&$form, &$form_state) {
       else {
         $line_item = rooms_create_line_item($unit, $agent, array('adults' => $group_size, 'children' => 0), $price_modifiers);
       }
-      $line_item->rooms_booking_number_people['und'][0]['value'] = 10;
+      
+      $line_item->rooms_booking_number_people['und'][0]['value'] = $group_size;
       // Add line item to cart.
       $line_item = commerce_cart_product_add($user->uid, $line_item, FALSE);
 
@@ -1035,4 +1041,47 @@ function edville_custom_menu_alter(&$items) {
 
 function edville_custom_cart_redirect() {
   drupal_goto('bookings');
+}
+
+function edville_custom_menu() {
+   $items['edville-calendar/%/%/%'] = array(
+    'title' => 'Ajax calendar',
+    'page callback' => 'edville_custom_calendar',
+    'access arguments' => array('access content'),
+    'page arguments' => array(1, 2, 3),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function edville_custom_calendar($year, $month, $unit_id) {
+            
+  // rooms_availability_modal_style();
+
+  // Get the current page's URL, striped of the year and month args.
+  // This allows us to place this page anywhere, including at
+  // unit/%/availability  or  admin/rooms/units/unit/%/availability
+  list($url) = explode('/' . $year . '/' . $month, current_path());
+
+  $calendar = array(
+    '#theme' => 'rooms_one_month_calendar',
+    '#url' => $url,
+    '#year' => $year,
+    '#month' => $month,
+    '#attached' => array(
+      'css' => array(
+        drupal_get_path('module', 'rooms_availability') . '/css/rooms_availability.css',
+      ),
+      'js' => array(
+        drupal_get_path('module', 'edville_custom') . '/js/edville_rooms_availability.js',
+        array(
+          'data' => array('roomsAvailability' => array('roomID' => $unit_id)),
+          'type' => 'setting',
+        ),
+      ),
+    ),
+  );
+
+  return render($calendar);
 }
