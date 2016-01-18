@@ -320,38 +320,38 @@ $(document).ready(function($) {
 	/*-------------------------------------------------*/
 	/* =  flexslider
 	/*-------------------------------------------------*/
-	try {
-		$('#carousel').flexslider({
-			animation: "slide",
-			controlNav: false,
-			animationLoop: false,
-			slideshow: false,
-			itemWidth: 235,
-			itemMargin: 4,
-			asNavFor: '#slider2'
-		});
+	// try {
+	// 	$('#carousel').flexslider({
+	// 		animation: "slide",
+	// 		controlNav: false,
+	// 		animationLoop: false,
+	// 		slideshow: false,
+	// 		itemWidth: 235,
+	// 		itemMargin: 4,
+	// 		asNavFor: '#slider2'
+	// 	});
 
-		$('#slider2').flexslider({
-			animation: "slide",
-			controlNav: false,
-			animationLoop: false,
-			slideshow: false,
-			sync: "#carousel"
-		});
-	} catch(err) {
+	// 	$('#slider2').flexslider({
+	// 		animation: "slide",
+	// 		controlNav: false,
+	// 		animationLoop: false,
+	// 		slideshow: false,
+	// 		sync: "#carousel"
+	// 	});
+	// } catch(err) {
 
-	}
-	try {
+	// }
+	// try {
 
-		var SliderPost = $('.flexslider');
+	// 	var SliderPost = $('.flexslider');
 
-		SliderPost.flexslider({
-			slideshowSpeed: 3000,
-			easing: "swing"
-		});
-	} catch(err) {
+	// 	SliderPost.flexslider({
+	// 		slideshowSpeed: 3000,
+	// 		easing: "swing"
+	// 	});
+	// } catch(err) {
 
-	}
+	// }
 
 	/*-------------------------------------------------*/
 	/* =  price range code

@@ -129,7 +129,14 @@
         <?php endif; ?>
       </ul>
       <?php if (arg(0) == 'unit') print render($search_form); ?>
-      <?php print render($content['field_room_photos']); ?>
+      <?php
+        $content['field_room_photos']['#settings']['attributes']['id'] = 'flexslider-1';
+        print render($content['field_room_photos']); 
+
+        $content['field_room_photos']['#settings']['optionset'] = 'thumbnail_navigation';
+        $content['field_room_photos']['#settings']['attributes']['id'] = 'flexslider-2';
+        print render($content['field_room_photos']); 
+      ?>
       <?php if (isset($unit_object->field_description['und'][0]['value'])): ?>
         <div class="content-item">
           <img class="icon" src="<?php print url($theme_path . '/images/icons/home.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Description'); ?></h2>

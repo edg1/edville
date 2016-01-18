@@ -7895,11 +7895,24 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   padding: 4px 10px;
   color: #fff;
 }
-.page-unit .flexslider .slides img {
+.unit-detail-content .flexslider .slides img {
+  padding: 10px 5px;
   border-radius: 0;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   -o-border-radius: 0;
+}
+
+.unit-detail-content #flexslider-2 .flex-direction-nav {
+  position: initial;
+}
+
+.unit-detail-content #flexslider-2 .flex-direction-nav .flex-prev, .unit-detail-content #flexslider-2 .flex-direction-nav .flex-next {
+  position: absolute;
+  top: 25%;
+}
+.unit-detail-content #flexslider-2 .flex-direction-nav .flex-next {
+  right: 0;
 }
 .check-in, .check-out {
   font-size: 16px;

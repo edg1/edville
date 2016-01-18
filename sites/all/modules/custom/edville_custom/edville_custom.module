@@ -47,6 +47,8 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['rooms_fieldset']['group_size_adults:1']['#default_value'] = -1;
   unset($form['rooms_fieldset']['group_size_adults:1']['#title']);
 
+  $form['rooms_fieldset']['group_size_children:1']['#options'] = rooms_assoc_range(1, $max_peoples);
+
   $form['rooms_fieldset']['group_size_children:1']['#options'] = array(
     -1 => $form['rooms_fieldset']['group_size_children:1']['#title']
     ) + $form['rooms_fieldset']['group_size_children:1']['#options'];
@@ -1084,4 +1086,8 @@ function edville_custom_calendar($year, $month, $unit_id) {
   );
 
   return render($calendar);
+}
+
+function edville_custom_process_flexslider(&$vars) {
+  
 }
