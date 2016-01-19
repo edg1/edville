@@ -31,6 +31,12 @@ function element_preprocess_page(&$variables) {
     drupal_add_js('http://maps.google.com/maps/api/js?sensor=false', array('type' => 'external'));
   }
 
+  $path = $_GET['q'];
+
+  if (strpos($path,'bookings') !== false) {
+    drupal_set_title(t('Confirm your reservation'));
+  }
+
   // $detect = mobile_detect_get_object();
 
   // $is_mobile = $detect->isMobile();

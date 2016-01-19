@@ -1,6 +1,10 @@
 <?php
 
 function edville_custom_form_alter(&$form, &$form_state, $form_id) {
+  
+  if (strpos($form_id, 'views_form_booking_cart_form_default') !== FALSE) {
+    $form['actions']['submit']['#value'] = t('Book Now');
+  }
   if (strpos($form_id, 'book_unit_form') !== FALSE) {
     $person_default = array_search($form['rooms_group_size']['#value'], $form['persons']['#options']);
     $children_default = array_search($form['rooms_children']['#value'], $form['children']['#options']);
@@ -917,8 +921,9 @@ function edville_book_unit_form_submit(&$form, &$form_state) {
   $unit_id = $form_state['values']['unit_id'];
   $start_date = $form_state['values']['start_date'];
   $end_date = $form_state['values']['end_date'];
-  $group_size = (isset($form_state['values']['persons'])) ? $form['persons']['#options'][$form_state['values']['persons']] : $form_state['values']['rooms_group_size'];
 
+  $group_size = (!empty($form_state['values']['persons'])) ? $form['persons']['#options'][$form_state['values']['persons']] : $form_state['values']['rooms_group_size'];
+  
   $status = $form_state['values']['status'];
 
   // This is very inefficient right now but we need to create date objects
