@@ -14,6 +14,16 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   }
 
   if (strpos($form_id, 'rooms_booking_availability_search_form') === FALSE)  return;
+
+  if (arg(0) == 'booking') {
+    $form['rooms_date_range'] = rooms_date_range_fields();
+    $start_date = check_plain(arg(1));
+    $end_date = check_plain(arg(2));
+    
+    $form['rooms_date_range']['rooms_start_date']['#default_value'] = $start_date;
+    $form['rooms_date_range']['rooms_end_date']['#default_value'] = $end_date;
+  }
+
   $form['rooms_date_range']['rooms_start_date']['#attributes']['placeholder'] = $form['rooms_date_range']['rooms_start_date']['#title'];
   unset($form['rooms_date_range']['rooms_start_date']['#title']);
 
@@ -30,9 +40,9 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   //   $form['rooms_date_range']['rooms_end_date']['#type'] = 'textfield';
   //   unset($form['rooms_date_range']['rooms_end_date']['#attached']);
   // }
+
   $form['rooms_date_range']['rooms_end_date']['#attributes']['placeholder'] = $form['rooms_date_range']['rooms_end_date']['#title'];
   unset($form['rooms_date_range']['rooms_end_date']['#title']);
-
 
   $form['conditions']['rooms']['#options'] = array(
     -1 => $form['conditions']['rooms']['#title']
@@ -59,6 +69,13 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['rooms_fieldset']['group_size_children:1']['#default_value'] = -1;
   unset($form['rooms_fieldset']['group_size_children:1']['#title']);
   
+  if (arg(0) == 'booking') {
+    $person_default = check_plain($_GET['rooms_group_size1']);
+    $children_default = check_plain($_GET['rooms_children1']);
+    $form['rooms_fieldset']['group_size_adults:1']['#default_value'] = $person_default;
+    $form['rooms_fieldset']['group_size_children:1']['#default_value'] = $children_default;
+  }
+
   $form['actions']['submit']['#value'] = t('Search');
 
   $form['#validate'][] = 'edville_custom_room_search_validate';
@@ -647,7 +664,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
   $nights = $end_date->diff($start_date)->days;
 
   $form['price'] = array(
-    '#prefix' => '<div class="rooms-search-result__unit-base-price" id="unit_' . $unit->unit_id . '_base_price">',
+    '#prefix' => '<div class="hide rooms-search-result__unit-base-price" id="unit_' . $unit->unit_id . '_base_price">',
     '#markup' => rooms_string('<label>' . t('Base price') . ':</label> <span class="rooms-search-result__base-price-amount">' .
       t('@currency_symbol @amount', array( // TODO: replace with a proper currency formatter
         '@currency_symbol' => $currency_symbol,
@@ -714,6 +731,8 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
         'callback' => 'rooms_booking_manager_options_change_callback',
         'wrapper' => 'unit_' . $unit->unit_id . '_price',
       ),
+      '#prefix' => '<div class="hide">',
+      '#suffix' => '</div>',
     );
 
     // Show quantity field selector if in option quantity is set.
@@ -771,8 +790,11 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
         'wrapper' => 'unit_' . $unit->unit_id . '_price',
       ),
       '#title' => t('How many people in this unit (including adults and children)?'),
-      '#prefix' => '<div class="rooms-search-result__select-guests">',
+      '#prefix' => '<div class="rooms-search-result__select-guests hide">',
       '#suffix' => '</div>',
+      '#attributes' => array(
+        'class' => array('hide'),
+      ),
     );
 
     $max_children = $unit->max_children;
@@ -795,7 +817,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
           'callback' => 'rooms_booking_manager_children_change_callback',
           'wrapper' => 'unit_' . $unit->unit_id . '_childrensage',
         ),
-        '#prefix' => '<div class="rooms-search-result__select-children">',
+        '#prefix' => '<div class="rooms-search-result__select-children hide">',
         '#suffix' => '</div>',
       );
     }
@@ -875,7 +897,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
 
     $form['new_price'] = array(
       '#prefix' => '<div class="rooms-search-result__new-price" id="unit_' . $unit->unit_id . '_price">',
-      '#markup' => '<label>' . t('Cost') . ':</label> <span class="rooms-search-result__new-price-amount">' .
+      '#markup' => '<span class="rooms-search-result__new-price-amount">' .
         t('@currency_symbol @amount', array( // TODO: replace with a proper currency formatter
           '@currency_symbol' => $currency_symbol,
           '@amount' => $new_price['full_price'],

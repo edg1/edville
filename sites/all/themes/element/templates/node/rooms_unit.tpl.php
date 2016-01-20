@@ -102,7 +102,7 @@
   <div class="section-content page-banner-section" style="background:url(<?php print $first_img; ?>) center no-repeat; background-size:cover;">
     
   </div>
-  <?php endif; ?>
+  
   <div class="container">
   <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
     <div class="unit-detail-content content"<?php print $content_attributes; ?>>
@@ -116,6 +116,7 @@
         <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['doubles'] . t(' doubles'); ?></span></li>
         <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['singles'] . t(' singles'); ?></span></li>
         <li><img src="/<?php print $theme_path . '/images/icons/shower.png'; ?>" /><span><?php print $unit_object->field_showers['und'][0]['value'] . t(' shower'); ?></span></li>
+
         <?php if (isset($unit_object->field_student_approved['und'][0]['value']) && $unit_object->field_student_approved['und'][0]['value']): ?>
         <li><img src="/<?php print $theme_path . '/images/icons/student-approved.png'; ?>" /><span><?php print t('Student approved'); ?></span></li>
         <?php endif; ?>
@@ -128,7 +129,7 @@
         <li><img src="/<?php print $theme_path . '/images/icons/wifi.png'; ?>" /><span><?php print t('WIFI'); ?></span></li>
         <?php endif; ?>
       </ul>
-      <?php if (arg(0) == 'unit') print render($search_form); ?>
+      <?php print render($search_form); ?>
       <?php
         $content['field_room_photos']['#settings']['attributes']['id'] = 'flexslider-1';
         print render($content['field_room_photos']); 
@@ -166,7 +167,7 @@
             <?php endif; ?> 
         </div>
       <?php endif; ?>
-      <?php if (arg(0) == 'unit'): ?>
+      
       <div class="content-item">
         <img class="icon icon-office" src="<?php print url($theme_path . '/images/icons/office.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Search for availability'); ?></h2>
         <?php print render($search_form2); ?>
@@ -238,7 +239,7 @@
         <div class="col-md-5"><div id="theme-calendar"><?php print render($calendar); ?></div></div>
       </div>
     </div>
-    <?php endif; ?>
+    
       <?php if (isset($unit_object->field_location['und'][0])): ?>
       <div class="content-item">
         <img class="icon icon-office" src="<?php print url($theme_path . '/images/icons/office.png'); ?>" alt="icon-home" /><h2 class="title nomarl"><?php print t('Location'); ?></h2>
@@ -255,22 +256,43 @@
   </div>
 </div>
 </div>
-  <?php else: ?>
-    <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-      <?php if (!$page): ?>
-        <h2<?php print $title_attributes; ?>>
-           <?php print $title; ?>
-        </h2>
+<?php else: ?>
+  <div class="unit-detail-content content"<?php print $content_attributes; ?>>
+    <h2 class="title"><?php print $title; ?></h2>
+    <ul class="room-features">
+      <?php if ($unit_object->field_home['und'][0]['value'] == 1): ?>
+      <li><img src="/<?php print $theme_path . '/images/icons/home.png'; ?>" /><span><?php print t('Home'); ?></span></li>
       <?php endif; ?>
-
-      <div class="content"<?php print $content_attributes; ?>>
-        <?php
-          unset ($content['state']);
-          unset ($content['type']);
-          unset ($content['sleeps']);
-          unset ($content['bed_arrangement']);
-          print render($content);
-        ?>
-      </div>
-    </div>
-  <?php endif; ?>
+      <li><img src="/<?php print $theme_path . '/images/icons/group-size.png'; ?>" /><span><?php print t('Group size ') . $unit_object->max_sleeps; ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['doubles'] . t(' doubles'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['singles'] . t(' singles'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/shower.png'; ?>" /><span><?php print $unit_object->field_showers['und'][0]['value'] . t(' shower'); ?></span></li>
+      <?php if (isset($unit_object->field_student_approved['und'][0]['value']) && $unit_object->field_student_approved['und'][0]['value']): ?>
+      <li><img src="/<?php print $theme_path . '/images/icons/student-approved.png'; ?>" /><span><?php print t('Student approved'); ?></span></li>
+      <?php endif; ?>
+      <?php if (isset($unit_object->field_business_approved['und'][0]['value']) && $unit_object->field_business_approved['und'][0]['value']): ?>
+      <li><img src="/<?php print $theme_path . '/images/icons/business-approved.png'; ?>" /><span><?php print t('Business approved'); ?></span></li>
+      <?php endif; ?>
+      <li><img src="/<?php print $theme_path . '/images/icons/wc.png'; ?>" /><span><?php print $unit_object->field_wc['und'][0]['value'] . t(' WC'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/rooms.png'; ?>" /><span><?php print $unit_object->field_rooms['und'][0]['value'] . t(' rooms'); ?></span></li>
+      <?php if (isset($unit_object->field_wifi['und'][0]['value']) && $unit_object->field_wifi['und'][0]['value']): ?>
+      <li><img src="/<?php print $theme_path . '/images/icons/wifi.png'; ?>" /><span><?php print t('WIFI'); ?></span></li>
+      <?php endif; ?>
+    </ul>
+    <?php 
+      
+      $first_img_uri = $unit_object->field_room_photos['und'][0]['uri']; 
+      $first_image = array(
+        'style_name' => 'blog_540x300_',
+        'path' => $first_img_uri,
+        'width' => '',
+        'height' => '',
+        'alt' => '',
+        'title' => '',
+        );
+      print theme('image_style',$first_image);
+    ?>
+  </div>
+<?php endif;  ?>
+<?php endif;  ?>
+  
