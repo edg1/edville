@@ -41,10 +41,14 @@ function rooms_create_line_item($unit_to_book, AvailabilityAgent $agent, $bookin
 
   // Product name - we set something that will make sense to the user here.
   $nights = $dd->diff($agent->start_date)->days;
+  $peoples = isset($booking_size['adults']) ? $booking_size['adults'] : 0;
+  $childrens = isset($booking_size['children']) ? $booking_size['children'] : 0;
   
   $line_item_label = rooms_string(
     t('Booking for') . ' ' . $unit_type->label . ' (' .
     format_plural($nights, '1 Night', '@count Nights') . '; ' .
+    format_plural($peoples, '1 People', '@count Peoples') . '; ' .
+    format_plural($childrens, '1 Children', '@count Childrens') . '; ' .
     t('Arrival') . ': ' . $agent->start_date->format($date_format) . ' ' .
     t('Departure') . ': ' . $dd->format($date_format) . ')' ,
     $context = array(

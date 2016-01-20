@@ -41,46 +41,55 @@ $(document).ready(function($) {
 	/* book slider */
 	if ($('.book-slider').length > 0) {
 		$('.book-slider').flexslider({
-	    animation: "slide",
+	    animation: "fade",
 	    prevText:"",
 	    nextText:"",
 	    controlNav:false,
 	    start: function ( slider ) {
-	    	if ($('.flex-active-slide').hasClass('White')) {
-					$('header .inactive_logo').show();
-					$('header .active_logo').hide();
-					$('.navbar-nav > li > a').addClass('white');
-					$('.navbar-nav > li > a').removeClass('black');
-					console.log('white');
-				}
-				else {
-					$('header .inactive_logo').hide();
-					$('header .active_logo').show();
-					$('.navbar-nav > li > a').addClass('black');
-					$('.navbar-nav > li > a').removeClass('white');
-					console.log('black');
-				}
+	    	if ($(window).width() >= 768) {
+	    		if ($('.flex-active-slide').hasClass('White')) {
+						$('header .inactive_logo').show();
+						$('header .active_logo').hide();
+						$('.navbar-nav > li > a').addClass('white');
+						$('.navbar-nav > li > a').removeClass('black');
+						$('header .navbar-default').addClass('white');
+						$('header .navbar-default').removeClass('black');
+					}
+					else {
+						$('header .inactive_logo').hide();
+						$('header .active_logo').show();
+						$('.navbar-nav > li > a').addClass('black');
+						$('.navbar-nav > li > a').removeClass('white');
+						$('header .navbar-default').addClass('black');
+						$('header .navbar-default').removeClass('white');
+					}
+	    	}
 	    },
-	    before: function ( slider ) {
-	      if ($('.flex-active-slide').hasClass('White')) {
-					$('header .inactive_logo').show();
-					$('header .active_logo').hide();
-					$('.navbar-nav > li > a').addClass('white');
-					$('.navbar-nav > li > a').removeClass('black');
-					console.log('white');
-				}
-				else {
-					$('header .inactive_logo').hide();
-					$('header .active_logo').show();
-					$('.navbar-nav > li > a').addClass('black');
-					$('.navbar-nav > li > a').removeClass('white');
-					console.log('black');
-				}
+	    after: function ( slider ) {
+	    	if ($(window).width() >= 768) {
+	    		if ($('.flex-active-slide').hasClass('White')) {
+						$('header .inactive_logo').show();
+						$('header .active_logo').hide();
+						$('.navbar-nav > li > a').addClass('white');
+						$('.navbar-nav > li > a').removeClass('black');
+						$('header .navbar-default').addClass('white');
+						$('header .navbar-default').removeClass('black');
+					}
+					else {
+						$('header .inactive_logo').hide();
+						$('header .active_logo').show();
+						$('.navbar-nav > li > a').addClass('black');
+						$('.navbar-nav > li > a').removeClass('white');
+						$('header .navbar-default').addClass('black');
+						$('header .navbar-default').removeClass('white');
+					}
+	    	}
 	    }
 	  });
 	}
 
 	if ($('body').hasClass('front') && $(window).width() >= 768) {
+		
 		if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 			$('.front .rooms-availability-search .form-control').addClass('white');
 			$('.front .rooms-availability-search .form-control').removeClass('black');
@@ -88,6 +97,8 @@ $(document).ready(function($) {
 			$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('black');
 			$('.front .rooms-availability-search .btn-primary').addClass('white');
 			$('.front .rooms-availability-search .btn-primary').removeClass('black');
+			$('header .navbar-default').addClass('white');
+			$('header .navbar-default').removeClass('black');
 		}
 		else {
 			$('.front .rooms-availability-search .form-control').addClass('black');
@@ -96,8 +107,10 @@ $(document).ready(function($) {
 			$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('white');
 			$('.front .rooms-availability-search .btn-primary').addClass('black');
 			$('.front .rooms-availability-search .btn-primary').removeClass('white');
+			$('header .navbar-default').addClass('black');
+			$('header .navbar-default').removeClass('white');
 		}
-		$('.flexslider').bind('before', function (slider) {
+		$('.flexslider').bind('after', function (slider) {
 	    if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 				$('.front .rooms-availability-search .form-control').addClass('white');
 				$('.front .rooms-availability-search .form-control').removeClass('black');
@@ -105,6 +118,8 @@ $(document).ready(function($) {
 				$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('black');
 				$('.front .rooms-availability-search .btn-primary').addClass('white');
 				$('.front .rooms-availability-search .btn-primary').removeClass('black');
+				$('header .navbar-default').addClass('white');
+				$('header .navbar-default').removeClass('black');
 			}
 			else {
 				$('.front .rooms-availability-search .form-control').addClass('black');
@@ -113,6 +128,8 @@ $(document).ready(function($) {
 				$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('white');
 				$('.front .rooms-availability-search .btn-primary').addClass('black');
 				$('.front .rooms-availability-search .btn-primary').removeClass('white');
+				$('header .navbar-default').addClass('black');
+				$('header .navbar-default').removeClass('white');
 			}
 	  });	
 	}
@@ -680,7 +697,8 @@ $(document).ready(function($) {
 
 function setHeaderColor() {
 	if (!$('header').hasClass('active'))  {
-		if ($('.flexslider').length > 0) {
+
+		if ($('.flexslider').length > 0 && $(window).width() >= 768) {
 			if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 				$('header .inactive_logo').show();
 				$('header .active_logo').hide();
@@ -693,7 +711,7 @@ function setHeaderColor() {
 				$('.navbar-nav > li > a').addClass('black');
 				$('.navbar-nav > li > a').removeClass('white');
 			}
-			$('.flexslider').bind('before', function (slider) {
+			$('.flexslider').bind('after', function (slider) {
 	      if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 					$('header .inactive_logo').show();
 					$('header .active_logo').hide();

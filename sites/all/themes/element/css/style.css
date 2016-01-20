@@ -536,26 +536,12 @@ header.active .inactive_logo{
 .light-boxed header.active .navbar-default {
   background: #f7f7f7;
 }
-header.active .navbar-default {
-  background: #fff;
-}
-header.active .active_logo{
-  display:block !important;
-}
-header.active .inactive_logo{
-  display:none !important;
-}
+
 header .navbar-nav > li > a.white {
   color: #fff !important;
 }
 header .navbar-nav > li > a.black {
   color: #333 !important;
-}
-header.active .navbar-nav > li > a {
-  color: #333 !important;
-}
-header.active .navbar-nav > li > a:hover, .navbar-nav > li > a.active {
-  color: #aaa !important;
 }
 header.active .navbar-brand {
   padding: 20px 15px 20px;
@@ -8245,6 +8231,7 @@ form#rooms-booking-manager-change-search-form {
   header .inactive_logo {
     display: block !important;
   }
+
   .front .slide-link {
     margin-top: 0;
   }
@@ -8271,14 +8258,28 @@ form#rooms-booking-manager-change-search-form {
     margin-bottom: 0;
     position: relative;
   }
+  .navbar-default .navbar-toggle .icon-bar {
+    background: #fff;
+  }
+  .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    background: none;
+    border: none;
+  }
   .navbar-brand {
     padding: 15px 15px 15px;
   }
   .navbar-nav > li > a {
     padding: 5px 15px;
   }
+  .navbar-nav li.drop {
+    float: left;
+  }
+  .navbar-nav li.shop-icon {
+    float: right;
+  }
   .navbar-nav li.shop-icon a {
-    padding-left: 20px;
+    padding-left: 0;
+    padding-top: 17px;
   }
   .navbar-nav > li:before {
     display: none;
@@ -8543,6 +8544,27 @@ form#rooms-booking-manager-change-search-form {
   }
 }
 @media (min-width: 768px) {
+  header > .navbar-default.white {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  header > .navbar-default.black {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  header.active .navbar-default {
+    background: #fff;
+  }
+  header.active .active_logo{
+    display:block !important;
+  }
+  header.active .inactive_logo{
+    display:none !important;
+  }
+  header.active .navbar-nav > li > a {
+    color: #333 !important;
+  }
+  header.active .navbar-nav > li > a:hover, .navbar-nav > li > a.active {
+    color: #aaa !important;
+  }
   .front #block-rooms-booking-manager-rooms-availability-search{
     position: absolute;
     z-index: 8;
@@ -8633,6 +8655,18 @@ form#rooms-booking-manager-change-search-form {
   }
 }
 @media (max-width: 767px) {
+  .navbar-default .navbar-nav > li > a {
+    text-align: center;
+    font-size: 15px;
+    color: #fff !important;
+  }
+  header.active .navbar-nav, .navbar-nav {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+  .region-menu-extra + .navbar-nav, header.active .region-menu-extra + .navbar-nav {
+    margin-top: 0;
+  }
   .services-alt-section .services-ban {
     padding: 40px 20px;
   }
