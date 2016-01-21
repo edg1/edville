@@ -25,7 +25,30 @@ $(document).ready(function($) {
 	//  //    }
 	// 	// });
 	// });
-	
+	$('.rooms-availability-search select').change();
+
+	var stack = {
+    delay: 1000,
+    actions:[],
+    run: function() {
+      if (stack.actions.length) {
+        stack.actions.shift()();
+        setTimeout(stack.run, stack.delay);
+    	}
+    }
+	};
+	$('.rooms-search-result-content select').each(function(){
+    var that = this;
+    stack.actions.push(function(){
+      $(that).change();
+    });
+	});
+
+	stack.run();
+
+	$('#unit_search_childrensage select').each(function() {
+		var select_age_name = $(this).attr('name');
+	});
 
 	$('.rooms-book-unit-form input[type=checkbox]').click();
 

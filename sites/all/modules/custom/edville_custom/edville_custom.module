@@ -81,6 +81,35 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['#validate'][] = 'edville_custom_room_search_validate';
   $form['conditions']['rooms']['#default_value'] = 1;
   $form['conditions']['rooms']['#attributes']['class'] = array('hide');
+
+  // childrens age
+  if ((arg(0) == 'booking' && arg(1) != '') || arg(1) ==  'ajax' ) {
+    $form['rooms_fieldset']['group_size_children:1']['#ajax'] = array(
+      'callback' => 'rooms_booking_search_children_change_callback',
+      'wrapper' => 'unit_search_childrensage',
+    );
+
+    $form['childrens_age_search'] = array(
+      '#prefix' => '<div class="rooms-search-result__select-childrensage" id="unit_search_childrensage">',
+      '#suffix' => '</div>',
+      '#tree' => TRUE,
+    );
+
+    if (isset($form_state['values']['group_size_children:1'])) {
+      if ($form_state['values']['group_size_children:1'] > 0) {
+        for ($t = 1; $t <= $form_state['values']['group_size_children:1']; $t++) {
+          $form['childrens_age_search'][$t] = array(
+            '#type' => 'select',
+            '#field_prefix' => t('Age of child @num', array('@num' => $t)),
+            '#options' => range(0, 18),
+            '#attributes' => array('class' => array('rooms-search-result__childrens-age')),
+          );
+        }
+      }
+    }
+  }
+  
+
   drupal_add_js("jQuery(document).ready(function() {
     jQuery('#edit-rooms').closest('.form-type-select').hide();
   })", 'inline');
@@ -625,6 +654,11 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
   $from['#attached']['css'] = array(drupal_get_path('module', 'rooms_booking_manager') . '/css/booking_search.css');
   $form['#attributes']['class'][] = 'rooms-book-unit-form';
 
+  $form['#attached']['js'][] = array(
+    'data' => drupal_get_path('module', 'edville_custom') . '/js/edville_custom.js',
+    'scope' => 'footer'
+  );
+
   $currency_setting = commerce_currency_load(commerce_default_currency());
   $currency_symbol = $currency_setting['symbol'];
 
@@ -792,9 +826,6 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
       '#title' => t('How many people in this unit (including adults and children)?'),
       '#prefix' => '<div class="rooms-search-result__select-guests hide">',
       '#suffix' => '</div>',
-      '#attributes' => array(
-        'class' => array('hide'),
-      ),
     );
 
     $max_children = $unit->max_children;
@@ -840,6 +871,8 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
               'wrapper' => 'unit_' . $unit->unit_id . '_price',
             ),
             '#attributes' => array('class' => array('rooms-search-result__childrens-age')),
+            '#prefix' => '<div class="hide">',
+            '#suffix' => '</div>',
           );
         }
       }
@@ -1115,6 +1148,19 @@ function edville_custom_calendar($year, $month, $unit_id) {
   return render($calendar);
 }
 
-function edville_custom_process_flexslider(&$vars) {
+/**
+ * AJAX callback on booking search results page when Children selector change.
+ */
+function rooms_booking_search_children_change_callback(&$form, $form_state) {
   
+  list($type, $price, $tmp, $fieldset, $tmp, $index) = preg_split('/[\[(.)\]]/', $form_state['triggering_element']['#name']);
+  $commands = array();
+
+  // Show availability of individual units.
+  
+  $commands[] = ajax_command_replace('#unit_search_childrensage', render($form['childrens_age_search']));
+  $commands[] = ajax_command_invoke('#unit_search_childrensage select', 'trigger', array('each'));
+  
+  return array('#type' => 'ajax', '#commands' => $commands);
+
 }

@@ -6415,6 +6415,7 @@ input[type=text] {
   display: inline-block;
   margin-left: 40px;
   margin-right: 40px;
+  position: relative;
 }
 .rooms-availability-search .form-item label {
   text-align: left;
@@ -6444,6 +6445,20 @@ input[type=text] {
 }
 .rooms-availability-search .form-wrapper {
   margin: 0;
+}
+.rooms-availability-search .rooms-search-result__select-childrensage {
+  position: absolute;
+  right: 80px;
+  top: 100%;
+  width: 200px;
+  z-index: 99;
+  background: #fff;
+}
+.rooms-availability-search .rooms-search-result__childrens-age {
+  float: right;
+  width: 106px;
+  border-right: 1px solid;
+  margin-left: 5px;
 }
 .rooms-date-range .container-inline-date .form-item input {
   text-align: center;
@@ -6481,7 +6496,7 @@ input[type=text] {
 .view-book-a-room .views-field-name {
   margin-bottom: 10px;
 }
-.view-book-a-room .views-field-name a, .rooms-search-result-container .unit-detail-content h2.title2 {
+.view-book-a-room .views-field-name a, .rooms-search-result-container .unit-detail-content h2.title {
   color: #333;
   opacity: 0.8;
   font-size: 20px;
