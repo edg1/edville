@@ -6496,12 +6496,16 @@ input[type=text] {
 .view-book-a-room .views-field-name {
   margin-bottom: 10px;
 }
-.view-book-a-room .views-field-name a, .rooms-search-result-container .unit-detail-content h2.title {
+.view-book-a-room .views-field-name a, .rooms-search-result-container .unit-detail-content h2.title a {
   color: #333;
   opacity: 0.8;
   font-size: 20px;
   font-weight: bold;
   text-transform: initial;
+}
+.rooms-search-result-container .unit-detail-content h2.title a:hover {
+  text-decoration: none;
+  opacity: 1;
 }
 .view-book-a-room .views-field-name a:hover {
   opacity: 1;

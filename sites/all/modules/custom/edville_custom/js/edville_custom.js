@@ -16,6 +16,7 @@ Drupal.edville_custom = Drupal.edville_custom || {};
 			});
 
     	$(document).ready(function() {
+    		
     		var search_height = $('.rooms-availability-search .rooms-search-result__select-childrensage').height();
 				if (search_height > 0) {
 					search_height = $('.rooms-availability-search > div').height() + search_height + 30;
@@ -28,6 +29,11 @@ Drupal.edville_custom = Drupal.edville_custom || {};
 						$('.rooms-availability-search').height(search_height);
 					}
 	    	});
+
+    		if ($('.rooms-availability-search input[name="rooms_start_date[date]"]').val() != '') {
+    			// $('.rooms-availability-search input[name="rooms_start_date[date]"]').prepend('<label class="label-prepend">' + $('input[name="rooms_start_date[date]"]').attr("placeholder") + '</label>');
+    		} 
+
     	});
     }
 	};

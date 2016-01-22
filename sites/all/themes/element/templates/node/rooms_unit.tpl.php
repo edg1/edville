@@ -257,8 +257,13 @@
 </div>
 </div>
 <?php else: ?>
+  <?php 
+    $sub_path = str_replace('booking', '', current_path());
+    $query = drupal_get_query_parameters();
+    $query['book_result'] = 1;
+  ?>
   <div class="unit-detail-content content"<?php print $content_attributes; ?>>
-    <h2 class="title"><?php print $title; ?></h2>
+    <h2 class="title"><?php print l($title, 'unit/' . $unit_object->unit_id . $sub_path, array('query' => $query, 'html' => TRUE, 'attributes' => array('target' => '_blank'))); ?></h2>
     <ul class="room-features">
       <?php if ($unit_object->field_home['und'][0]['value'] == 1): ?>
       <li><img src="/<?php print $theme_path . '/images/icons/home.png'; ?>" /><span><?php print t('Home'); ?></span></li>
@@ -280,7 +285,6 @@
       <?php endif; ?>
     </ul>
     <?php 
-      
       $first_img_uri = $unit_object->field_room_photos['und'][0]['uri']; 
       $first_image = array(
         'style_name' => 'blog_540x300_',
@@ -290,7 +294,7 @@
         'alt' => '',
         'title' => '',
         );
-      print theme('image_style',$first_image);
+      print l(theme('image_style',$first_image), 'unit/' . $unit_object->unit_id . $sub_path, array('query' => $query, 'html' => TRUE, 'attributes' => array('target' => '_blank')));
     ?>
   </div>
 <?php endif;  ?>
