@@ -7905,6 +7905,9 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   padding: 0;
   border: none;
 }
+#rooms-booking-availability-search-form-block-2 {
+  height: auto !important;
+}
 .unit-detail-content .rooms-three-month-calendar .month1 {
   width: 100%;
   height: auto;

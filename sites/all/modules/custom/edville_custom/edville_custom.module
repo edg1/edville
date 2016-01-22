@@ -24,6 +24,15 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
     $form['rooms_date_range']['rooms_end_date']['#default_value'] = $end_date;
   }
 
+  if (arg(0) == 'unit' && isset($_GET['book_result']) && $form_id != 'rooms_booking_availability_search_form_block_2') {
+    $form['rooms_date_range'] = rooms_date_range_fields();
+    $start_date = check_plain(arg(2));
+    $end_date = check_plain(arg(3));
+    
+    $form['rooms_date_range']['rooms_start_date']['#default_value'] = $start_date;
+    $form['rooms_date_range']['rooms_end_date']['#default_value'] = $end_date;
+  }
+
   $form['rooms_date_range']['rooms_start_date']['#attributes']['placeholder'] = $form['rooms_date_range']['rooms_start_date']['#title'];
   unset($form['rooms_date_range']['rooms_start_date']['#title']);
 
@@ -69,7 +78,7 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['rooms_fieldset']['group_size_children:1']['#default_value'] = -1;
   unset($form['rooms_fieldset']['group_size_children:1']['#title']);
   
-  if (arg(0) == 'booking') {
+  if (isset($_GET['rooms_group_size1']) && isset($_GET['rooms_children1']) && $form_id != 'rooms_booking_availability_search_form_block_2') {
     $person_default = check_plain($_GET['rooms_group_size1']);
     $children_default = check_plain($_GET['rooms_children1']);
     $form['rooms_fieldset']['group_size_adults:1']['#default_value'] = $person_default;
@@ -83,7 +92,7 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['conditions']['rooms']['#attributes']['class'] = array('hide');
 
   // childrens age
-  if ((arg(0) == 'booking' && arg(1) != '') || arg(1) ==  'ajax' ) {
+  if ((arg(0) == 'booking' && arg(1) != '') || arg(1) ==  'ajax' || isset($_GET['book_result'])) {
     $form['rooms_fieldset']['group_size_children:1']['#ajax'] = array(
       'callback' => 'rooms_booking_search_children_change_callback',
       'wrapper' => 'unit_search_childrensage',
@@ -654,11 +663,6 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
   // Add stylesheets and classes.
   $from['#attached']['css'] = array(drupal_get_path('module', 'rooms_booking_manager') . '/css/booking_search.css');
   $form['#attributes']['class'][] = 'rooms-book-unit-form';
-
-  $form['#attached']['js'][] = array(
-    'data' => drupal_get_path('module', 'edville_custom') . '/js/edville_custom.js',
-    'scope' => 'footer'
-  );
 
   $currency_setting = commerce_currency_load(commerce_default_currency());
   $currency_symbol = $currency_setting['symbol'];

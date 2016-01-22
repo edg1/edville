@@ -130,6 +130,34 @@
         <?php endif; ?>
       </ul>
       <?php print render($search_form); ?>
+      <?php 
+        if (isset($_GET['book_result'])) {
+          $start_date = new Datetime(check_plain(arg(2)));
+          $end_date = new Datetime(check_plain(arg(3)));
+          $persons = check_plain($_GET['rooms_group_size1']);
+          $childrens = check_plain($_GET['rooms_children1']);
+
+          $form = 'book_unit_form_' . $unit_object->unit_id . '_' . $key;
+          $form_booking_parameters = array(
+            '1' => array(
+              'adults' => $persons,
+              'children' => $childrens
+            )
+          );
+          $night = $date_to->diff($date_from)->days;
+          $price = $unit_object->base_price * $unit_object->max_sleeps * $night;
+
+          $book_form = drupal_get_form($form, $unit_object, $start_date, $end_date, $form_booking_parameters, 1, $price);
+
+          drupal_add_js("
+            jQuery(document).ready(function() {
+              jQuery('.rooms-search-result__select-children select').change();
+            });
+          ", 'inline');
+
+          print render($book_form);
+        }
+      ?>
       <?php
         $content['field_room_photos']['#settings']['attributes']['id'] = 'flexslider-1';
         print render($content['field_room_photos']); 
