@@ -32,6 +32,7 @@
   module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
   $search_form = drupal_get_form('rooms_booking_availability_search_form_page_' . $unit_object->unit_id);
   $search_form2 = drupal_get_form('rooms_booking_availability_search_form_block_' . $unit_object->unit_id);
+  $search_form2['#attributes']['class'][] = 'edville_booking_search_block';
   
   if (empty($unit_object) || (arg(0) != 'unit' && arg(0) != 'booking')) return;
   if (arg(0) == 'unit') {

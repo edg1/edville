@@ -7905,7 +7905,7 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
   padding: 0;
   border: none;
 }
-#rooms-booking-availability-search-form-block-2 {
+.edville_booking_search_block {
   height: auto !important;
 }
 .unit-detail-content .rooms-three-month-calendar .month1 {

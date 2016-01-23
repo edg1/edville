@@ -6,7 +6,8 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
     $form['actions']['submit']['#value'] = t('Book Now');
   }
   if (strpos($form_id, 'book_unit_form') !== FALSE) {
-    $person_default = array_search($form['rooms_group_size']['#value'], $form['persons']['#options']);
+    $min_persons = array_values($form['persons']['#options'])[0];
+    $person_default = $form['rooms_group_size']['#value'] > $min_persons ? $form['rooms_group_size']['#value'] : $min_persons;
     $children_default = array_search($form['rooms_children']['#value'], $form['children']['#options']);
 
     $form['persons']['#default_value'] = $person_default;
@@ -24,7 +25,7 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
     $form['rooms_date_range']['rooms_end_date']['#default_value'] = $end_date;
   }
 
-  if (arg(0) == 'unit' && isset($_GET['book_result']) && $form_id != 'rooms_booking_availability_search_form_block_2') {
+  if (arg(0) == 'unit' && isset($_GET['book_result']) && strpos($form_id, 'rooms_booking_availability_search_form_block') === FALSE) {
     $form['rooms_date_range'] = rooms_date_range_fields();
     $start_date = check_plain(arg(2));
     $end_date = check_plain(arg(3));
@@ -78,7 +79,7 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['rooms_fieldset']['group_size_children:1']['#default_value'] = -1;
   unset($form['rooms_fieldset']['group_size_children:1']['#title']);
   
-  if (isset($_GET['rooms_group_size1']) && isset($_GET['rooms_children1']) && $form_id != 'rooms_booking_availability_search_form_block_2') {
+  if (isset($_GET['rooms_group_size1']) && isset($_GET['rooms_children1']) && strpos($form_id, 'rooms_booking_availability_search_form_block') === FALSE) {
     $person_default = check_plain($_GET['rooms_group_size1']);
     $children_default = check_plain($_GET['rooms_children1']);
     $form['rooms_fieldset']['group_size_adults:1']['#default_value'] = $person_default;
@@ -92,7 +93,7 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['conditions']['rooms']['#attributes']['class'] = array('hide');
 
   // childrens age
-  if ((arg(0) == 'booking' && arg(1) != '') || arg(1) ==  'ajax' || isset($_GET['book_result'])) {
+  if (((arg(0) == 'booking' && arg(1) != '') || arg(1) ==  'ajax' || isset($_GET['book_result'])) && strpos($form_id, 'rooms_booking_availability_search_form_block') === FALSE) {
     $form['rooms_fieldset']['group_size_children:1']['#ajax'] = array(
       'callback' => 'rooms_booking_search_children_change_callback',
       'wrapper' => 'unit_search_childrensage',
@@ -171,7 +172,7 @@ function edville_custom_theme() {
 function edville_custom_preprocess_rooms_one_month_calendar(&$vars) {
 
 
-  if (arg(3) != '' && !$_GET['book_result']) {
+  if (arg(3) != '' && ! isset($_GET['book_result'])) {
     $vars['month'] = arg(3);
     $vars['year'] = arg(2);
     $vars['url'] = url('unit/' . arg(1));
@@ -513,7 +514,7 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
     $form['persons'] = array(
       '#type' => 'select',
       '#field_suffix' => t('Guests'),
-      '#options' => range($unit->min_sleeps, $unit->max_sleeps),
+      '#options' => array_combine(range($unit->min_sleeps, $unit->max_sleeps), range($unit->min_sleeps, $unit->max_sleeps)),
       '#default_value' => $unit->max_sleeps - $unit->min_sleeps,
       '#ajax' => array(
         'callback' => 'rooms_booking_manager_quantity_change_callback',
@@ -526,7 +527,7 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
 
     $max_children = $unit->max_children;
     if (isset($form_state['values']['persons'])) {
-      $persons = $form_state['values']['persons'] + $unit->min_sleeps;
+      $persons = $form_state['values']['persons'];
 
       if ($persons < $unit->max_children) {
         $max_children = $persons;
@@ -576,7 +577,7 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
   $unit_options = rooms_unit_get_unit_options($unit);
   if (variable_get('rooms_price_calculation', ROOMS_PER_NIGHT) == ROOMS_PER_PERSON || !empty($unit_options)) {
     if (isset($form_state['values']['persons'])) {
-      $group_size = $form_state['values']['persons'] + $unit->min_sleeps;
+      $group_size = $form_state['values']['persons'];
     }
     else {
       $group_size = $unit->max_sleeps;
@@ -614,7 +615,7 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
 
     if (isset($form_state['values']['persons'])) {
       $new_price = $price_calendar->calculatePrice($start_date, $temp_end_date,
-                      $form_state['values']['persons'] + $unit->min_sleeps,
+                      $form_state['values']['persons'],
                       $form_state['values']['children'] + $unit->min_children,
                       $childrens_age);
     }
@@ -822,7 +823,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
     $form['persons'] = array(
       '#type' => 'select',
       '#field_suffix' => t('Guests'),
-      '#options' => range($unit->min_sleeps, $unit->max_sleeps),
+      '#options' => array_combine(range($unit->min_sleeps, $unit->max_sleeps), range($unit->min_sleeps, $unit->max_sleeps)),
       '#default_value' => $unit->max_sleeps - $unit->min_sleeps,
       '#ajax' => array(
         'callback' => 'rooms_booking_manager_quantity_change_callback',
@@ -835,7 +836,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
 
     $max_children = $unit->max_children;
     if (isset($form_state['values']['persons'])) {
-      $persons = $form_state['values']['persons'] + $unit->min_sleeps;
+      $persons = $form_state['values']['persons'];
 
       if ($persons < $unit->max_children) {
         $max_children = $persons;
@@ -887,7 +888,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
   $unit_options = rooms_unit_get_unit_options($unit);
   if (variable_get('rooms_price_calculation', ROOMS_PER_NIGHT) == ROOMS_PER_PERSON || !empty($unit_options)) {
     if (isset($form_state['values']['persons'])) {
-      $group_size = $form_state['values']['persons'] + $unit->min_sleeps;
+      $group_size = $form_state['values']['persons'];
     }
     else {
       $group_size = $unit->max_sleeps;
@@ -925,7 +926,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
 
     if (isset($form_state['values']['persons'])) {
       $new_price = $price_calendar->calculatePrice($start_date, $temp_end_date,
-                      $form_state['values']['persons'] + $unit->min_sleeps,
+                      $form_state['values']['persons'],
                       $form_state['values']['children'] + $unit->min_children,
                       $childrens_age);
     }
@@ -981,11 +982,11 @@ function edville_book_unit_form_submit(&$form, &$form_state) {
   $unit_id = $form_state['values']['unit_id'];
   $start_date = $form_state['values']['start_date'];
   $end_date = $form_state['values']['end_date'];
-
+  
   $group_size = (!empty($form_state['values']['persons'])) ? $form['persons']['#options'][$form_state['values']['persons']] : $form_state['values']['rooms_group_size'];
   
   $status = $form_state['values']['status'];
-
+  
   // This is very inefficient right now but we need to create date objects
   // reconvert them back to strings to recreate them in the Availability Agent.
   $sd = start_date_load($start_date);
