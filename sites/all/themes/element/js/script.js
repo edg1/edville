@@ -25,6 +25,8 @@ $(document).ready(function($) {
 	//  //    }
 	// 	// });
 	// });
+	
+	
 	$('.rooms-availability-search select').change();
 
 	var stack = {
@@ -46,9 +48,28 @@ $(document).ready(function($) {
 
 	stack.run();
 
-	$('#unit_search_childrensage select').each(function() {
-		var select_age_name = $(this).attr('name');
+	
+
+	$('.rooms-availability-search').each(function() {
+		var search_form = $(this);
+		if (search_form.find('input[name="rooms_start_date[date]"]').val() != '') {
+			search_form.addClass('search-result');
+			search_form.find('select').each(function() {
+				var select_param = $(this);
+				if (select_param.attr('name') != 'rooms') {
+					$('<p class="label-result">' + select_param.find('option:first-child').text() + '</p>').insertBefore(select_param);
+				}
+			});
+		}
 	});
+	
+	
+	if ($('.search-result input[name="rooms_start_date[date]"]').val() != '') {
+		$('<p class="label-result">' + $('.search-result input[name="rooms_start_date[date]"]').attr('placeholder') + '</p>').insertBefore('.search-result input[name="rooms_start_date[date]"]');
+	}
+	if ($('.search-result input[name="rooms_end_date[date]"]').val() != '') {
+		$('<p class="label-result">' + $('.search-result input[name="rooms_end_date[date]"]').attr('placeholder') + '</p>').insertBefore('.search-result input[name="rooms_end_date[date]"]');
+	}
 
 	$('.rooms-book-unit-form input[type=checkbox]').click();
 
