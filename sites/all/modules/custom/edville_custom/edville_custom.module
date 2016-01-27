@@ -673,7 +673,7 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
     $start_date = new Datetime($form_state['values']['edville_start_date']);
   }
 
-  if (isset($form_state['values']['end_date'])) {
+  if (isset($form_state['values']['edville_end_date'])) {
     $end_date = new Datetime($form_state['values']['edville_end_date']);
   }
 
