@@ -5,26 +5,6 @@ var $ = jQuery.noConflict();
 
 $(document).ready(function($) {
 	"use strict";
-
-	// $('#edville-calendar-back a').click(function(e) {
-	// 	e.preventDefault();
-	// 	// $.ajax({
-	// 	//   url: "/edville-calendar/2016/1/1",
-	// 	//   context: document.body
-	// 	// }).done(function(calendar) {
-	// 	// 	var result = $(calendar).filter("#theme-calendar");
-	// 	//   $('#theme-calendar').html(result);
-	// 	// });
-
-	// 	// $.ajax({
-	//  //    url: "/edville-calendar/2016/1/1",
-	//  //    cache: false,
-	//  //    success: function(response) {
-	//  //        var result = $("#theme-calendar", response);
-	//  //        console.log(result);
-	//  //    }
-	// 	// });
-	// });
 	
 	
 	$('.rooms-availability-search select').change();
@@ -54,6 +34,60 @@ $(document).ready(function($) {
 		var search_form = $(this);
 		if (search_form.find('input[name="rooms_start_date[date]"]').val() != '') {
 			search_form.addClass('search-result');
+
+			// ajax 
+			$('.search-result #rooms-group-page select').first().change(function() {
+				var people_val = $(this).val();
+				if (people_val == '-1') {
+					alert('Group size must be greater than zero!');
+					$(this).val(1);
+					people_val = 1;
+				}
+				$('select[name="persons"]').each(function() {
+					var person_select_max = $(this).find('option:last').val();
+
+					if (parseInt(people_val) > parseInt(person_select_max)) {
+						$(this).closest('.rooms-search-result__unit-type').hide();
+					}
+					else {
+						$(this).closest('.rooms-search-result__unit-type').show();
+						$(this).val(people_val).change();
+					}
+				});
+			});
+
+			$('.search-result #rooms-group-page select').eq(1).change(function() {
+				var children_val = $(this).val();
+				$('select[name="children"]').each(function() {
+					$(this).val(children_val).change();
+				});
+			});
+
+			
+
+			$('.search-result input[name="rooms_end_date[date]"]').change(function() {
+				var end_date = $(this).val();
+				$('input[name="edville_end_date[date]"]').each(function() {
+					$(this).val(end_date).change();
+				});
+			});
+
+			var load = $.Deferred(function (dfd) {
+			  $('.search-result input[name="rooms_start_date[date]"]').change(function() {
+					var start_date = $(this).val();
+					var end_date = $('.search-result input[name="rooms_end_date[date]"]').val();
+					$('input[name="edville_start_date[date]"]').each(function() {
+						$(this).val(start_date).change();
+					});
+				});
+			}).promise();
+
+			$.when(load).then(function () {
+			  alert('kilaku');
+			});
+
+			//
+
 			search_form.find('select').each(function() {
 				var select_param = $(this);
 				if (select_param.attr('name') != 'rooms') {
@@ -742,7 +776,7 @@ $(document).ready(function($) {
 function setHeaderColor() {
 	if (!$('header').hasClass('active'))  {
 
-		if ($('.flexslider').length > 0 && $(window).width() >= 768) {
+		if ($('body').hasClass('front') && $('.flexslider').length > 0 && $(window).width() >= 768) {
 			if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 				$('header .inactive_logo').show();
 				$('header .active_logo').hide();

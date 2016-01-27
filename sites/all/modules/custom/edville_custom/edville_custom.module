@@ -74,9 +74,9 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   $form['rooms_fieldset']['group_size_children:1']['#options'] = rooms_assoc_range(1, $max_peoples);
 
   $form['rooms_fieldset']['group_size_children:1']['#options'] = array(
-    -1 => $form['rooms_fieldset']['group_size_children:1']['#title']
+    0 => $form['rooms_fieldset']['group_size_children:1']['#title']
     ) + $form['rooms_fieldset']['group_size_children:1']['#options'];
-  $form['rooms_fieldset']['group_size_children:1']['#default_value'] = -1;
+  $form['rooms_fieldset']['group_size_children:1']['#default_value'] = 0;
   unset($form['rooms_fieldset']['group_size_children:1']['#title']);
   
   if (isset($_GET['rooms_group_size1']) && isset($_GET['rooms_children1']) && strpos($form_id, 'rooms_booking_availability_search_form_block') === FALSE) {
@@ -668,6 +668,15 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
   $currency_setting = commerce_currency_load(commerce_default_currency());
   $currency_symbol = $currency_setting['symbol'];
 
+
+  if (isset($form_state['values']['edville_start_date'])) {
+    $start_date = new Datetime($form_state['values']['edville_start_date']);
+  }
+
+  if (isset($form_state['values']['end_date'])) {
+    $end_date = new Datetime($form_state['values']['end_date']);
+  }
+
   $form['unit_id'] = array(
     '#type' => 'hidden',
     '#value' => $unit->unit_id,
@@ -681,7 +690,39 @@ function edville_book_unit_form_builder2($form_id, $form_state, $unit, $start_da
   $form['start_date'] = array(
     '#type' => 'hidden',
     '#value' => $start_date->format('Y-m-d'),
+    '#ajax' => array(
+      'callback' => 'rooms_booking_manager_quantity_change_callback',
+      'wrapper' => 'unit_' . $unit->unit_id . '_price',
+      'event' => 'change',
+    ),
   );
+
+  $form['edville_start_date'] = array(
+    '#type' => 'date_popup',
+    '#default_value' => $start_date,
+    '#date_format' => 'd/m/Y',
+    '#ajax' => array(
+      'callback' => 'rooms_booking_manager_quantity_change_callback',
+      'wrapper' => 'unit_' . $unit->unit_id . '_price',
+      'event' => 'change',
+    ),
+    '#prefix' => '<div class="hide">',
+    '#suffix' => '</div>',
+  );
+
+  $form['edville_end_date'] = array(
+    '#type' => 'date_popup',
+    '#default_value' => $end_date,
+    '#date_format' => 'd/m/Y',
+    '#ajax' => array(
+      'callback' => 'rooms_booking_manager_quantity_change_callback',
+      'wrapper' => 'unit_' . $unit->unit_id . '_price',
+      'event' => 'change',
+    ),
+    '#prefix' => '<div class="hide">',
+    '#suffix' => '</div>',
+  );
+
 
   $form['end_date'] = array(
     '#type' => 'hidden',
@@ -1109,49 +1150,6 @@ function edville_custom_menu_alter(&$items) {
 
 function edville_custom_cart_redirect() {
   drupal_goto('bookings');
-}
-
-function edville_custom_menu() {
-   $items['edville-calendar/%/%/%'] = array(
-    'title' => 'Ajax calendar',
-    'page callback' => 'edville_custom_calendar',
-    'access arguments' => array('access content'),
-    'page arguments' => array(1, 2, 3),
-    'type' => MENU_CALLBACK,
-  );
-
-  return $items;
-}
-
-function edville_custom_calendar($year, $month, $unit_id) {
-            
-  // rooms_availability_modal_style();
-
-  // Get the current page's URL, striped of the year and month args.
-  // This allows us to place this page anywhere, including at
-  // unit/%/availability  or  admin/rooms/units/unit/%/availability
-  list($url) = explode('/' . $year . '/' . $month, current_path());
-
-  $calendar = array(
-    '#theme' => 'rooms_one_month_calendar',
-    '#url' => $url,
-    '#year' => $year,
-    '#month' => $month,
-    '#attached' => array(
-      'css' => array(
-        drupal_get_path('module', 'rooms_availability') . '/css/rooms_availability.css',
-      ),
-      'js' => array(
-        drupal_get_path('module', 'edville_custom') . '/js/edville_rooms_availability.js',
-        array(
-          'data' => array('roomsAvailability' => array('roomID' => $unit_id)),
-          'type' => 'setting',
-        ),
-      ),
-    ),
-  );
-
-  return render($calendar);
 }
 
 /**

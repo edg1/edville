@@ -308,7 +308,7 @@ website:    http://www.themepunch.com
 /* =  Header
 /*-------------------------------------------------*/
 .navbar-default {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.1);
   border: none;
   padding: 0 40px;
   transition: all 0.2s ease-in-out;
@@ -6509,6 +6509,7 @@ p.label-result {
 }
 .search-result .btn-primary {
   padding: 22px 20px;
+  height: 67px;
   background: #696565;
 }
 .unit-detail-content .rooms-availability-search.search-result {
