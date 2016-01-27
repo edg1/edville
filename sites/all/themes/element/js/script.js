@@ -63,7 +63,12 @@ $(document).ready(function($) {
 				});
 			});
 
-			
+			$('.search-result input[name="rooms_start_date[date]"]').change(function() {
+				var start_date = $(this).val();
+				$('input[name="edville_start_date[date]"]').each(function() {
+					$(this).val(start_date).change();
+				});
+			});
 
 			$('.search-result input[name="rooms_end_date[date]"]').change(function() {
 				var end_date = $(this).val();
@@ -71,20 +76,7 @@ $(document).ready(function($) {
 					$(this).val(end_date).change();
 				});
 			});
-
-			var load = $.Deferred(function (dfd) {
-			  $('.search-result input[name="rooms_start_date[date]"]').change(function() {
-					var start_date = $(this).val();
-					var end_date = $('.search-result input[name="rooms_end_date[date]"]').val();
-					$('input[name="edville_start_date[date]"]').each(function() {
-						$(this).val(start_date).change();
-					});
-				});
-			}).promise();
-
-			$.when(load).then(function () {
-			  alert('kilaku');
-			});
+			
 
 			//
 
