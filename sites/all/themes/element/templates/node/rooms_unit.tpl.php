@@ -27,7 +27,17 @@
  * @see template_preprocess_entity()
  * @see template_process()
  */
-  $unit_object = isset($content['rooms_booking_unit_options']['#object']) ?  $content['rooms_booking_unit_options']['#object'] : null;
+
+  $keys = array_keys($content);
+  $tmpKey = 'field_home';
+  foreach ($keys as $key) {
+    if (strpos($key, 'field_') !== false) {
+      $tmpKey = $key;
+      break;
+    }
+  }
+
+  $unit_object = isset($content[$key]['#object']) ?  $content[$key]['#object'] : null;
 
   module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.availability_search');
   $search_form = drupal_get_form('rooms_booking_availability_search_form_page_' . $unit_object->unit_id);
