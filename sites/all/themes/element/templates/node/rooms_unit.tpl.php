@@ -253,7 +253,7 @@
 
             $year = date('Y'); $month = date('m');
             
-            // rooms_availability_modal_style();
+             rooms_availability_modal_style();
 
             // Get the current page's URL, striped of the year and month args.
             // This allows us to place this page anywhere, including at
