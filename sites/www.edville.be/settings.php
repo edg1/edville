@@ -215,9 +215,9 @@ $databases = array (
   array (
     'default' => 
     array (
-      'database' => 'edville',
+      'database' => 'devedbe',
       'username' => 'root',
-      'password' => '',
+      'password' => 'wu%9whes',
       'host' => 'localhost',
       'port' => '',
       'driver' => 'mysql',
