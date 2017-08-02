@@ -861,13 +861,13 @@ ul.portfolio-pagination li a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  
+
 }
 .slotholder:after, .md-mainimg:after, .md-slide-items .overlay {
-  /** add overlay if necessary 
-  
+  /** add overlay if necessary
+
   background: rgba(51, 51, 51, 0.8);
-  
+
   */
 }
 .page-home-corporate .md-mainimg:after, .page-home-corporate .md-slide-items .overlay {
@@ -4654,7 +4654,7 @@ input[type=text] {
   text-align: center;
   text-transform: uppercase;
   font-size: 13px;
-} 
+}
 .page-about-us a.view-more:hover {
   cursor: pointer;
   text-decoration: none;
@@ -5081,7 +5081,7 @@ input[type=text] {
 .about-page-header h1{
   padding-top: 100px;
 }
-.about-page-header h2, 
+.about-page-header h2,
 .about-page-header h3{
   color:white;
 }
@@ -6403,13 +6403,13 @@ input[type=text] {
   margin-left: 10px;
   font-weight: normal;
 }
-  
+
 .rooms-availability-search {
   text-align: center;
   margin-top: 40px;
   border-bottom: 1px solid;
   padding-bottom: 30px;
-  
+
 }
 .rooms-availability-search > div {
   display: inline-block;
@@ -6448,18 +6448,22 @@ input[type=text] {
 }
 .rooms-availability-search .rooms-search-result__select-childrensage {
   position: absolute;
-  right: 96px;
+  right: 100px;
   top: 100%;
   width: 200px;
   z-index: 99;
   background: #fff;
+}
+
+.rooms-availability-search .form-item-group-size-children {
+  width: 99px !important;
 }
 .unit-detail-content .rooms-availability-search.search-result .rooms-search-result__select-childrensage {
   right: 95px;
 }
 .rooms-availability-search .rooms-search-result__childrens-age {
   float: right;
-  width: 106px;
+  width: 100px;
   border-right: 1px solid;
   border-top: 0;
   margin-left: 5px;
@@ -6511,6 +6515,7 @@ p.label-result {
   padding: 22px 20px;
   height: 67px;
   background: #696565;
+  width: 110px;
 }
 .unit-detail-content .rooms-availability-search.search-result {
   margin-top: 0;
@@ -7357,7 +7362,7 @@ ul.portfolio-pagination li a:hover {
   color: #aaa;
 }
 .page-contact .pane-block-24 {
-  padding-top: 50px; 
+  padding-top: 50px;
 }
 /*-------------------------------------------------*/
 /* =  faqs page
@@ -8084,16 +8089,16 @@ footer .up-footer .block-simplenews .not-logged-in button[type="submit"]:hover {
 input[type=text]::-webkit-input-placeholder {
   color: #333;
 }
- 
+
 input[type=text]:-moz-placeholder { /* Firefox 18- */
   color: #333;
 }
- 
+
 input[type=text]::-moz-placeholder {  /* Firefox 19+ */
   color: #333;
 }
- 
-input[type=text]:-ms-input-placeholder {  
+
+input[type=text]:-ms-input-placeholder {
   color: #333;
 }
 
@@ -8110,7 +8115,7 @@ form#rooms-booking-manager-change-search-form {
   margin-left: 0;
 }
 .page-booking .unit-detail-content .price-result {
-  margin: 15px 0; 
+  margin: 15px 0;
 }
 .page-booking .unit-detail-content .rooms-search-result__unit-embedded .rooms-search-result__actions {
   margin-top: -38px;
@@ -8597,7 +8602,7 @@ form#rooms-booking-manager-change-search-form {
     font-size: 14px;
     border: 1px solid #ccc;
   }
-  .rooms-availability-search .form-wrapper, 
+  .rooms-availability-search .form-wrapper,
   .rooms-availability-search .rooms-date-range .start-date,
   .rooms-availability-search .rooms-date-range .end-date,
   .rooms-date-range .container-inline-date .form-item input,
@@ -8611,7 +8616,7 @@ form#rooms-booking-manager-change-search-form {
   .rooms-availability-search .rooms-date-range .start-date > div,
   .rooms-availability-search .rooms-date-range .end-date > div,
   .rooms-availability-search .form-type-select select,
-  .rooms-availability-search .btn-primary, p.label-result, 
+  .rooms-availability-search .btn-primary, p.label-result,
   .rooms-availability-search .rooms-search-result__select-childrensage {
     width: 200px;
     margin: 0 auto;
@@ -8635,7 +8640,7 @@ form#rooms-booking-manager-change-search-form {
     font-size: 14px;
     border: 1px solid #ccc;
   }
-  .rooms-availability-search .form-wrapper, 
+  .rooms-availability-search .form-wrapper,
   .rooms-availability-search .rooms-date-range .start-date,
   .rooms-availability-search .rooms-date-range .end-date,
   .rooms-date-range .container-inline-date .form-item input,
@@ -8649,7 +8654,7 @@ form#rooms-booking-manager-change-search-form {
   .rooms-availability-search .rooms-date-range .start-date > div,
   .rooms-availability-search .rooms-date-range .end-date > div,
   .rooms-availability-search .form-type-select select,
-  .rooms-availability-search .btn-primary, p.label-result, 
+  .rooms-availability-search .btn-primary, p.label-result,
   .rooms-availability-search .rooms-search-result__select-childrensage {
     width: 200px;
     margin: 0 auto;
@@ -8781,32 +8786,32 @@ form#rooms-booking-manager-change-search-form {
   .front .rooms-date-range .container-inline-date .form-item input::-webkit-input-placeholder {
     color: #fff;
   }
-   
+
   .front .rooms-date-range .container-inline-date .form-item input:-moz-placeholder { /* Firefox 18- */
     color: #fff;
   }
-   
+
   .front .rooms-date-range .container-inline-date .form-item input::-moz-placeholder {  /* Firefox 19+ */
     color: #fff;
   }
-   
-  .front .rooms-date-range .container-inline-date .form-item input:-ms-input-placeholder {  
+
+  .front .rooms-date-range .container-inline-date .form-item input:-ms-input-placeholder {
     color: #fff;
   }
 
   .front .rooms-date-range .container-inline-date .form-item input.black::-webkit-input-placeholder {
     color: #333;
   }
-   
+
   .front .rooms-date-range .container-inline-date .form-item input.black:-moz-placeholder { /* Firefox 18- */
     color: #333;
   }
-   
+
   .front .rooms-date-range .container-inline-date .form-item input.black::-moz-placeholder {  /* Firefox 19+ */
     color: #333;
   }
-   
-  .front .rooms-date-range .container-inline-date .form-item input.black:-ms-input-placeholder {  
+
+  .front .rooms-date-range .container-inline-date .form-item input.black:-ms-input-placeholder {
     color: #333;
   }
   .front .rooms-availability-search select option {
@@ -8854,7 +8859,7 @@ form#rooms-booking-manager-change-search-form {
     float: none;
   }
   .rooms-availability-search.search-result, .search-container .rooms-book-unit-form {
-    height: auto !important; 
+    height: auto !important;
     width: 200px;
     margin-left: auto;
     margin-right: auto;
