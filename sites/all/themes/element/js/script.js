@@ -5,8 +5,8 @@ var $ = jQuery.noConflict();
 
 $(document).ready(function($) {
 	"use strict";
-	
-	
+
+
 	$('.rooms-availability-search select').change();
 
 	var stack = {
@@ -28,14 +28,14 @@ $(document).ready(function($) {
 
 	stack.run();
 
-	
+
 
 	$('.rooms-availability-search').each(function() {
 		var search_form = $(this);
 		if (search_form.find('input[name="rooms_start_date[date]"]').val() != '') {
 			search_form.addClass('search-result');
 
-			// ajax 
+			// ajax
 			$('.search-result #rooms-group-page select').first().change(function() {
 				var people_val = $(this).val();
 				if (people_val == '-1') {
@@ -76,7 +76,7 @@ $(document).ready(function($) {
 					$(this).val(end_date).change();
 				});
 			});
-			
+
 
 			//
 
@@ -88,8 +88,8 @@ $(document).ready(function($) {
 			});
 		}
 	});
-	
-	
+
+
 	if ($('.search-result input[name="rooms_start_date[date]"]').val() != '') {
 		$('<p class="label-result">' + $('.search-result input[name="rooms_start_date[date]"]').attr('placeholder') + '</p>').insertBefore('.search-result input[name="rooms_start_date[date]"]');
 	}
@@ -104,10 +104,10 @@ $(document).ready(function($) {
            $('.rooms-book-unit-form input[type=checkbox]').attr('disabled', 'disabled');
       }, 1000);
   });
-	
+
 	$('.element-calendar .calendar-forward a').html('<i class="fa fa-caret-right"></i>');
 	$('.element-calendar .calendar-back a').html('<i class="fa fa-caret-left"></i>');
-	
+
 	/* book slider */
 	if ($('.book-slider').length > 0) {
 		$('.book-slider').flexslider({
@@ -159,10 +159,12 @@ $(document).ready(function($) {
 	}
 
 	if ($('body').hasClass('front') && $(window).width() >= 768) {
-		
+
 		if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 			$('.front .rooms-availability-search .form-control').addClass('white');
 			$('.front .rooms-availability-search .form-control').removeClass('black');
+			$('.front .rooms-availability-search .label-result').addClass('white');
+			$('.front .rooms-availability-search .label-result').removeClass('black');
 			$('.front .rooms-date-range .container-inline-date .form-item input').addClass('white');
 			$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('black');
 			$('.front .rooms-availability-search .btn-primary').addClass('white');
@@ -173,6 +175,8 @@ $(document).ready(function($) {
 		else {
 			$('.front .rooms-availability-search .form-control').addClass('black');
 			$('.front .rooms-availability-search .form-control').removeClass('white');
+			$('.front .rooms-availability-search .label-result').addClass('black');
+			$('.front .rooms-availability-search .label-result').removeClass('white');
 			$('.front .rooms-date-range .container-inline-date .form-item input').addClass('black');
 			$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('white');
 			$('.front .rooms-availability-search .btn-primary').addClass('black');
@@ -184,6 +188,8 @@ $(document).ready(function($) {
 	    if ($('.flex-active-slide .slide').hasClass('White') || $('.flex-active-slide').hasClass('White')) {
 				$('.front .rooms-availability-search .form-control').addClass('white');
 				$('.front .rooms-availability-search .form-control').removeClass('black');
+				$('.front .rooms-availability-search .label-result').addClass('white');
+				$('.front .rooms-availability-search .label-result').removeClass('black');
 				$('.front .rooms-date-range .container-inline-date .form-item input').addClass('white');
 				$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('black');
 				$('.front .rooms-availability-search .btn-primary').addClass('white');
@@ -194,6 +200,8 @@ $(document).ready(function($) {
 			else {
 				$('.front .rooms-availability-search .form-control').addClass('black');
 				$('.front .rooms-availability-search .form-control').removeClass('white');
+				$('.front .rooms-availability-search .label-result').addClass('black');
+				$('.front .rooms-availability-search .label-result').removeClass('white');
 				$('.front .rooms-date-range .container-inline-date .form-item input').addClass('black');
 				$('.front .rooms-date-range .container-inline-date .form-item input').removeClass('white');
 				$('.front .rooms-availability-search .btn-primary').addClass('black');
@@ -201,11 +209,11 @@ $(document).ready(function($) {
 				$('header .navbar-default').addClass('black');
 				$('header .navbar-default').removeClass('white');
 			}
-	  });	
+	  });
 	}
-	
-	
-	
+
+
+
 	/* header color for each slide */
 	setHeaderColor();
 
@@ -220,7 +228,7 @@ $(document).ready(function($) {
 
 		try{
 			$container.imagesLoaded( function(){
-				$container.trigger('resize');				
+				$container.trigger('resize');
 
 				$('.triggerAnimation').waypoint(function() {
 					var animation = $(this).attr('data-animate');
@@ -237,33 +245,33 @@ $(document).ready(function($) {
 		} catch(err) {
 		}
 
-		var $allVideos = jQuery(".embedded-video iframe[src^='http://player.vimeo.com'], .embedded-video iframe[src^='//player.vimeo.com'], .embedded-video iframe[src^='//www.youtube.com'], .embedded-video iframe[src^='http://www.youtube.com']");  
-	  	
-		$allVideos.each(function() {					
+		var $allVideos = jQuery(".embedded-video iframe[src^='http://player.vimeo.com'], .embedded-video iframe[src^='//player.vimeo.com'], .embedded-video iframe[src^='//www.youtube.com'], .embedded-video iframe[src^='http://www.youtube.com']");
+
+		$allVideos.each(function() {
 		  $(this)
-		    // jQuery .data does not work on object/embed elements		    
+		    // jQuery .data does not work on object/embed elements
 		    .attr('data-aspectRatio', this.height / this.width)
 		    .removeAttr('height')
-		    .removeAttr('width')	  
+		    .removeAttr('width')
 		    .css('width', '100%')
-	    	.height($(this).width() * $(this).attr('data-aspectRatio'));	
+	    	.height($(this).width() * $(this).attr('data-aspectRatio'));
 	    $(this).parent().height(this.height);
 		});
 
 		winDow.bind('resize', function(){
 
 			$allVideos.each(function() {
-	  
+
 		    var $el = jQuery(this);
 		    $el.css('width', '100%');
-	    	$el.height($el.width() * $el.attr('data-aspectRatio'));	  
-	    	$el.parent().height($el.height()); 
+	    	$el.height($el.width() * $el.attr('data-aspectRatio'));
+	    	$el.parent().height($el.height());
 		  });
 
 			var selector = $filter.find('a.active').attr('data-filter');
 
 			try {
-				$container.isotope({ 
+				$container.isotope({
 					filter	: selector,
 					animationOptions: {
 						duration: 750,
@@ -274,7 +282,7 @@ $(document).ready(function($) {
 			} catch(err) {
 			}
 			return false;
-		});			
+		});
 
 	/*-------------------------------------------------*/
 	/* =  browser detect
@@ -283,12 +291,12 @@ $(document).ready(function($) {
 		$.browserSelector();
 		// Adds window smooth scroll on chrome.
 		if($("html").hasClass("chrome")) {
-			// $.smoothScroll();			
+			// $.smoothScroll();
 		}
 	} catch(err) {
 
 	}
-	
+
 	try {
 		if (!$('body').hasClass('light-boxed') && !$('body').hasClass('dark-boxed') && !$('body').hasClass('page-home-corporate')) {
 			$('.navbar > .container').removeClass('container');
@@ -333,7 +341,7 @@ $(document).ready(function($) {
 	/*-------------------------------------------------*/
 	/* =  Search animation
 	/*-------------------------------------------------*/
-	
+
 	var searchToggle = $('.open-search'),
 		inputAnime = $(".form-search"),
 		body = $('body');
@@ -343,7 +351,7 @@ $(document).ready(function($) {
 		if ( !inputAnime.hasClass('active') ) {
 			inputAnime.addClass('active');
 		} else {
-			inputAnime.removeClass('active');			
+			inputAnime.removeClass('active');
 		}
 	});
 
@@ -370,7 +378,7 @@ $(document).ready(function($) {
 	/*-------------------------------------------------*/
 	/* =  fullwidth carousell
 	/*-------------------------------------------------*/
-	
+
 	try {
 		$("#owl-demo2").owlCarousel({
 			autoPlay: 8000,
@@ -467,7 +475,7 @@ $(document).ready(function($) {
 	} catch(err) {
 
 	}
-	
+
 	/* ---------------------------------------------------------------------- */
 	/*	Contact Map
 	/* ---------------------------------,------------------------------------- */
@@ -512,13 +520,13 @@ $(document).ready(function($) {
 	} catch(err) {
 
 	}
-	
+
 
 	/*-------------------------------------------------*/
 	/* = skills animate
 	/*-------------------------------------------------*/
 
-	try{		
+	try{
 		var skillBar = $('.skills-progress');
 		skillBar.appear(function() {
 
@@ -540,7 +548,7 @@ $(document).ready(function($) {
 		$('.skills-section .view-content').appear(function() {
 			$('.circle-skill').each(function() {
 				DevSolutionSkill.init($(this).attr('id'));
-			});			 			
+			});
 		});
 	// } catch(err) {
 
@@ -566,12 +574,12 @@ $(document).ready(function($) {
 	/*-------------------------------------------------*/
 	/* =  feature box appear
 	/*-------------------------------------------------*/
-	
+
 	try{
 		$('.feature-box').appear(function() {
 			$(this).addClass('active');
 		});
-		
+
 	} catch(err) {
 	}
 
@@ -591,7 +599,7 @@ $(document).ready(function($) {
 	/*-------------------------------------------------*/
 	/* =  product increase
 	/*-------------------------------------------------*/
-	
+
 	var fieldNum = $('.product-details input[type="text"]'),
 		btnIncrease = $('button.increase'),
 		btnDecrease = $('button.decrease');
@@ -624,7 +632,7 @@ $(document).ready(function($) {
 			parentCheck = $this.parents('.accord-elem'),
 			accordItems = $('.accord-elem'),
 			accordContent = $('.accord-content');
-			
+
 		if( !parentCheck.hasClass('active')) {
 
 			accordContent.slideUp(400, function(){
@@ -654,7 +662,7 @@ $(document).ready(function($) {
 		e.preventDefault();
 
 		var $this = $(this);
-		
+
 		$.ajax({
 			type: "POST",
 			url: 'contact.php',
@@ -692,7 +700,7 @@ $(document).ready(function($) {
 				}
 			}, false );
 		}
-		
+
 		function scrollPage() {
 			var sy = scrollY();
 			if ( sy >= changeHeaderOn ) {
@@ -703,66 +711,66 @@ $(document).ready(function($) {
 			}
 			didScroll = false;
 		}
-		
+
 		function scrollY() {
 			return window.pageYOffset || docElem.scrollTop;
 		}
-		
+
 		init();
-		
+
 	})();
 
 	/* ---------------------------------------------------------------------- */
 	/*	Like display and click
 	/* ---------------------------------------------------------------------- */
 
-	$('a.flag').each(function() {		
-		var like_count = $(this).closest('ul').next();		
-		$(this).attr('title', like_count.text());			
-		$(this).html('<i class="fa fa-heart"></i>');		
-	});	
+	$('a.flag').each(function() {
+		var like_count = $(this).closest('ul').next();
+		$(this).attr('title', like_count.text());
+		$(this).html('<i class="fa fa-heart"></i>');
+	});
 
-	
-	if ($('.single-project-section').length > 0) {			
+
+	if ($('.single-project-section').length > 0) {
 		var count_init = parseInt($('.single-project-section .like-count').text());
 		if (count_init <=0) {
 			count_init = 0;
 		}
 		$('.single-project-section a.flag').html('<i class="fa fa-heart"></i><span>' + count_init + '</span>');
 	}
-	
-  $(document).bind('flagGlobalAfterLinkUpdate', function(event, data) {  	
-    if (data.flagName == 'like' && data.flagSuccess) {    		      
+
+  $(document).bind('flagGlobalAfterLinkUpdate', function(event, data) {
+    if (data.flagName == 'like' && data.flagSuccess) {
       var like_count = $('#like-node-' + data.contentId);
       var count = parseInt(like_count.html());
-      
+
       if (data.flagStatus == 'flagged') {
       	count++;
       }
       else {
       	count--;
-      }      
+      }
    		if (count <= 0) {
    			count = 0;
    		}
    		if ($('body').hasClass('node-type-portfolio')) {
-   			like_count.html(count); 
+   			like_count.html(count);
    		}
    		else {
-   			like_count.html(count + ' Likes'); 	
+   			like_count.html(count + ' Likes');
    		}
-      
-            
+
+
       if ($('body').hasClass('node-type-portfolio')) {
       	$('.flag-like-' + data.contentId + ' a').html('<i class="fa fa-heart"></i><span>' + count + '</span>');
       }
       else {
-      	$('.flag-like-' + data.contentId + ' a').html('<i class="fa fa-heart"></i>'); 
+      	$('.flag-like-' + data.contentId + ' a').html('<i class="fa fa-heart"></i>');
       }
-      $('.flag-like-' + data.contentId + ' a').attr('title', like_count.text());			
-    }			
-  });  
-	
+      $('.flag-like-' + data.contentId + ' a').attr('title', like_count.text());
+    }
+  });
+
 });
 
 function setHeaderColor() {
