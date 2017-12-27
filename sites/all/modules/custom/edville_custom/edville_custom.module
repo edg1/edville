@@ -613,6 +613,13 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
     // Apply price modifiers and replace unit price.
     $price_calendar = new UnitPricingCalendar($unit->unit_id, $price_modifiers);
 
+    $pers = $booking_parameters[1]['adults'];
+    if ($pers > $unit->max_sleeps) {
+      $pers = $unit->max_sleeps;
+    }
+
+    $booking_parameters[1]['adults'] = $pers;
+
     if (isset($form_state['values']['persons'])) {
       $new_price = $price_calendar->calculatePrice($start_date, $temp_end_date,
                       $form_state['values']['persons'],
@@ -625,11 +632,12 @@ function edville_book_unit_form_builder($form_id, $form_state, $unit, $start_dat
 
     $form['new_price'] = array(
       '#prefix' => '<div class="price-result" id="unit_' . $unit->unit_id . '_price">',
-      '#markup' => t('From @start_date to @end_date > Starting from @currency_symbol @amount for 10 guests', array( // TODO: replace with a proper currency formatter
+      '#markup' => t('From @start_date to @end_date > Starting from @currency_symbol@amount for @person guests', array( // TODO: replace with a proper currency formatter
           '@currency_symbol' => $currency_symbol,
           '@amount' => $new_price['full_price'],
           '@start_date' => $start_date->format('d-m-Y'),
           '@end_date' => $temp_end_date->format('d-m-Y'),
+          '@person' => $pers
         )),
       '#suffix' => '</div>',
     );
