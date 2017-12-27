@@ -63,6 +63,12 @@ function edville_custom_form_alter(&$form, &$form_state, $form_id) {
 
   $max_peoples = get_max_peoples_allowed();
 
+  $form_params = explode('_', $form_id);
+
+  if (end($form_params) > 0) {
+    $max_peoples = end($form_params);
+  }
+
   $form['rooms_fieldset']['group_size_adults:1']['#options'] = rooms_assoc_range(1, $max_peoples);
 
   $form['rooms_fieldset']['group_size_adults:1']['#options'] = array(
