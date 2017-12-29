@@ -259,7 +259,7 @@
             // This allows us to place this page anywhere, including at
             // unit/%/availability  or  admin/rooms/units/unit/%/availability
             list($url) = explode('/' . $year . '/' . $month, current_path());
-
+            global $user;
             $calendar = array(
               '#theme' => 'rooms_one_month_calendar',
               '#url' => $url,
@@ -272,7 +272,7 @@
                 'js' => array(
                   drupal_get_path('module', 'edville_custom') . '/js/edville_rooms_availability.js',
                   array(
-                    'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id)),
+                    'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id), 'userID' => $user->uid),
                     'type' => 'setting',
                   ),
                 ),
