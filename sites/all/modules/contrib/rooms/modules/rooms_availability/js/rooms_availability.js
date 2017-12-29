@@ -80,14 +80,8 @@ Drupal.behaviors.rooms_availability = {
 
           var sd = calEvent.start.unix();
           var ed = calEvent.end.unix();
-
-          if (Drupal.settings && Drupal.settings.userID > 0) {
-            window.location(Drupal.settings.basePath + 'enquiry/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '?quantity=' + 5);
-          }
-          else {
-            // Open the modal for edit
-            Drupal.RoomsAvailability.Modal(view, calEvent.id, sd, ed);
-          }
+          // Open the modal for edit
+          Drupal.RoomsAvailability.Modal(view, calEvent.id, sd, ed);
         },
         select: function(start, end, allDay) {
           var ed = end.subtract(1, 'days');
