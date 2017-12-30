@@ -117,7 +117,7 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         var ed = calEvent.end.unix();
         // Open the modal for edit
         if (Drupal.settings && Drupal.settings.userID > 0) {
-          window.location = Drupal.settings.basePath + 'enquiry/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '?quantity=' + 5;
+          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/quantity=' + 5;
         }
         else {
           // Open the modal for edit
@@ -130,7 +130,7 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         ed = end.unix();
         // Open the modal for edit
         if (Drupal.settings && Drupal.settings.userID > 0) {
-          window.location = Drupal.settings.basePath + 'enquiry/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '?quantity=' + 5;
+          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/quantity=' + 5;
         }
         else {
           // Open the modal for edit
