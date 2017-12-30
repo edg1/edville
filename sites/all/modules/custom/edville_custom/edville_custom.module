@@ -1,5 +1,73 @@
 <?php
 
+/**
+ * Implements hook_menu().
+ */
+function edville_custom_menu() {
+  $items = array();
+
+  $items['edville/%start_date/%end_date/%unit_id/%group_size'] = array(
+    'title' => 'Calendar booking',
+    'page callback' =>  'edville_custom_calendar_book',
+    'page arguments' => array(1, 2, 3, 4),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function edville_custom_calendar_book(DateTime $start_date, DateTime $end_date, $unit_id = 0, $group_size = 10) {
+
+  module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.commerce');
+
+  $start_date = date('y-m-d', $start_date);
+  $end_date = date('y-m-d', $end_date);
+
+  global $user;
+
+  // This is very inefficient right now but we need to create date objects
+  // reconvert them back to strings to recreate them in the Availability Agent.
+  $sd = start_date_load($start_date);
+  $ed = end_date_load($end_date);
+
+  // Let us get available rooms again and match the order against actual rooms.
+  $agent = new AvailabilityAgent($sd, $ed, $group_size);
+  $agent->setValidStates(array_keys(array_filter(variable_get('rooms_valid_availability_states', drupal_map_assoc(array(ROOMS_AVAILABLE, ROOMS_ON_REQUEST))))));
+
+  // Let us make sure our bookable unit is still available.
+  $available_units = $agent->checkAvailabilityForUnit($unit_id);
+
+  if (count($available_units) > 0) {
+    if (variable_get('rooms_checkout_style', ROOMS_COMMERCE_CHECKOUT) == ROOMS_COMMERCE_CHECKOUT) {
+
+      $unit = array_pop($available_units);
+
+      $price_modifiers = array();
+
+      // Create line item.
+
+      $line_item = rooms_create_line_item($unit, $agent, array(
+        'adults' => $group_size,
+        'children' => 0
+      ), $price_modifiers);
+
+
+      $line_item->rooms_booking_number_people['und'][0]['value'] = $group_size;
+      // Add line item to cart.
+      $line_item = commerce_cart_product_add($user->uid, $line_item, FALSE);
+
+      // Refresh line items price and redirect to bookings page.
+      commerce_cart_order_refresh(commerce_cart_order_load($user->uid));
+      drupal_goto("bookings");
+    }
+  }
+  else {
+    drupal_set_message(t('We apologize for the inconvenience; this unit is no longer available.'));
+    drupal_goto("<front>");
+  }
+}
+
 function edville_custom_form_alter(&$form, &$form_state, $form_id) {
   
   if (strpos($form_id, 'views_form_booking_cart_form_default') !== FALSE) {
@@ -1097,7 +1165,7 @@ function edville_book_unit_form_submit(&$form, &$form_state) {
       else {
         $line_item = rooms_create_line_item($unit, $agent, array('adults' => $group_size, 'children' => 0), $price_modifiers);
       }
-      
+
       $line_item->rooms_booking_number_people['und'][0]['value'] = $group_size;
       // Add line item to cart.
       $line_item = commerce_cart_product_add($user->uid, $line_item, FALSE);
