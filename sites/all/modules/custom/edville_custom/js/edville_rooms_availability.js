@@ -124,7 +124,7 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         }
 
         //if (Drupal.settings && Drupal.settings.userID > 0) {
-          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/' + 5;
+          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/' + group_size;
         //}
         //else {
         //  // Open the modal for edit
