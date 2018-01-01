@@ -272,7 +272,7 @@
                 'js' => array(
                   drupal_get_path('module', 'edville_custom') . '/js/edville_rooms_availability.js',
                   array(
-                    'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id), 'userID' => $user->uid),
+                    'data' => array('roomsAvailability' => array('roomID' => $unit_object->unit_id), 'userID' => $user->uid, 'group_size' => $unit_object->max_sleeps),
                     'type' => 'setting',
                   ),
                 ),

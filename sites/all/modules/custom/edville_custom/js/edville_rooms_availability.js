@@ -117,7 +117,7 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         var ed = calEvent.end.unix();
         // Open the modal for edit
         if (Drupal.settings && Drupal.settings.userID > 0) {
-          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/quantity=' + 5;
+          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/' + 5;
         }
         else {
           // Open the modal for edit
@@ -128,9 +128,16 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         var ed = end.subtract(1, 'days');
         var sd = start.unix();
         ed = end.unix();
+        var group_size = prompt("Please enter your group size", Drupal.settings.roomsAvailability.group_size);
+
+        if (group_size > Drupal.settings.roomsAvailability.group_size) {
+          alert('Max available group size is ' + Drupal.settings.roomsAvailability.group_size);
+          return false;
+        }
+
         // Open the modal for edit
         if (Drupal.settings && Drupal.settings.userID > 0) {
-          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/quantity=' + 5;
+          window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/' + group_size;
         }
         else {
           // Open the modal for edit

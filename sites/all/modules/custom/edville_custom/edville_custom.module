@@ -6,23 +6,31 @@
 function edville_custom_menu() {
   $items = array();
 
-  $items['edville/%start_date/%end_date/%unit_id/%group_size'] = array(
+  $items['edville/%/%/%/%'] = array(
     'title' => 'Calendar booking',
     'page callback' =>  'edville_custom_calendar_book',
     'page arguments' => array(1, 2, 3, 4),
     'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
+  );
+
+  $items['testing'] = array(
+    'title' => 'Review your reservation',
+    'title callback' => 'rooms_booking_manager_menu_title_callback',
+    'title arguments' => array('bookings'),
+    'page callback' => 'rooms_booking_manager_cart_view',
+    'access arguments' => array('access checkout'),
   );
 
   return $items;
 }
 
-function edville_custom_calendar_book(DateTime $start_date, DateTime $end_date, $unit_id = 0, $group_size = 10) {
-
+function edville_custom_calendar_book($start_date, $end_date, $unit_id = 0, $group_size = 10) {
+  error_reporting(E_ALL);
+  ini_set('display_errors', '1');
   module_load_include('inc', 'rooms_booking_manager', 'rooms_booking_manager.commerce');
 
-  $start_date = date('y-m-d', $start_date);
-  $end_date = date('y-m-d', $end_date);
+  $start_date = date('Y-m-d', $start_date);
+  $end_date = date('Y-m-d', strtotime($start_date . "+1 days"));
 
   global $user;
 
@@ -37,6 +45,7 @@ function edville_custom_calendar_book(DateTime $start_date, DateTime $end_date, 
 
   // Let us make sure our bookable unit is still available.
   $available_units = $agent->checkAvailabilityForUnit($unit_id);
+
 
   if (count($available_units) > 0) {
     if (variable_get('rooms_checkout_style', ROOMS_COMMERCE_CHECKOUT) == ROOMS_COMMERCE_CHECKOUT) {
