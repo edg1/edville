@@ -131,7 +131,7 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         var group_size = prompt("Please enter your group size", Drupal.settings.group_size);
 
         if (group_size > Drupal.settings.roomsAvailability.group_size || !group_size) {
-          alert('Max available group size is ' + Drupal.settings.roomsAvailability.group_size);
+          alert('Please input group size <= ' + Drupal.settings.group_size);
           return false;
         }
 
