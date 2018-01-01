@@ -116,13 +116,20 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         var sd = calEvent.start.unix();
         var ed = calEvent.end.unix();
         // Open the modal for edit
-        if (Drupal.settings && Drupal.settings.userID > 0) {
+        var group_size = prompt("Please enter your group size", Drupal.settings.group_size);
+
+        if (group_size > Drupal.settings.roomsAvailability.group_size || !group_size) {
+          alert('Please input group size <= ' + Drupal.settings.group_size);
+          return false;
+        }
+
+        //if (Drupal.settings && Drupal.settings.userID > 0) {
           window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/' + 5;
-        }
-        else {
-          // Open the modal for edit
-          Drupal.RoomsAvailability.Modal(view, calEvent.id, sd, ed);
-        }
+        //}
+        //else {
+        //  // Open the modal for edit
+        //  Drupal.RoomsAvailability.Modal(view, calEvent.id, sd, ed);
+        //}
       },
       select: function(start, end, allDay) {
         var ed = end.subtract(1, 'days');
@@ -136,13 +143,13 @@ function load_calendar(currentMonth, currentYear, firstDay) {
         }
 
         // Open the modal for edit
-        if (Drupal.settings && Drupal.settings.userID > 0) {
+        //if (Drupal.settings && Drupal.settings.userID > 0) {
           window.location = Drupal.settings.basePath + 'edville/' + sd + '/' + ed + '/' + Drupal.settings.roomsAvailability.roomID + '/' + group_size;
-        }
-        else {
+        //}
+        //else {
           // Open the modal for edit
-          Drupal.RoomsAvailability.Modal(this, -2, sd, ed);
-        }
+        //  Drupal.RoomsAvailability.Modal(this, -2, sd, ed);
+        //}
 
         $(value[0]).fullCalendar('unselect');
       },
