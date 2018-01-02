@@ -6488,10 +6488,12 @@ p.label-result {
 }
 p.label-result.black {
   border: 1px solid #333;
+  background: #fff;
   color: #333;
 }
 p.label-result.white {
   border: 1px solid #fff;
+  background: #333;
   color: #fff;
 }
 .search-container, .search-container + .flexslider, .search-container + .flexslider + .flexslider {
@@ -6535,7 +6537,7 @@ p.label-result.white {
   margin-top: 300px;
 }
 .rooms-availability-search .form-control.error, .rooms-availability-search .form-control.error.black {
-  border-color: red;
+  border: 1px solid red !important;
 }
 
 .view-book-a-room .view-content {
@@ -7142,9 +7144,11 @@ ul.portfolio-pagination li a:hover {
 }
 .slide.White, .slide.White a {
   color: #fff;
+  background: #333;
 }
 .slide.black, .slide.black a, .slide.Black, .slide.Black a {
   color: #333;
+  background: #fff;
 }
 .slide-content {
   position: absolute;
@@ -8778,7 +8782,11 @@ form#rooms-booking-manager-change-search-form {
   .front .rooms-availability-search .form-control.black {
     color: #333;
     border: 1px solid #333;
+    background: #fff;
     border-right: 0;
+  }
+  .front .rooms-availability-search .form-control.white {
+    background: #333;
   }
   .front .rooms-availability-search .btn-primary, .front .rooms-availability-search .btn-primary.white {
     background: #fff;
