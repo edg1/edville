@@ -7146,8 +7146,14 @@ ul.portfolio-pagination li a:hover {
   color: #fff;
   background: #333;
 }
+.slide.White .slide-description p {
+  display: block;
+  clear:both;
+  width: fit-content;
+}
 .slide.White .slide-text > span {
   background: #333;
+  padding: 0 10px;
 }
 .slide.black, .slide.black a, .slide.Black, .slide.Black a, .slide.black .slide-description p, .slide.Black .slide-description p {
   color: #333;
@@ -7155,6 +7161,12 @@ ul.portfolio-pagination li a:hover {
 }
 .slide.black .slide-text > span, .slide.Black .slide-text > span {
   background: #fff;
+  padding: 0 10px;
+}
+.slide.black .slide-description p, .slide.Black .slide-description p {
+  display: block;
+  clear:both;
+  width: fit-content;
 }
 .slide-content {
   position: absolute;
@@ -7185,13 +7197,14 @@ ul.portfolio-pagination li a:hover {
 }
 .slide-description {
   font-size: 20px;
-  margin: 50px 0;
-  display: grid;
-  align-items: center;
-  justify-content: center
+  margin: 50px auto;
+  width: 100%;
 }
 .slide-description p {
   font-size: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  padding:0 5px;
 }
 .slide-link a {
   text-transform: uppercase;
