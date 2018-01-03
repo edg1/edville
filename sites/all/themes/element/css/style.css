@@ -7142,12 +7142,18 @@ ul.portfolio-pagination li a:hover {
 .slide {
   position: relative;
 }
-.slide.White, .slide.White a {
+.slide.White, .slide.White a, .slide.White .slide-description p {
   color: #fff;
   background: #333;
 }
-.slide.black, .slide.black a, .slide.Black, .slide.Black a {
+.slide.White .slide-text > span {
+  background: #333;
+}
+.slide.black, .slide.black a, .slide.Black, .slide.Black a, .slide.black .slide-description p, .slide.Black .slide-description p {
   color: #333;
+  background: #fff;
+}
+.slide.black .slide-text > span, .slide.Black .slide-text > span {
   background: #fff;
 }
 .slide-content {
@@ -7172,7 +7178,7 @@ ul.portfolio-pagination li a:hover {
   vertical-align: middle;
   font-family: 'Open Sans',sans-serif;
 }
-.slide-text h1 {
+.slide-text > span {
   text-transform: uppercase;
   font-weight: 600;
   font-size: 48px;
@@ -7180,6 +7186,12 @@ ul.portfolio-pagination li a:hover {
 .slide-description {
   font-size: 20px;
   margin: 50px 0;
+  display: grid;
+  align-items: center;
+  justify-content: center
+}
+.slide-description p {
+  font-size: 20px;
 }
 .slide-link a {
   text-transform: uppercase;
