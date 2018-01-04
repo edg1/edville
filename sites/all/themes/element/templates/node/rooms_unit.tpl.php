@@ -125,7 +125,22 @@
         <?php endif; ?>
         <li><img src="/<?php print $theme_path . '/images/icons/group-size.png'; ?>" /><span><?php print t('Group size ') . $unit_object->max_sleeps; ?></span></li>
         <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['doubles'] . t(' doubles'); ?></span></li>
-        <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php if ($unit_object->data['bed_arrangement']['singles'] != 2) print $unit_object->data['bed_arrangement']['singles'] . t(' singles'); else print t('Sofa bed'); ?></span></li>
+        <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" />
+          <span>
+            <?php
+            switch (intval($unit_object->data['bed_arrangement']['singles'])) {
+              case 2:
+                  print t('Sofa bed');
+                  break;
+                case 0:
+                  print t('1 Sofa bed');
+                  break;
+                default:
+                  print $unit_object->data['bed_arrangement']['singles'] . t(' singles');
+              }
+            ?>
+          </span>
+        </li>
         <li><img src="/<?php print $theme_path . '/images/icons/shower.png'; ?>" /><span><?php print $unit_object->field_showers['und'][0]['value'] . t(' shower'); ?></span></li>
 
         <?php if (isset($unit_object->field_student_approved['und'][0]['value']) && $unit_object->field_student_approved['und'][0]['value']): ?>
@@ -313,7 +328,22 @@
       <?php endif; ?>
       <li><img src="/<?php print $theme_path . '/images/icons/group-size.png'; ?>" /><span><?php print t('Group size ') . $unit_object->max_sleeps; ?></span></li>
       <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php print $unit_object->data['bed_arrangement']['doubles'] . t(' doubles'); ?></span></li>
-      <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" /><span><?php if ($unit_object->data['bed_arrangement']['singles'] != 2) print $unit_object->data['bed_arrangement']['singles'] . t(' singles'); else print t('Sofa bed'); ?></span></li>
+      <li><img src="/<?php print $theme_path . '/images/icons/bed.png'; ?>" />
+        <span>
+          <?php
+          switch (intval($unit_object->data['bed_arrangement']['singles'])) {
+            case 2:
+              print t('Sofa bed');
+              break;
+            case 0:
+              print t('1 Sofa bed');
+              break;
+            default:
+              print $unit_object->data['bed_arrangement']['singles'] . t(' singles');
+          }
+          ?>
+        </span>
+      </li>
       <li><img src="/<?php print $theme_path . '/images/icons/shower.png'; ?>" /><span><?php print $unit_object->field_showers['und'][0]['value'] . t(' shower'); ?></span></li>
       <?php if (isset($unit_object->field_student_approved['und'][0]['value']) && $unit_object->field_student_approved['und'][0]['value']): ?>
       <li><img src="/<?php print $theme_path . '/images/icons/student-approved.png'; ?>" /><span><?php print t('Student approved'); ?></span></li>
