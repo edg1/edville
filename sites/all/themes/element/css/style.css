@@ -7150,10 +7150,12 @@ ul.portfolio-pagination li a:hover {
   display: block;
   clear:both;
   width: fit-content;
+  border: 1px solid #fff;
 }
 .slide.White .slide-text > span {
   background: #333;
   padding: 0 10px;
+  border: 1px solid #fff;
 }
 .slide.black, .slide.black a, .slide.Black, .slide.Black a, .slide.black .slide-description p, .slide.Black .slide-description p {
   color: #333;
@@ -7162,11 +7164,13 @@ ul.portfolio-pagination li a:hover {
 .slide.black .slide-text > span, .slide.Black .slide-text > span {
   background: #fff;
   padding: 0 10px;
+  border: 1px solid #333;
 }
 .slide.black .slide-description p, .slide.Black .slide-description p {
   display: block;
   clear:both;
   width: fit-content;
+  border: 1px solid #333;
 }
 .slide-content {
   position: absolute;
