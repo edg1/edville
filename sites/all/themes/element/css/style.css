@@ -7204,7 +7204,7 @@ ul.portfolio-pagination li a:hover {
   font-size: 20px;
   margin-left: auto;
   margin-right: auto;
-  padding:0 5px;
+  padding:5px 5px;
 }
 .slide-link a {
   text-transform: uppercase;
