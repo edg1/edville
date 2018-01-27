@@ -1237,6 +1237,7 @@ function mobile_detect_get_object() {
 
 function edville_custom_menu_alter(&$items) {
   $items['cart']['page callback'] = 'edville_custom_cart_redirect';
+  $items['admin/rooms']['title'] = t('Room Types');
 }
 
 function edville_custom_cart_redirect() {
