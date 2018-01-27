@@ -7142,39 +7142,17 @@ ul.portfolio-pagination li a:hover {
 .slide {
   position: relative;
 }
-.slide.White, .slide.White a, .slide.White .slide-description p {
+.slide.White, .slide.White a {
   color: #fff;
   background: #333;
 }
-.slide.White .slide-description p {
-  display: block;
-  clear:both;
-  width: fit-content;
-  border: 1px solid #fff;
-}
-.slide.White .slide-text > span {
-  background: #333;
-  padding: 0 10px;
-  border: 1px solid #fff;
-}
-.slide.black, .slide.black a, .slide.Black, .slide.Black a, .slide.black .slide-description p, .slide.Black .slide-description p {
+.slide.black, .slide.black a, .slide.Black, .slide.Black a {
   color: #333;
   background: #fff;
 }
-.slide.black .slide-text > span, .slide.Black .slide-text > span {
-  background: #fff;
-  padding: 0 10px;
-  border: 1px solid #333;
-}
-.slide.black .slide-description p, .slide.Black .slide-description p {
-  display: block;
-  clear:both;
-  width: fit-content;
-  border: 1px solid #333;
-}
 .slide-content {
   position: absolute;
-  width: 100%;
+  width: 100%;  
   height: 100%;
   z-index: 7;
   top: 0;
@@ -7194,21 +7172,14 @@ ul.portfolio-pagination li a:hover {
   vertical-align: middle;
   font-family: 'Open Sans',sans-serif;
 }
-.slide-text > span {
+.slide-text h1 {
   text-transform: uppercase;
   font-weight: 600;
   font-size: 48px;
 }
 .slide-description {
   font-size: 20px;
-  margin: 50px auto;
-  width: 100%;
-}
-.slide-description p {
-  font-size: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  padding:5px 5px;
+  margin: 50px 0;
 }
 .slide-link a {
   text-transform: uppercase;
