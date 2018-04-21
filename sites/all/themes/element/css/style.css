@@ -4671,6 +4671,9 @@ input[type=text] {
   background: none;
   margin-bottom: 0;
 }
+.page-heusden, .page-heusden .line-banner-section {
+  background-color: #F7CACB;
+}
 .feature-section2.pattern-back {
   padding: 60px 0;
   background: url('../images/pattern2.jpg') repeat;
