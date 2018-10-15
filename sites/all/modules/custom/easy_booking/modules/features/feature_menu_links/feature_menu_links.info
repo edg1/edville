@@ -1,0 +1,37 @@
+name = feature menu links
+core = 7.x
+package = Features
+version = 7.x-1.1
+project = feature_menu_links
+dependencies[] = feature_our_services_view
+dependencies[] = features
+dependencies[] = menu
+features[features_api][] = api:2
+features[menu_custom][] = main-menu
+features[menu_links][] = main-menu_about-area:about
+features[menu_links][] = main-menu_book-a-room:book
+features[menu_links][] = main-menu_contact:contact
+features[menu_links][] = main-menu_home:<front>
+features[menu_links][] = main-menu_news:news
+features[menu_links][] = main-menu_our-hotel:node/22
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

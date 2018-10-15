@@ -1,0 +1,19 @@
+name = Colorized gmap
+description = Allows to create blocks with google map and provide UI to customize them.
+core = 7.x
+package = Map
+
+dependencies[] = libraries
+dependencies[] = block
+dependencies[] = entity
+
+help = admin/help/colorized_gmap
+configure = admin/config/content/colorized_gmap
+files[] = colorized_gmap.info.inc
+
+; Information added by Drupal.org packaging script on 2018-02-27
+version = "7.x-1.5"
+core = "7.x"
+project = "colorized_gmap"
+datestamp = "1519728198"
+

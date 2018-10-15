@@ -1,0 +1,15 @@
+; easy_booking make file for local development
+core = "7.x"
+api = "2"
+
+projects[drupal][version] = "7.x"
+; include the d.o. profile base
+includes[] = "drupal-org.make"
+
+; easy_booking
+libraries[corporate_profile][directory_name] = "easy_booking"
+libraries[corporate_profile][type] = "profile"
+libraries[corporate_profile][destination] = "../../profiles"
+libraries[corporate_profile][download][type] = "get"
+libraries[corporate_profile][download][url] = "http://ftp.drupal.org/files/projects/easy_booking-7.x-2.x-dev.tar.gz"
+

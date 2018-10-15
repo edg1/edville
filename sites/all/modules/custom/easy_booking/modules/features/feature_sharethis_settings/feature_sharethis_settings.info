@@ -1,0 +1,53 @@
+name = Feature ShareThis Settings
+description = 7.x-1.1
+core = 7.x
+package = Features
+version = 7.x-1.1
+project = feature_sharethis_settings
+dependencies[] = feature_content_type_news
+dependencies[] = ctools
+dependencies[] = sharethis
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[variable][] = sharethis_about_options
+features[variable][] = sharethis_article_options
+features[variable][] = sharethis_button_option
+features[variable][] = sharethis_comments
+features[variable][] = sharethis_late_load
+features[variable][] = sharethis_location
+features[variable][] = sharethis_news_options
+features[variable][] = sharethis_node_types
+features[variable][] = sharethis_option_extras
+features[variable][] = sharethis_option_neworzero
+features[variable][] = sharethis_option_onhover
+features[variable][] = sharethis_option_shorten
+features[variable][] = sharethis_our_services_options
+features[variable][] = sharethis_page_options
+features[variable][] = sharethis_publisherID
+features[variable][] = sharethis_service_option
+features[variable][] = sharethis_slideshow_header_options
+features[variable][] = sharethis_twitter_recommends
+features[variable][] = sharethis_weight
+features[variable][] = sharethis_widget_option
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

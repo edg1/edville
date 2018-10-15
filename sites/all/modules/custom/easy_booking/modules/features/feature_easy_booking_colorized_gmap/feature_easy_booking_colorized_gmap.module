@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the easy booking colorized gmap feature.
+ */
+
+include_once 'feature_easy_booking_colorized_gmap.features.inc';

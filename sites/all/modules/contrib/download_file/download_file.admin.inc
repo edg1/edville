@@ -1,5 +1,4 @@
 <?php
-// $Id: download_file.admin.inc,v 1.1.4.2 2010/11/15 08:07:02 xmattx Exp $
 
 /**
  * @file
@@ -32,7 +31,7 @@ function download_file_settings_validate($form, &$form_state) {
   if (strpos($format, '!extension') === FALSE || strpos($format, '!file_size') === FALSE) {
     form_set_error('download_file_accessible_format', t('The format must contain the two variables <em>!extension</em> and <em>!file_size</em>.'));
   }
-  else if (strip_tags($format) != $format) {
+  elseif (strip_tags($format) != $format) {
     form_set_error('download_file_accessible_format', t('The format must not contain any HTML tags.'));
   }
 }

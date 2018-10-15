@@ -1,0 +1,68 @@
+name = feature Content type article
+core = 7.x
+package = Features
+version = 7.x-1.2
+project = feature_content_type_article
+dependencies[] = feature_content_type_about_area
+dependencies[] = feature_content_type_our_services
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = flexslider_fields
+dependencies[] = image
+dependencies[] = strongarm
+dependencies[] = taxonomy
+dependencies[] = text
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[field_base][] = field_body
+features[field_base][] = field_outline
+features[field_base][] = field_slideshow_comment
+features[field_base][] = field_slideshow_images
+features[field_base][] = field_subtitle
+features[field_instance][] = node-article-body
+features[field_instance][] = node-article-field_body
+features[field_instance][] = node-article-field_image
+features[field_instance][] = node-article-field_outline
+features[field_instance][] = node-article-field_slideshow_comment
+features[field_instance][] = node-article-field_slideshow_images
+features[field_instance][] = node-article-field_subtitle
+features[field_instance][] = node-article-field_tags
+features[node][] = article
+features[taxonomy][] = tags
+features[variable][] = comment_anonymous_article
+features[variable][] = comment_article
+features[variable][] = comment_default_mode_article
+features[variable][] = comment_default_per_page_article
+features[variable][] = comment_form_location_article
+features[variable][] = comment_preview_article
+features[variable][] = comment_subject_field_article
+features[variable][] = field_bundle_settings_node__article
+features[variable][] = menu_options_article
+features[variable][] = menu_parent_article
+features[variable][] = node_options_article
+features[variable][] = node_preview_article
+features[variable][] = node_submitted_article
+features_exclude[field_base][field_image] = field_image
+features_exclude[field_base][body] = body
+features_exclude[field_base][field_tags] = field_tags
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

@@ -1,0 +1,63 @@
+name = feature image styles
+description = These image styles are used for news and about area carousels, for about area slideshow and for news node view
+core = 7.x
+package = Features
+version = 7.x-1.5
+project = feature_image_styles
+dependencies[] = date
+dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = features
+dependencies[] = field_ui
+dependencies[] = block
+dependencies[] = file
+dependencies[] = flexslider
+dependencies[] = flippy
+dependencies[] = image
+dependencies[] = owlcarousel
+dependencies[] = rooms_booking_manager
+dependencies[] = simplenews
+dependencies[] = views
+dependencies[] = webform
+dependencies[] = strongarm
+dependencies[] = taxonomy
+dependencies[] = jquery_update
+dependencies[] = text
+dependencies[] = ctools
+dependencies[] = entityreference
+dependencies[] = uuid_features
+dependencies[] = entity_view_mode
+dependencies[] = variable
+dependencies[] = rooms_booking_manager
+dependencies[] = node_reference
+dependencies[] = rules
+dependencies[] = ckeditor
+dependencies[] = uuid
+dependencies[] = uuid_features
+features[features_api][] = api:2
+features[image][] = article_image_style
+features[image][] = carousel
+features[image][] = news-image
+features[image][] = pay_reserved_full
+features[image][] = slideshow
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

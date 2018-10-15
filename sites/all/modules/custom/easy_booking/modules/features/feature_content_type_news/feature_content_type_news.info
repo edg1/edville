@@ -1,0 +1,84 @@
+name = feature Content type News
+description = A content type for your news.
+core = 7.x
+package = Features
+version = 7.x-1.8
+project = feature_content_type_news
+dependencies[] = feature_content_type_about_area
+dependencies[] = features
+dependencies[] = field_slideshow
+dependencies[] = flexslider_fields
+dependencies[] = flippy
+dependencies[] = image
+dependencies[] = options
+dependencies[] = strongarm
+dependencies[] = taxonomy
+dependencies[] = text
+dependencies[] = uuid
+dependencies[] = uuid_features
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[field_base][] = field_news_tag
+features[field_instance][] = node-news-body
+features[field_instance][] = node-news-field_news_image
+features[field_instance][] = node-news-field_news_outline
+features[field_instance][] = node-news-field_news_slideshow
+features[field_instance][] = node-news-field_news_slideshow_comment
+features[field_instance][] = node-news-field_news_subtitle
+features[field_instance][] = node-news-field_news_tag
+features[node][] = news
+features[taxonomy][] = news_category
+features[uuid_term][] = 49e0078e-6962-401a-ae27-72abdd77e428
+features[uuid_term][] = 6e015af1-39f7-4236-9666-cedca25669f7
+features[uuid_term][] = db56ead8-51a5-474e-a925-8110c877e2ca
+features[variable][] = comment_anonymous_news
+features[variable][] = comment_default_mode_news
+features[variable][] = comment_default_per_page_news
+features[variable][] = comment_form_location_news
+features[variable][] = comment_news
+features[variable][] = comment_preview_news
+features[variable][] = comment_subject_field_news
+features[variable][] = field_bundle_settings_node__news
+features[variable][] = flippy_custom_sorting_news
+features[variable][] = flippy_ellipse_news
+features[variable][] = flippy_first_label_news
+features[variable][] = flippy_firstlast_news
+features[variable][] = flippy_head_news
+features[variable][] = flippy_last_label_news
+features[variable][] = flippy_loop_news
+features[variable][] = flippy_news
+features[variable][] = flippy_next_label_news
+features[variable][] = flippy_order_news
+features[variable][] = flippy_prev_label_news
+features[variable][] = flippy_random_label_news
+features[variable][] = flippy_random_news
+features[variable][] = flippy_show_empty_news
+features[variable][] = flippy_sort_news
+features[variable][] = flippy_truncate_news
+features[variable][] = menu_options_news
+features[variable][] = menu_parent_news
+features[variable][] = node_options_news
+features[variable][] = node_preview_news
+features[variable][] = node_submitted_news
+features_exclude[field_base][body] = body
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

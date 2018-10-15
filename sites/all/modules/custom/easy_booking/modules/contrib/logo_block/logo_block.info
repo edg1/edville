@@ -1,0 +1,13 @@
+name = Logo Block
+description = Renders the site logo in a block
+package = Other
+core = 7.x
+dependencies[] = block
+dependencies[] = image
+
+; Information added by Drupal.org packaging script on 2017-06-30
+version = "7.x-1.7"
+core = "7.x"
+project = "logo_block"
+datestamp = "1498837444"
+

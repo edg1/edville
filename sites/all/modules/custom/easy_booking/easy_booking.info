@@ -1,0 +1,185 @@
+; Packaging information for easy_booking
+name = "Easy Booking"
+description = ""
+core = "7.x"
+; ----------
+; Dependencies
+; ----------
+; Administration
+dependencies[] = admin_menu
+; Chaos tool suite
+dependencies[] = ctools
+; Commerce
+dependencies[] = commerce
+dependencies[] = commerce_cart
+dependencies[] = commerce_checkout
+dependencies[] = commerce_customer
+dependencies[] = commerce_customer_ui
+dependencies[] = commerce_line_item
+dependencies[] = commerce_line_item_ui
+dependencies[] = commerce_order
+dependencies[] = commerce_order_ui
+dependencies[] = commerce_price
+dependencies[] = commerce_product
+dependencies[] = commerce_product_pricing
+dependencies[] = commerce_product_reference
+dependencies[] = commerce_product_ui
+dependencies[] = commerce_ui
+; Commerce (contrib)
+dependencies[] = commerce_cart_expiration
+; Context
+dependencies[] = context
+dependencies[] = context_layouts
+dependencies[] = context_ui
+; Core
+dependencies[] = block
+dependencies[] = color
+dependencies[] = comment
+dependencies[] = contextual
+dependencies[] = dashboard
+dependencies[] = dblog
+dependencies[] = field
+dependencies[] = field_sql_storage
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = filter
+dependencies[] = help
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = node
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = rdf
+dependencies[] = search
+dependencies[] = shortcut
+dependencies[] = system
+dependencies[] = taxonomy
+dependencies[] = text
+dependencies[] = update
+dependencies[] = user
+; Date/Time
+dependencies[] = date
+dependencies[] = date_all_day
+dependencies[] = date_api
+dependencies[] = date_popup
+dependencies[] = date_tools
+dependencies[] = date_views
+; Easy Booking
+dependencies[] = easy_booking_custom
+dependencies[] = easy_booking_export
+; Features extra
+dependencies[] = fe_block
+; Fields
+dependencies[] = addressfield
+dependencies[] = entityreference
+dependencies[] = field_placeholder
+dependencies[] = field_slideshow
+dependencies[] = node_reference
+dependencies[] = references
+; FlexSlider
+dependencies[] = flexslider
+dependencies[] = flexslider_fields
+dependencies[] = flexslider_views
+; Mail
+dependencies[] = simplenews
+dependencies[] = simplenews_rules
+; Map
+dependencies[] = colorized_gmap
+; Media
+dependencies[] = imce
+; Other
+dependencies[] = block_class
+dependencies[] = entity
+dependencies[] = entity_token
+dependencies[] = entity_view_mode
+dependencies[] = flippy
+dependencies[] = libraries
+dependencies[] = logo_block
+dependencies[] = strongarm
+dependencies[] = token
+dependencies[] = pathauto
+; Owl Carousel
+dependencies[] = owlcarousel
+dependencies[] = owlcarousel_fields
+dependencies[] = owlcarousel_ui
+dependencies[] = owlcarousel_views
+; Rooms
+dependencies[] = rooms
+dependencies[] = rooms_availability
+dependencies[] = rooms_availability_reference
+dependencies[] = rooms_booking
+dependencies[] = rooms_booking_manager
+dependencies[] = rooms_pricing
+dependencies[] = rooms_ui
+dependencies[] = rooms_unit
+dependencies[] = bat
+; Rules
+dependencies[] = rules
+dependencies[] = rules_admin
+dependencies[] = rules_scheduler
+; Sharing
+dependencies[] = sharethis
+; UUID
+dependencies[] = uuid
+dependencies[] = uuid_services
+; User interface
+dependencies[] = ckeditor
+dependencies[] = form_placeholder
+dependencies[] = jquery_update
+; Variable
+dependencies[] = variable
+dependencies[] = variable_admin
+dependencies[] = variable_realm
+dependencies[] = variable_store
+dependencies[] = variable_views
+; Views
+dependencies[] = better_exposed_filters
+dependencies[] = views
+dependencies[] = views_ui
+; Webform
+dependencies[] = webform
+; Features
+dependencies[] = features
+dependencies[] = uuid_features
+dependencies[] = commerce_features
+dependencies[] = feature_ask_a_question_content
+dependencies[] = feature_book_a_room
+dependencies[] = feature_booking_theme_settings
+dependencies[] = feature_content_type_about_area
+dependencies[] = feature_content_type_article
+dependencies[] = feature_content_type_news
+dependencies[] = feature_content_type_our_services
+dependencies[] = feature_content_type_page
+dependencies[] = feature_page_node
+dependencies[] = feature_custom_blocks_export
+dependencies[] = feature_custom_copyright_block_export
+dependencies[] = feature_rules_notify_admin
+dependencies[] = feature_frontpage_slideshow_ct_view
+dependencies[] = feature_our_services_view
+dependencies[] = feature_popular_rooms_view
+dependencies[] = feature_room_top_slideshow
+dependencies[] = feature_views_about_area
+dependencies[] = feature_views_news
+dependencies[] = feature_image_styles
+dependencies[] = feature_menu_links
+dependencies[] = feature_news_nodes
+dependencies[] = feature_our_hotel_node
+dependencies[] = feature_our_services_nodes
+dependencies[] = feature_about_area_nodes
+dependencies[] = feature_frontpage_slideshow_nodes
+dependencies[] = feature_blocks_settings_export
+dependencies[] = feature_profile_type_billing_information
+dependencies[] = feature_room
+dependencies[] = feature_rooms_settings
+dependencies[] = feature_sharethis_settings
+dependencies[] = feature_permissions_export
+dependencies[] = feature_ckeditor_profiles
+dependencies[] = feature_easy_booking_colorized_gmap
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the page node feature.
+ */
+
+include_once 'feature_page_node.features.inc';

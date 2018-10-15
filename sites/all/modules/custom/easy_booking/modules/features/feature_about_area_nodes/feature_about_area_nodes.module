@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the about_area_nodes feature.
+ */
+
+include_once 'feature_about_area_nodes.features.inc';

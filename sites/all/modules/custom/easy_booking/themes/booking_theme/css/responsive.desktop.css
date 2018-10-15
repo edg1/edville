@@ -1,0 +1,305 @@
+/*  OTHER  */
+html,
+body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
+#page-wrapper {
+  min-height:100%;
+  position:relative;
+}
+#columns {
+  padding-bottom: 180px;
+}
+.node-type-news #columns,
+.node-type-about #columns,
+.node-type-page  .not-front #columns {
+  margin-top: 110px;
+}
+.region-content-aside {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+
+
+/*  HEADER  */
+.region-secondary-content{
+    margin-top: 0;
+}
+#header {
+  background: rgba(0, 0, 0, 0.8);
+  top:0;
+  position: fixed;
+  z-index: 500;
+}
+#header #block-system-main-menu {
+  float: right;
+  margin: 0;
+  font-weight: bold;
+}
+#header #block-system-main-menu ul.menu li {
+  float: left;
+  list-style: none;
+  margin-right: 20px;
+}
+#header #block-system-main-menu ul.menu a {
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  line-height: 42px;
+    -webkit-transition: color 0.5s;
+  transition: color 0.5s;
+}
+#header #block-system-main-menu ul.menu li.last a {
+  display: block;
+  border: 2px solid #fff;
+ text-align: center;
+  width: 100%;
+  padding: 0 10px;
+  line-height: 42px;
+  -webkit-transition: background 0.5s;
+  transition: background 0.5s;
+  margin-top: -2px;
+}
+#header #block-system-main-menu ul.menu li.last a:hover {
+  background: #f99801;
+  color: #fff;
+}
+#header #block-system-main-menu a.active {
+  padding-bottom: 13px;
+}
+#header #block-system-main-menu li.last a.active {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+#header .menu-expand-button-block {
+  display: none;
+}
+
+
+/*  CONTACT  */
+.hotel-adress-block {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.hotel-adress-block .contact {
+  position: absolute;
+  left: 300px;
+  top: 50px;
+  background: #fff;
+  padding: 40px;
+}
+.hotel-adress-block .contact ul {
+  list-style: none;
+  padding: 0;
+}
+.hotel-adress-block .contact h1,
+.hotel-adress-block .contact p,
+.hotel-adress-block .contact a {
+  margin: 0;
+  color: #000;
+}
+.hotel-adress-block .contact h1 {
+  text-transform: uppercase;
+  font-size: 35px;
+}
+.hotel-adress-block button {
+  padding: 5px 20px 5px 20px;
+  background: #fff;
+  border: 1px solid #000;
+}
+
+
+/*  CONTACTS  */
+.page-contact .contacts-mail-and-phone-block {
+  top: 25%;
+}
+.contacts-mail-and-phone-block {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  margin: -145px 0 0 -350px;
+  background: #fff;
+  padding: 30px 50px 40px 40px;
+}
+.contacts-mail-and-phone-block h1,
+.contacts-mail-and-phone-block .block-content p,
+.contacts-mail-and-phone-block .block-content a {
+  margin: 0;
+  color: #000;
+  text-decoration: none;
+}
+.contacts-mail-and-phone-block .block-title {
+  text-transform: uppercase;
+  font-size: 35px;
+  margin-bottom: 10px;
+  color: #000;
+}
+.contacts-mail-and-phone-block button {
+  margin-top: 20px;
+  padding: 8px 20px 8px 20px;
+  background: #fff;
+  border: 1px solid #000;
+  font-size: 17px;
+  text-transform: uppercase;
+  -webkit-transition: background 0.5s;
+  transition: background 0.5s;
+}
+.contacts-mail-and-phone-block button:hover {
+  background: #f99801;
+  border-color: #f99801;
+  color: #fff;
+}
+.contacts-mail-and-phone-block .address {
+  background-image: url(../images/contact/address.png);
+}
+.contacts-mail-and-phone-block .mail {
+  background-image: url(../images/contact/email.png);
+}
+.contacts-mail-and-phone-block .phone {
+  background-image: url(../images/contact/phone.png);
+}
+.contacts-mail-and-phone-block .contact {
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 5px 0 5px 40px;
+}
+
+
+/*  ASK A QUESTION  */
+.page-contact .webform-ask-a-question-block{
+  top: 25%;
+}
+.webform-ask-a-question-block {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  margin-top: -145px;
+  background: #fff;
+  padding: 30px 40px 30px 40px;
+  display: none;
+}
+.webform-ask-a-question-block .block-title {
+  text-transform: uppercase;
+  font-size: 30px;
+  margin-bottom: 25px;
+  color: #000;
+}
+.webform-ask-a-question-block #edit-submitted-you-name {
+  width: 220px;
+  padding: 5px;
+}
+.webform-ask-a-question-block #edit-submitted-email {
+  width: 220px;
+  padding: 5px;
+}
+.webform-ask-a-question-block #edit-submitted-message {
+  width: 234px;
+  padding: 5px;
+  resize: none;
+}
+.webform-ask-a-question-block .webform-submit {
+  border: 1px solid #999;
+}
+.page-user #main-content {
+    padding-top: 100px;
+    padding-bottom: 30px;
+}
+.node-type-news #main-content-header{
+  padding-top: 0;
+  width: 90%;
+  float: right;
+  border-right: none;
+}
+.node-type-article #main-content-header,
+.node-type-about #main-content-header{
+  padding-top: 0;
+  width: 90%;
+}
+.node-type-news .title-wrapper {
+  width: 80%;
+}
+.node-type-news .sidebar .title-wrapper {
+  width: 100%;
+}
+.node-type-news #main-content #content,
+.node-type-about #main-content #content {
+  width: 100%;
+  padding-right: 0;
+}
+.node-type-article #block-system-main .node-article,
+.node-type-news #block-system-main .node-news,
+.node-type-about #block-system-main .node-about{
+  width: 90%;
+  margin: 0 auto;
+}
+.node-type-news #block-sharethis-sharethis-block {
+  width: 100%;
+}
+.node-type-article #vlock-sharethis-sharethis-block,
+.node-type-about #block-sharethis-sharethis-block {
+width: 800px;
+}
+.region-sidebar-first {
+  padding-top: 30px;
+}
+.page-node #block-system-main {
+  width: 100%;
+}
+.page-node.not-front.no-sidebars #block-system-main {
+  width: 800px;
+}
+.page-node #main-content-header #tasks {
+  width: 100%;
+}
+.node-type-article #columns {
+  width: 1000px;
+  margin: 0 auto;
+}
+.node-type-about #columns {
+  width: 1000px;
+  margin: 100px auto 0 auto;
+}
+.two-sidebars.node-type-news #main-content #content {
+  border-right: none;
+}
+.page-booking #columns,
+.page-book #columns {
+  width: 980px;
+  margin: 0 auto;
+}
+.page-unit div#messages {
+  margin-left: 300px;
+}
+.checkout-steps-block .step.step-submit {
+    width: 324px;
+}
+.page-checkout .form-item-customer-profile-billing-commerce-customer-address-und-0-administrative-area,
+.page-checkout .form-item-customer-profile-billing-commerce-customer-address-und-0-locality {
+  width: 90%;
+}
+
+.page-about #content {
+  padding-bottom: 20px;
+}
+.page-about #content-column{
+  padding-bottom: 20px;
+}
+.page-news div.news-no-results {
+  height: 440px;
+  border-right: 1px solid #999;
+  margin-right: -1px;
+}
+.not-logged-in.page-news div.news-no-results {
+  height: 520px;
+}
+#block-views-news-recent-news-block .news-image-wrapper {
+  overflow: hidden;
+  width: 390px;
+  height: 254px;
+  margin:0 auto;
+}

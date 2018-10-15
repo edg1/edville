@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the ask a question content feature.
+ */
+
+include_once 'feature_ask_a_question_content.features.inc';

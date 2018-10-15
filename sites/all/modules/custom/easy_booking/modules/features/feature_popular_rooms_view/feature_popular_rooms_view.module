@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Popular rooms view feature.
+ */
+
+include_once 'feature_popular_rooms_view.features.inc';

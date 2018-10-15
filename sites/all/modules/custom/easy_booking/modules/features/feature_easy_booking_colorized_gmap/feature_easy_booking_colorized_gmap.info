@@ -1,0 +1,23 @@
+name = feature easy booking colorized gmap
+core = 7.x
+package = Features
+version = 7.x-2.0-beta1
+project = easy_booking
+dependencies[] = colorized_gmap
+dependencies[] = context_ui
+dependencies[] = entity
+dependencies[] = fe_block
+dependencies[] = feature_custom_blocks_export
+datestamp = 1428487686
+features[colorized_gmap][] = colorized_gmap_1427792708
+features[colorized_gmap][] = colorized_gmap_1469694601
+features[fe_block_settings][] = colorized_gmap-3
+features[fe_block_settings][] = colorized_gmap-4
+features[features_api][] = api:2
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+
