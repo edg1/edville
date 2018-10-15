@@ -32,6 +32,44 @@
  29.footer
  30.Responsive part
 -------------------------------------------------*/
+
+
+@font-face {
+  font-family: "Brandon Bold";
+  src: url('../fonts/Brandon_bld.otf'),
+  url('../fonts/Brandon_bld_it.otf');
+}
+
+@font-face {
+  font-family: "Brandon Black";
+  src: url('../fonts/Brandon_blk.otf'),
+  url('../fonts/Brandon_bld_it.otf');
+}
+
+@font-face {
+  font-family: "Brandon Light";
+  src: url('../fonts/Brandon_light.otf'),
+  url('../fonts/Brandon_light_it.otf');
+}
+
+@font-face {
+  font-family: "Brandon Meidum";
+  src: url('../fonts/Brandon_med%20(1).otf'),
+  url('../fonts/Brandon_med_it.otf');
+}
+
+@font-face {
+  font-family: "Brandon Regular";
+  src: url('../fonts/Brandon_reg.otf'),
+  url('../fonts/Brandon_reg_it.otf');
+}
+
+@font-face {
+  font-family: "Brandon Thin";
+  src: url('../fonts/Brandon_thin.otf'),
+  url('../fonts/Brandon_thin_it.otf');
+}
+
 /*-------------------------------------------------------*/
 /* 1. Isotope filtering
 /*-------------------------------------------------------*/
@@ -4671,6 +4709,123 @@ input[type=text] {
   background: none;
   margin-bottom: 0;
 }
+.page-heusden, .page-heusden .line-banner-section {
+  background-color: #F7CACB;
+  font-family: "Brandon Light";
+}
+body, .p {
+  font-family: "Brandon Light";
+}
+.page-heusden .slides .slide-content img, .heusden-slide .slide-content img {
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+}
+.heusden-slide .slide-text {
+  display: block;
+  margin-top: 110px;
+}
+.heusden-slide .slide-text h4 {
+  font-size: 35px;
+  font-family: "Brandon Meidum";
+}
+.heusden-slide .slide-description {
+  margin-top: 80px;
+}
+.heusden-slide p, .heusden-slide h1, .page-heusden .slide-description p, .page-heusden .slide-description h1{
+  margin: 0;
+}
+.front .heusden-slide .slide-link {
+  margin-top: 200px;
+}
+.page-heusden .summary {
+  background-color: #feece9;
+  border-radius: 5px;
+  padding: 15px 25px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.page-heusden .summary .highlight {
+  margin: 20px 0;
+}
+.page-heusden .summary p {
+  margin: 0;
+  font-family: "Brandon Thin";
+  font-size: 1.45em;
+}
+.page-heusden .summary .pull-right h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.45em;
+  font-family: "Brandon Light";
+}
+.page-heusden .summary .pull-right .pull-right {
+  text-align: center;
+}
+.page-heusden .summary .circle {
+  border-radius: 50%;
+  background-color: #fff;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+.page-heusden .summary .circle p {
+  margin: 5px 0;
+  font-family: "Brandon Light";
+}
+.page-heusden .summary .pull-right {
+  margin: 15px 0 0 10px;
+}
+.page-heusden .summary .pull-right p {
+  font-size: 1.2em;
+}
+.page-heusden .slide-content .wrapper .slide-text h4 {
+  font-family: "Brandon Meidum";
+  font-size: 3.45em;
+}
+.page-heusden .slide-content .wrapper .slide-text .slide-description p {
+  font-family: "Brandon Thin";
+  font-size: .8em;
+}
+.page-heusden .summary .pull-right p:first-child {
+  font-family: "Brandon Light";
+  font-size: 1.5em;
+}
+.page-heusden .summary .circle p:first-child {
+  font-size: 3.45em;
+  font-family: "Brandon Light";
+}
+.page-heusden .summary .line {
+  border-bottom: 1px solid;
+  width: 30px;
+  margin: 0 auto;
+  height: 1px;
+}
+.page-heusden .body-header {
+  padding-bottom: 5px;
+  border-bottom: 2px solid;
+}
+.page-heusden ul.logo {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: table;
+  width: 100%;
+}
+.page-heusden ul.logo li {
+  display: table-cell;
+}
+.page-heusden ul.logo li img {
+  display: block;
+  margin: 0 auto;
+}
+.page-heusden ul.logo li:first-child img {
+  margin-left: 0;
+}
+.page-heusden ul.logo li:last-child img {
+  margin-right: 0;
+}
 .feature-section2.pattern-back {
   padding: 60px 0;
   background: url('../images/pattern2.jpg') repeat;
@@ -7170,16 +7325,18 @@ ul.portfolio-pagination li a:hover {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
-  font-family: 'Open Sans',sans-serif;
 }
 .slide-text h1 {
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 48px;
+  font-size: 3em;
+  font-family: "Brandon Thin";
 }
 .slide-description {
   font-size: 20px;
-  margin: 50px 0;
+}
+.page-heusden .slide-description {
+  margin: 156px 0 0 0;
 }
 .slide-link a {
   text-transform: uppercase;
@@ -7355,6 +7512,7 @@ ul.portfolio-pagination li a:hover {
   text-align: left;
   margin-top: 50px;
   list-style: none;
+  padding-left: 0;
 }
 .page-contact .contact-content ul li {
   margin-bottom: 15px;
@@ -8138,6 +8296,32 @@ form#rooms-booking-manager-change-search-form {
 .rooms-book-unit-form .rooms-search-result__select-childrensage .form-control {
   width: auto;
 }
+.page-heusden .pane-content .heusden-content h3 {
+  font-family: "Brandon Regular";
+  font-size: 2.2em;
+}
+.page-heusden .pane-content .heusden-content .heusden-body .body-header > div.pull-left {
+  font-size: 1.45em;
+  font-family: "Brandon Meidum";
+}
+.page-heusden .pane-content .heusden-content .heusden-body .body-header > div.pull-right {
+  font-size: 1.45em;
+  font-family: "Brandon Meidum";
+}
+.page-heusden .pane-content .heusden-content div > h1 {
+  font-size: 1.45em;
+  font-family: "Brandon Meidum";
+}
+.page-heusden .pane-content .heusden-content div div.rteleft {
+  font-family: "Brandon Light";
+  font-size: 1.45em;
+}
+.page-heusden .pane-content .heusden-content div div.rteleft:nth-child(6), .pane-custom .pane-content .heusden-content div div.rteleft:nth-child(3), .pane-custom .pane-content .heusden-content div div.rteleft:nth-child(4) {
+  text-align: center;
+  font-family: "Brandon Light";
+  font-size: 1.45em;
+}
+
 /*-------------------------------------------------*/
 /* =  Responsive Part
 /*-------------------------------------------------*/
@@ -8380,7 +8564,16 @@ form#rooms-booking-manager-change-search-form {
   header .inactive_logo {
     display: block !important;
   }
-
+  .page-heusden ul.logo {
+    text-align: center;
+  }
+  .page-heusden ul.logo li{
+    display: inline-block;
+    margin: 5px;
+  }
+  .page-heusden iframe {
+    height: 600px;
+  }
   .front .slide-link {
     margin-top: 0;
   }
