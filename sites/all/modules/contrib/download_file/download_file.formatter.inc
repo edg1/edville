@@ -86,6 +86,26 @@ function theme_download_file_formatter_direct_download_accessible_icon($variable
 }
 
 /**
+ * Theming function for link with a thumbnail to direct download the image.
+ *
+ * @param $element
+ *   Element(s) to format.
+ * @return
+ *   A string containing the HTML ouput.
+ */
+function theme_download_file_formatter_direct_download_thumbnail_image($variables) {
+  $output = '';
+  foreach ($variables['items'] as $delta => $item) {
+    if (!empty($item)) {
+      $output .= theme('download_file_direct_download_thumbnail_image', 
+                       array('file' => (object) $item));
+    }
+  }
+
+  return $output;
+}
+
+/**
  * Theme function for the 'direct_download' multiple file formatter.
  *
  * @param $file
@@ -112,7 +132,7 @@ function theme_download_file_direct_download_item($variables) {
     if (!empty($file->description)) {
       $link_text = $file->description;
     }
-    else if (!empty($file->title)) {
+    elseif (!empty($file->title)) {
       $link_text = $file->title;
     }
     
@@ -150,7 +170,7 @@ function theme_download_file_direct_download_icon_item($variables) {
     if (!empty($file->description)) {
       $link_text = $file->description;
     }
-    else if (!empty($file->title)) {
+    elseif (!empty($file->title)) {
       $link_text = $file->title;
     }
     
@@ -188,7 +208,7 @@ function theme_download_file_direct_download_item_accessible($variables) {
     if (!empty($file->description)) {
       $link_text = $file->description;
     }
-    else if (!empty($file->title)) {
+    elseif (!empty($file->title)) {
       $link_text = $file->title;
     }
     
@@ -227,7 +247,7 @@ function theme_download_file_direct_download_icon_item_accessible($variables) {
     if (!empty($file->description)) {
       $link_text = $file->description;
     }
-    else if (!empty($file->title)) {
+    elseif (!empty($file->title)) {
       $link_text = $file->title;
     }
     
@@ -235,6 +255,33 @@ function theme_download_file_direct_download_icon_item_accessible($variables) {
   }
 
   return '<li>' . $icon . l($link_text . ' ' . $accessibility, $url, $options) . '</li>';
+}
+/**
+ * Theme function for the 'direct_download__thumbnail_image' multiple file formatter.
+ *
+ * @param $file
+ *   File to format.
+ * @return
+ *   A string containing the HTML ouput.
+ */
+function theme_download_file_direct_download_thumbnail_image($variables) {
+  $file = $variables['file'];
+  
+  // Views may call this function with a NULL value, return an empty string.
+  if (empty($file->fid)) {
+    return '';
+  }
+  
+  $image_url       = $variables['file']->uri;
+  $image_alt       = $variables['file']->alt;
+  $image_title     = $variables['file']->title;
+  $style           = 'thumbnail';
+  $image_path      = image_style_url($style, $image_url);
+  $url             = download_file_path($file->fid);
+  $image           = "<img src='$image_path' alt='$image_alt' title='$image_title' />";
+  $options['html'] = TRUE;
+  
+  return '<div class="download-file clear-block">' . l($image, $url, $options) . '</div>';
 }
 
 /**
@@ -253,7 +300,7 @@ function theme_download_file_detail_accessible($variables) {
   $file_size = theme('download_file_bytes_accessible', array('filesize' => $file->filesize));
   $format = variable_get('download_file_accessible_format', '(format !extension / !file_size)');
 
-  return '<span class="detail">' . t($format, array('!extension' => $extension, '!file_size' => $file_size)). '</span>';
+  return '<span class="detail">' . t($format, array('!extension' => $extension, '!file_size' => $file_size)) . '</span>';
 }
 
 /**

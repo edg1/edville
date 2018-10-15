@@ -1,0 +1,36 @@
+name = BAT Event
+description = Create and administer events for BAT.
+core = 7.x
+
+package = BAT
+
+dependencies[] = bat_unit
+dependencies[] = entityreference
+
+files[] = bat_event.admin.inc
+files[] = bat_event_type.admin.inc
+files[] = views/bat_event.views.inc
+files[] = views/bat_event_handler_link_field.inc
+files[] = views/bat_event_handler_date_field.inc
+files[] = views/bat_event_handler_delete_link_field.inc
+files[] = views/bat_event_handler_edit_link_field.inc
+files[] = views/bat_event_handler_event_operations_field.inc
+files[] = views/bat_event_handler_event_type_field.inc
+files[] = views/bat_event_handler_date_filter.inc
+files[] = views/bat_event_handler_duration_field.inc
+files[] = views/bat_event_handler_value_field.inc
+files[] = views/bat_event_handler_blocking_field.inc
+
+; Information added by Drupal.org packaging script on 2016-05-19
+version = "7.x-1.1"
+core = "7.x"
+project = "bat"
+datestamp = "1463668746"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

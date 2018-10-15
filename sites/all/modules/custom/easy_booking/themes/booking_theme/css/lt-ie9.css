@@ -1,0 +1,563 @@
+/*
+ * Target IE 6, 7 and 8 (less than IE9)
+ */
+/*
+ * Assuming a mobile first approach with respond.js OFF, we must reset the font
+ * size for lt IE9
+ */
+html {
+  font-size: 81.3%;
+}
+#block-views-about-area-about-area-slideshow .flex-control-paging li a {
+  border: none;
+  width: 22px;
+  height: 22px;
+  background: url(../images/slideshow_controls/pager-controls.png) 99% 50% no-repeat;
+}
+#block-views-about-area-about-area-slideshow .flex-control-paging li a.flex-active {
+  border: none;
+  width: 22px;
+  height: 22px;
+  background: url(../images/slideshow_controls/pager-controls.png) 0% 50% no-repeat;
+}
+.region-secondary-content{
+    margin-top: 0;
+}
+#header {
+  background-image: url(../images/background/transparent_background.png);
+  background-repeat: repeat;
+  background-attachment: scroll;
+  background-position-x: 0%;
+  background-position-y: 0%;
+  background-color: transparent;
+  top:0;
+  position: fixed;
+  z-index: 500;
+}
+#header #block-system-main-menu {
+  float: right;
+  margin: 0;
+  font-weight: bold;
+}
+#header #block-system-main-menu .block-inner {
+  margin-top: 20px;
+}
+#header #block-system-main-menu ul.menu li {
+  float: left;
+  list-style: none;
+  margin-right: 20px;
+}
+#header #block-system-main-menu ul.menu a {
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  line-height: 42px;
+}
+#header #block-system-main-menu ul.menu li.last {
+  padding: 10px;
+  margin-top: -8px;
+}
+#header #block-system-main-menu ul.menu li.last a {
+  display: block;
+  border: 2px solid #fff;
+ text-align: center;
+  width: 100%;
+  padding: 0 10px;
+  line-height: 42px;
+  -webkit-transition: background 0.5s;
+  transition: background 0.5s;
+  margin-top: -2px;
+}
+#header #block-system-main-menu ul.menu li.last a:hover {
+  background: #f99801;
+  color: #fff;
+}
+#header #block-system-main-menu a.active {
+  padding-bottom: 13px;
+}
+#header #block-system-main-menu li.last a.active {
+  border-bottom: none;
+}
+#header .menu-expand-button-block {
+  display: none;
+}
+.page-cart .flex-direction-nav li,
+.page-bookings .flex-direction-nav li,
+.page-checkout .flex-direction-nav li,
+.page-node .flex-direction-nav li,
+#block-views-slideshow-header-block .view-slideshow-header .flex-direction-nav li {
+  text-indent: -9999px;
+}
+
+
+.front #block-views-popular-rooms-view-block .more-link::before,
+.front #block-views-popular-rooms-view-block .more-link::after,
+.front #block-views-popular-rooms-view-block .block-title::after,
+.front #block-views-popular-rooms-view-block .block-title::before {
+display: none;
+}
+
+.front #block-views-popular-rooms-view-block .more-link::after
+
+
+/*  CONTACT  */
+.hotel-adress-block {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.hotel-adress-block .contact {
+  position: absolute;
+  left: 300px;
+  top: 50px;
+  background: #fff;
+  padding: 40px;
+}
+.hotel-adress-block .contact ul {
+  list-style: none;
+  padding: 0;
+}
+.hotel-adress-block .contact h1,
+.hotel-adress-block .contact p,
+.hotel-adress-block .contact a {
+  margin: 0;
+  color: #000;
+}
+.hotel-adress-block .contact h1 {
+  text-transform: uppercase;
+  font-size: 35px;
+}
+.hotel-adress-block button {
+  padding: 5px 20px 5px 20px;
+  background: #fff;
+  border: 1px solid #000;
+}
+.front #block-views-popular-rooms-view-block .owl-item .views-field-nothing {
+  display: none;
+}
+.front #block-views-popular-rooms-view-block .owl-item:hover .views-field-nothing {
+  display: block;
+}
+#block-views-news-recent-news-block .view-display-id-recent_news_block .owl-item>div {
+  position: relative;
+}
+#block-views-news-recent-news-block .view-display-id-recent_news_block .owl-item>div p.post-date {
+position: absolute;
+  left: 35%;
+  display: block;
+  color: #333;
+  bottom: -10px;
+}
+#block-views-news-recent-news-block .view-display-id-recent_news_block .owl-item p {
+  font-size: 14px;
+}
+#block-views-our-cervices-block .views-row:hover .views-field-field-icon {
+  display: none;
+}
+
+
+
+
+
+/*contact */
+.hotel-adress-block {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.hotel-adress-block .contact {
+  position: absolute;
+  left: 300px;
+  top: 50px;
+  background: #fff;
+  padding: 40px;
+}
+.hotel-adress-block .contact ul {
+  list-style: none;
+  padding: 0;
+}
+.hotel-adress-block .contact h1,
+.hotel-adress-block .contact p,
+.hotel-adress-block .contact a {
+  margin: 0;
+  color: #000;
+}
+.hotel-adress-block .contact h1 {
+  text-transform: uppercase;
+  font-size: 35px;
+}
+.hotel-adress-block button {
+  padding: 5px 20px 5px 20px;
+  background: #fff;
+  border: 1px solid #000;
+}
+
+
+/*  CONTACTS  */
+.page-contact .contacts-mail-and-phone-block {
+  top: 25%;
+}
+.contacts-mail-and-phone-block {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  margin: -145px 0 0 -350px;
+  background: #fff;
+  padding: 30px 50px 40px 40px;
+}
+.contacts-mail-and-phone-block h1,
+.contacts-mail-and-phone-block .block-content p,
+.contacts-mail-and-phone-block .block-content a {
+  margin: 0;
+  color: #000;
+  text-decoration: none;
+}
+.contacts-mail-and-phone-block .block-title {
+  text-transform: uppercase;
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+.contacts-mail-and-phone-block button {
+  margin-top: 20px;
+  padding: 8px 20px 8px 20px;
+  background: #fff;
+  border: 1px solid #000;
+  font-size: 17px;
+  text-transform: uppercase;
+  -webkit-transition: background 0.5s;
+  transition: background 0.5s;
+}
+.contacts-mail-and-phone-block button:hover {
+  background: #f99801;
+  border-color: #f99801;
+  color: #fff;
+}
+.contacts-mail-and-phone-block .address {
+  background-image: url(../images/contact/address.png);
+}
+.contacts-mail-and-phone-block .mail {
+  background-image: url(../images/contact/email.png);
+}
+.contacts-mail-and-phone-block .phone {
+  background-image: url(../images/contact/phone.png);
+}
+.contacts-mail-and-phone-block .contact {
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 5px 0 5px 40px;
+}
+
+/*  ASK A QUESTION  */
+.page-contact .webform-ask-a-question-block{
+  top: 25%;
+}
+.webform-ask-a-question-block .webform-client-form label.element-invisible {
+  overflow: visible;
+  position: relative !important;
+  height: 15px;
+  padding-left: 5px;
+  color: #777;
+  width: 100%;
+}
+.webform-ask-a-question-block .webform-client-form textarea:active .element-invisible {
+  display: none;
+}
+.webform-ask-a-question-block {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  margin-top: -145px;
+  background: #fff;
+  padding: 30px 40px 30px 40px;
+  display: none;
+}
+.webform-ask-a-question-block .block-title {
+  text-transform: uppercase;
+  font-size: 30px;
+  margin-bottom: 25px;
+}
+.webform-ask-a-question-block #edit-submitted-you-name {
+  width: 220px;
+  padding: 5px;
+}
+.webform-ask-a-question-block #edit-submitted-email {
+  width: 220px;
+  padding: 5px;
+}
+.webform-ask-a-question-block #edit-submitted-message {
+  width: 234px;
+  padding: 5px;
+  resize: none;
+}
+.webform-ask-a-question-block .webform-submit {
+  border: 1px solid #999;
+}
+.page-user #main-content {
+    padding-top: 100px;
+    padding-bottom: 30px;
+}
+.node-type-news #main-content-header{
+  padding-top: 0;
+  width: 90%;
+  float: right;
+  border-right: none;
+}
+.node-type-article #main-content-header,
+.node-type-about #main-content-header{
+  padding-top: 0;
+  width: 90%;
+}
+.node-type-news .title-wrapper {
+  width: 80%;
+}
+.node-type-news #main-content #content,
+.node-type-about #main-content #content {
+  width: 100%;
+  padding-right: 0;
+}
+.node-type-article #block-system-main .node-article,
+.node-type-news #block-system-main .node-news,
+.node-type-about #block-system-main .node-about{
+  width: 90%;
+  margin: 0 auto;
+}
+.node-type-news #block-system-main .field-type-image img,
+.node-type-about #block-system-main .field-type-image img,
+.node-type-article #block-system-main .field-type-image img {
+  width: 100%;
+  height: auto;
+}
+.region-sidebar-first {
+  padding-top: 30px;
+}
+.page-node #block-system-main {
+  width: 100%;
+}
+.page-node #main-content-header #tasks {
+  width: 100%;
+}
+.node-type-article #columns {
+  width: 1000px;
+  margin: 0 auto;
+}
+.node-type-about #columns {
+  width: 1000px;
+  margin: 100px auto 0 auto;
+}
+.two-sidebars.node-type-news #main-content #content {
+  border-right: none;
+}
+.page-about .view-id-about_area img,
+.page-news .view-id-news img {
+  width: 100%;
+  height: auto;
+  border: none;
+}
+.page-contact .view-id-about_area .owl-item>div p {
+  font-size: 14px;
+}
+.page-contact .view-id-about_area .owl-carousel.owl-theme .owl-item>div p.title {
+  padding-bottom: 0;
+}
+.rooms-header-image-block img,
+.news-header-image-block img,
+.about-area-header-image-block img {
+  height: 500px;
+}
+#block-system-main .view-news .views-row p,
+#block-system-main .view-about-area .views-row p {
+  font-size: 14px;
+}
+.front #block-views-popular-rooms-view-block .more-link {
+  background-image: url(../images/line_title/line_title_white_little_no-repeat.png);
+  background-repeat: no-repeat;
+  background-position: -8% 50%;
+}
+.front #block-views-popular-rooms-view-block .title-wrapper {
+  background-image: url(../images/line_title/line_title_white_little_no-repeat.png);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+
+.node-type-news .container {
+  margin-top: 80px;
+}
+
+/* Rooms */
+
+div.region .room-search-filters .title-wrapper {
+  background: none;
+  line-height: 52px;
+  font-size: 20px;
+  text-indent: 30px;
+  width: 268px;
+  height: 52px;
+  background: #ff8401;
+  border-bottom: 3px solid #e57701;
+  margin: 0;
+}
+div.region .room-search-filters {
+  width: 268px;;
+  margin:0 auto -55px 0;
+  bottom: 55px;
+  position: relative;
+}
+.form-type-textfield.form-item-easy-booking-custom-start-date-date label,
+.form-type-textfield.form-item-easy-booking-custom-end-date-date label {
+ display: none;
+}
+.form-type-radio input,
+.form-type-checkbox input {
+  border: none;
+}
+#block-rooms-booking-manager-rooms-availability-search select {
+  height: 25px;
+}
+.page-unit #block-easy-booking-custom-easy-booking-custom select {
+  height: 26px;
+}
+    
+    /* Share this */
+
+.stButton .googleplus {
+  background-image: url(../images/social_networks/google_button.png)!important;
+  height: 60px!important;
+  text-indent: 9999px;
+  display: inline-block !important;
+}
+.st_googleplus_vcount .stButton .stBubble .stBubble_count {
+padding-top: 20px!important;
+border-radius: 0!important;
+border: none!important;
+background-image: url(../images/social_networks/clicks1.png)!important;
+width: 80px!important;
+height: 50px!important;
+}
+.st_facebook_vcount .stButton .stMainServices {
+  background-image: url(../images/social_networks/facebook_button.png)!important;
+}
+.st_twitter_vcount .stButton .stMainServices {
+  background-image: url(../images/social_networks/twitter_button.png)!important;
+}
+.st_googleplus_vcount .stButton .stButton_gradient {
+  background-image: url(../images/social_networks/google_button.png)!important;
+}
+.st_linkedin_vcount .stButton .stMainServices {
+  background-image: url(../images/social_networks/linkedin_button.png)!important;
+}
+.stButton .stBubble {
+  position: absolute;
+  top: 70px;
+  left: -10px;
+  margin: 0!important;
+  width: 80px!important;
+  height: 50px!important;
+  display: none!important;
+  z-index: 1000;
+}
+.stButton .stBubble .stBubble_count {
+  padding-top: 20px!important;
+  border-radius: 0!important;
+  border: none!important;
+  background-image: url(../images/social_networks/clicks1.png)!important;
+  width: 80px!important;
+  height: 50px!important;
+}
+.st_googleplus_vcount:hover .stButton .stBubble,
+.st_twitter_vcount:hover .stButton .stBubble,
+.st_facebook_vcount:hover .stButton .stBubble,
+.st_linkedin_vcount:hover .stButton .stBubble {
+  display: inline-block!important;
+}
+
+/* IE7  */
+.node-type-about .columns {
+  *padding-top: 60px;
+}
+#header {
+  *padding-bottom: 20px;
+  *left: 0;
+  *clear: both;
+}
+#block-views-slideshow-header-block  .bottom-scroll {
+  *margin-left: -50%;
+  *margin-right:50%;
+  *width: 52px;
+  *background-position-x: 100%;
+}
+.contacts-mail-and-phone-block {
+  *width: 180px;
+}
+.webform-ask-a-question-block {
+  *width: 230px;
+  *height: 350px;
+}
+.webform-ask-a-question-block h2.block-title {
+  *margin-bottom: 0;
+}
+#footer .social-media-links-block a.social {
+  *padding: 10px 25px 10px 25px;
+  *margin: 0 20px 0 20px;
+  *line-height: 0;
+  *color: transparent;
+  *display: inline-block;
+  *text-decoration: none;
+  *height: 25px;
+}
+.page-booking #main-content {
+  *padding-top: 20px;
+}
+.page-booking #main-content {
+  *padding-top: 20px;
+}
+div.region .room-search-filters.visible {
+  *top: -55px;
+}
+.page-book form.rooms-availability-search,
+.page-booking form.rooms-availability-search {
+  *padding-bottom: 130px;
+}
+.checkout-steps-block .step{
+  *display: inline;
+  *margin: 1px;
+}
+.checkout-steps-block .step.step-submit{
+  *border-left: 2px solid #fff;
+  *border-right: 2px solid #fff;
+  *width: 328px;
+}
+.page-book .view-book-a-room .views-row {
+  *display: inline;
+}
+.view-popular-rooms-view .views-field-nothing #fade-wrapper .places,
+.view-popular-rooms-view .views-field-nothing #fade-wrapper .space,
+.view-popular-rooms-view .views-field-nothing #fade-wrapper .bedsamount {
+  *display: inline;
+  *float: left;
+}
+.view-popular-rooms-view .views-field-nothing #fade-wrapper .places,
+.view-popular-rooms-view .views-field-nothing #fade-wrapper .bedsamount  {
+  *width: 50px;
+}
+.view-popular-rooms-view .views-field-nothing #fade-wrapper .space {
+  *width: 70px;
+}
+.page-news #footer {
+  *position: relative;
+}
+.page-news #columns {
+  *padding-bottom: 50px;
+}
+.page-unit .field-name-field-furnishing div.field-item {
+  *height: 70px;
+}
+.delete-line-item {
+  *color: transparent;
+}
+#block-views-news-recent-news-block h2.block-title,
+#block-views-our-cervices-block h2.block-title{
+  *width: 280px;
+}
+.page-about #content {
+  *padding-bottom: 20px;
+}

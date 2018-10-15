@@ -1,0 +1,104 @@
+language: php
+
+sudo: false
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+addons:
+  firefox: "42.0"
+
+before_script:
+  # Remove xdebug for the moment. We aren't generating code coverage, and it slows us down.
+  - rm /home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
+
+  # Set github access token for composer if available.
+  - if [[ $GITHUB_OAUTH_TOKEN ]]; then git config --global github.accesstoken $GITHUB_OAUTH_TOKEN; fi
+  # Copy module to tmp dir for later use.
+  - mkdir /tmp/bat; cp -r * /tmp/bat
+  # Update composer.
+  - composer -n self-update
+
+  # Install drush.
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer -n global require drush/drush:7.*
+  # Install drush composer extension.
+  - drush dl composer-8.x-1.x
+
+  # Install required packages for behat.
+  - cd ./test/behat
+  - composer -n install
+
+  # Make the site.
+  - cd $TRAVIS_BUILD_DIR
+  - drush make test/project.make bat
+
+  # Copy the bat module into the Drupal site.
+  - mv /tmp/bat bat/sites/all/modules/bat
+
+  - cd bat
+  - php -d sendmail_path=$(which true) ~/.composer/vendor/bin/drush.php --yes site-install --db-url=mysql://root:@127.0.0.1/drupal --account-name=admin --account-pass=test --site-mail=webmaster@roomify.us --site-name="bat"
+  # Following step with -y should also run composer install.
+  - drush -y en bat bat_api bat_calendar_reference bat_event bat_event_ui bat_facets bat_fullcalendar bat_unit composer_manager
+  - drush cc all --yes
+
+  # Run a webserver and wait until it is started up.
+  - drush --debug runserver "http://127.0.0.1" > ~/debug.txt 2>&1 &
+  - sleep 10
+
+  # Link test dir into working dir.
+  - ln -s $TRAVIS_BUILD_DIR/test .
+
+  # Setup display for selenium
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
+
+  - mkdir -p $HOME/.cache
+  - wget -nc -O $HOME/.cache/selenium-server-standalone-2.48.2.jar http://selenium-release.storage.googleapis.com/2.48/selenium-server-standalone-2.48.2.jar || true
+  - java -jar $HOME/.cache/selenium-server-standalone-2.48.2.jar -p 4444 &> /tmp/selenium.log &
+  - sleep 5
+
+script:
+  - cd $TRAVIS_BUILD_DIR/bat/test/behat
+  # behat.yml includes behat.local.yml so it must exist
+  - touch behat.local.yml
+  # Set path to drupal root
+  - export BEHAT_PARAMS="{\"extensions\":{\"Drupal\\\DrupalExtension\":{\"drupal\":{\"drupal_root\":\"$TRAVIS_BUILD_DIR/bat\"}}}}"
+  - ./bin/behat
+
+# after_script:
+# - bash $TRAVIS_BUILD_DIR/scripts/upload.sh
+
+after_failure:
+  - echo "### DB LOG ###"
+  - cd $TRAVIS_BUILD_DIR/bat
+  - drush sqlq 'SELECT * FROM watchdog\G'
+  - echo "### Server log ###"
+  - cat ~/debug.txt
+  - echo "### Selenium log ###"
+  - cat /tmp/selenium.log
+
+notifications:
+    slack: roomify:Z9qyI59J2b9NAF0XvdCn8VhH
+
+env:
+  global:
+    secure: "PUOYps+ygWErjAmF91vh909N927PQad879Kl2X1bZlBpbG5tRgMTdodeG39XxbWjziwnNI+1cybuCg3bqkhAxpf7OmxyIPRbehsIpjIIcVuV+wlkZ7vh0CKlk5fhZA80M3rwqyby6hYxmEj3UpHn4BKJAeH7kwEFGz8DKH96xYfNlmQflAeNCpiGfIFyz1duaWJvLPhw7e2PFpUp3Jt42Sig6w08Ja41v98uagBZ490ZZbZcM6B7GWLNWUcMA5FNCzj1jRHMg7dOZOlw/s1BJkKLE67DDjm0dQVIh5SL/3dZoPbQCqpoW1A6gZxbO61F4EALqfDsEb1LGnTRvzZqqhIQA9zNdrIGgSZzIeHAUGlRaknWjAS+y0WfilSrtvWha2pGYvif5NB2sfhr7wa27C3a6i4L5OZoNzaxxuaS8QJgYIneeESNkiD7/IyT4at0bK0BpV+KFGsa6dO6dWhI3UM7A6PuhSLo8P4CThA0X+US2nHegRgM0slLVC8b0E/ONaEMpHFiygSjf3+z2k2+ETLAa38iQuSLuhrhhUH5luYvim1xlgFvMliCLBk5SCCnTCw2BOLJxq03AdlbAmspw5yrjcOFDov80sTrujSZU98I1dkR8w7nrtuJ7CnRXGPPkbybv1QfYvKIdtzSI0dcsuzNV5kNrvmBRqPgcX3bdCA="
+
+# Cache composer/drush files
+cache:
+  directories:
+    - $HOME/.cache
+    - $HOME/.composer/cache
+    - vendor
+    - test/behat/bin
+    - test/behat/vendor
+    - $HOME/.drush/cache

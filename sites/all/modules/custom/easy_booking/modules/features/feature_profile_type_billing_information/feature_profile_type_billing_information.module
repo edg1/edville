@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Profile type - Billing information feature.
+ */
+
+include_once 'feature_profile_type_billing_information.features.inc';

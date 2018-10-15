@@ -1,0 +1,50 @@
+name = feature_news_nodes
+core = 7.x
+package = Features
+version = 7.x-2.1
+project = feature_news_nodes
+dependencies[] = feature_content_type_news
+dependencies[] = feature_views_news
+__drupal_alter_by_ref[][node][news] = news
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[uuid_node][] = 33d4934c-1b67-41d5-a7ab-391bdd7abfbe
+features[uuid_node][] = 4b5b0bb9-bca9-421e-9ad2-8140d9179e5e
+features[uuid_node][] = 847d8bb4-d9d1-443d-a773-44727854189e
+features_exclude[node][news] = news
+features_exclude[field_base][body] = body
+features_exclude[field_base][field_news_image] = field_news_image
+features_exclude[field_base][field_news_outline] = field_news_outline
+features_exclude[field_base][field_news_slideshow] = field_news_slideshow
+features_exclude[field_base][field_news_slideshow_comment] = field_news_slideshow_comment
+features_exclude[field_base][field_news_subtitle] = field_news_subtitle
+features_exclude[field_base][field_news_tag] = field_news_tag
+features_exclude[field_instance][node-news-body] = node-news-body
+features_exclude[field_instance][node-news-field_news_image] = node-news-field_news_image
+features_exclude[field_instance][node-news-field_news_outline] = node-news-field_news_outline
+features_exclude[field_instance][node-news-field_news_slideshow] = node-news-field_news_slideshow
+features_exclude[field_instance][node-news-field_news_slideshow_comment] = node-news-field_news_slideshow_comment
+features_exclude[field_instance][node-news-field_news_subtitle] = node-news-field_news_subtitle
+features_exclude[field_instance][node-news-field_news_tag] = node-news-field_news_tag
+features_exclude[taxonomy][news_category] = news_category
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the feature_our_hotel_node feature.
+ */
+
+include_once 'feature_our_hotel_node.features.inc';

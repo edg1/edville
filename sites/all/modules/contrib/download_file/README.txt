@@ -1,4 +1,3 @@
-// $Id: README.txt,v 1.2.6.4 2010/11/15 08:07:02 xmattx Exp $
 
 -- SUMMARY --
 

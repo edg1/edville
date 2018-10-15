@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Content type about area feature.
+ */
+
+include_once 'feature_content_type_about_area.features.inc';

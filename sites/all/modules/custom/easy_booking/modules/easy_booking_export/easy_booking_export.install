@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install for Easy Booking export module.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function easy_booking_export_install() {
+  variable_set('commerce_order_account_pane_mail_double_entry', '1');
+  variable_set('rooms_checkout_style', 'rooms_commerce_checkout');
+  variable_set('rooms_presentation_style', 'rooms_individual');
+}
+

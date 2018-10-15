@@ -1,0 +1,60 @@
+name = Feature Frontpage Slideshow ct view
+core = 7.x
+package = Features
+version = 7.x-1.2
+project = feature_frontpage_slideshow_ct_view
+dependencies[] = feature_content_type_our_services
+dependencies[] = features
+dependencies[] = flexslider
+dependencies[] = flexslider_views
+dependencies[] = strongarm
+dependencies[] = text
+dependencies[] = views
+features[ctools][] = flexslider:flexslider_default_preset:1
+features[ctools][] = strongarm:strongarm:1
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[field_instance][] = node-slideshow_header-body
+features[field_instance][] = node-slideshow_header-field_image
+features[flexslider_optionset][] = slideshowheader
+features[image][] = slideshow_header_style
+features[node][] = slideshow_header
+features[variable][] = comment_anonymous_slideshow_header
+features[variable][] = comment_default_mode_slideshow_header
+features[variable][] = comment_default_per_page_slideshow_header
+features[variable][] = comment_form_location_slideshow_header
+features[variable][] = comment_preview_slideshow_header
+features[variable][] = comment_slideshow_header
+features[variable][] = comment_subject_field_slideshow_header
+features[variable][] = field_bundle_settings_node__slideshow_header
+features[variable][] = menu_options_slideshow_header
+features[variable][] = menu_parent_slideshow_header
+features[variable][] = node_options_slideshow_header
+features[variable][] = node_preview_slideshow_header
+features[variable][] = node_submitted_slideshow_header
+features[views_view][] = slideshow_header
+features_exclude[dependencies][ctools] = ctools
+features_exclude[dependencies][image] = image
+features_exclude[field_base][body] = body
+features_exclude[field_base][field_image] = field_image
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

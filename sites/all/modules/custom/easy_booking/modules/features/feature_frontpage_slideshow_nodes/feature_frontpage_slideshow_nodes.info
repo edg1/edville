@@ -1,0 +1,43 @@
+name = feature_frontpage_slideshow_nodes
+core = 7.x
+package = Features
+version = 7.x-2.0
+project = feature_frontpage_slideshow_nodes
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = feature_frontpage_slideshow_ct_view
+dependencies[] = strongarm
+dependencies[] = uuid_features
+__drupal_alter_by_ref[][node][slideshow_header] = slideshow_header
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[uuid_node][] = 2256f717-0f46-43d4-9f97-72ef7b2bbb85
+features[uuid_node][] = 2c582b3b-c5d5-4880-be80-1d022a771dc3
+features[uuid_node][] = ce3005b1-525a-475d-91d4-7f1ea811303c
+features_exclude[node][slideshow_header] = slideshow_header
+features_exclude[dependencies][image] = image
+features_exclude[field_base][body] = body
+features_exclude[field_base][field_image] = field_image
+features_exclude[field_instance][node-slideshow_header-body] = node-slideshow_header-body
+features_exclude[field_instance][node-slideshow_header-field_image] = node-slideshow_header-field_image
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+

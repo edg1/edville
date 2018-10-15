@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the feature_frontpage_slideshow_nodes feature.
+ */
+
+include_once 'feature_frontpage_slideshow_nodes.features.inc';

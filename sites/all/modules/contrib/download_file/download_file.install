@@ -1,5 +1,4 @@
 <?php
-// $Id: download_file.install,v 1.1.4.2 2010/11/15 08:07:02 xmattx Exp $
 
 /**
  * Implementation of hook_install().
@@ -9,7 +8,7 @@ function download_file_install() {
   variable_set('download_file_accessible_format', '(format !extension / !file_size)');
   
   // Display the link to configure the format of the link accessible.
-  drupal_set_message(t('Configure the format of the link accessible on the <a href="@setting">setting page</a>.', array('@setting' => url('admin/config/media/download-file'))));
+  drupal_set_message(st('Configure the format of the link accessible on the <a href="@setting">setting page</a>.', array('@setting' => url('admin/config/media/download-file'))));
 }
 
 /**

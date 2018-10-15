@@ -1,0 +1,211 @@
+<?php
+/**
+ * @file
+ * Install functions and tasks for an Easy booking installation profile.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for this profile.
+ */
+function easy_booking_install() {
+  // Copy default images from profiles/easy_booking/images to sites/default/files.
+  $src = 'profiles/easy_booking/images/';
+  $dst = 'sites/default/files/';
+  multipurpose_corporate_profile_recurse_copy($src,$dst);
+  // Apply file formats.
+  $filtered_html_format = array(
+    'format' => 'filtered_html',
+    'name' => 'Filtered HTML',
+    'weight' => 0,
+    'filters' => array(
+      // URL filter.
+      'filter_url' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+      // HTML filter.
+      'filter_html' => array(
+        'weight' => 1,
+        'status' => 1,
+      ),
+      // Line break filter.
+      'filter_autop' => array(
+        'weight' => 2,
+        'status' => 1,
+      ),
+      // HTML corrector filter.
+      'filter_htmlcorrector' => array(
+        'weight' => 10,
+        'status' => 1,
+      ),
+    ),
+  );
+  $filtered_html_format = (object) $filtered_html_format;
+  filter_format_save($filtered_html_format);
+  $full_html_format = array(
+    'format' => 'full_html',
+    'name' => 'Full HTML',
+    'weight' => 1,
+    'filters' => array(
+      // URL filter.
+      'filter_url' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+      // Line break filter.
+      'filter_autop' => array(
+        'weight' => 1,
+        'status' => 1,
+      ),
+      // HTML corrector filter.
+      'filter_htmlcorrector' => array(
+        'weight' => 10,
+        'status' => 1,
+      ),
+    ),
+  );
+  $full_html_format = (object) $full_html_format;
+  filter_format_save($full_html_format);
+
+  // Enable some easy_booking blocks.
+  $default_theme = 'booking_theme';
+  $admin_theme = 'seven';
+  // disable all themes
+  db_update('system')
+    ->fields(array('status' => 0))
+    ->condition('type', 'theme')
+    ->execute();
+  // Enable $default_theme.
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', $default_theme)
+    ->execute();
+  // Enable $admin_theme.
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', $admin_theme)
+    ->execute();
+  variable_set('theme_default', $default_theme);
+  variable_set('admin_theme', $admin_theme);
+  // activate admin theme when editing a node.
+  variable_set('node_admin_theme', '1');
+  $blocks = array(
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'user',
+      'delta' => 'login',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'sidebar_first',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => -10,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $admin_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'help',
+      'pages' => '',
+      'cache' => -1,
+    ),
+  );
+  // Drop system / user blocks to ensure correct building.
+  db_delete('block')->condition('module', 'system')->execute();
+  db_delete('block')->condition('module', 'user')->execute();
+  // Add in our blocks defined above.
+  $query = db_insert('block')->fields(array('module', 'delta', 'theme', 'status', 'weight', 'region', 'pages', 'cache'));
+  foreach ($blocks as $block) {
+    $query->values($block);
+  }
+  $query->execute();
+  
+  // From shortcut. install, add shortcuts to the default set on install.
+  $shortcut_set = shortcut_set_load(SHORTCUT_DEFAULT_SET_NAME);
+  $shortcut_set->links = NULL;
+  $shortcut_set->links = array(
+    array(
+      'link_path' => 'admin/appearance/settings',
+      'link_title' => st('Theme'),
+      'weight' => -17,
+    ),
+  );
+  shortcut_set_save($shortcut_set);// Create a default role for site administrators, with all available permissions assigned.
+  $admin_role = new stdClass();
+  $admin_role->name = 'administrator';
+  $admin_role->weight = 10;
+  user_role_save($admin_role);
+  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
+  // Set this as the administrator role.
+  variable_set('user_admin_role', $admin_role->rid);
+
+  // Assign user 1 the "administrator" role.
+  db_insert('users_roles')
+    ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
+    ->execute();
+  // Update the menu router information.
+  menu_rebuild();
+  // Ignore any rebuild messages.
+  node_access_needs_rebuild(FALSE);
+  // Ignore any other install messages.$
+  drupal_get_messages();
+}
+
+/**
+ * Recursive copy.
+ *
+ * @param string $src
+ * - Source folder with files.
+ * @param string $dst
+ * - Destination folder.
+ */
+function multipurpose_corporate_profile_recurse_copy($src, $dst) {
+  $dir = opendir($src);
+  @mkdir($dst);
+  while (FALSE !== ($file = readdir($dir))) {
+    if (($file != '.') && ($file != '..')) {
+      if (is_dir($src . '/' . $file)) {
+        multipurpose_corporate_profile_recurse_copy($src . '/' . $file, $dst . '/' . $file);
+      }
+      else {
+        copy($src . '/' . $file, $dst . '/' . $file);
+      }
+    }
+  }
+  closedir($dir);
+}

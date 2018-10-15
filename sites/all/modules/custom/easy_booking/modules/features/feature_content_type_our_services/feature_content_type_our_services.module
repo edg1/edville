@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the feature_content type our services feature.
+ */
+
+include_once 'feature_content_type_our_services.features.inc';

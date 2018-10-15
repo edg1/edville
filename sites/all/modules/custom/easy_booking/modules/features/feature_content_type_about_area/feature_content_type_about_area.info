@@ -1,0 +1,84 @@
+name = feature Content type about area
+description = A content type for an "about" information.
+core = 7.x
+package = Features
+version = 7.x-2.2
+project = feature_content_type_about_area
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = field_slideshow
+dependencies[] = flexslider
+dependencies[] = flexslider_fields
+dependencies[] = flippy
+dependencies[] = image
+dependencies[] = feature_image_styles
+dependencies[] = strongarm
+dependencies[] = text
+features[ctools][] = flexslider:flexslider_default_preset:1
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[field_base][] = field_news_image
+features[field_base][] = field_news_outline
+features[field_base][] = field_news_slideshow
+features[field_base][] = field_news_slideshow_comment
+features[field_base][] = field_news_subtitle
+features[field_instance][] = node-about-body
+features[field_instance][] = node-about-field_news_image
+features[field_instance][] = node-about-field_news_outline
+features[field_instance][] = node-about-field_news_slideshow
+features[field_instance][] = node-about-field_news_slideshow_comment
+features[field_instance][] = node-about-field_news_subtitle
+features[flexslider_optionset][] = about_area_homepage
+features[image][] = about_preview_image
+features[node][] = about
+features[variable][] = comment_about
+features[variable][] = comment_anonymous_about
+features[variable][] = comment_default_mode_about
+features[variable][] = comment_default_per_page_about
+features[variable][] = comment_form_location_about
+features[variable][] = comment_preview_about
+features[variable][] = comment_subject_field_about
+features[variable][] = field_bundle_settings_node__about
+features[variable][] = flippy_about
+features[variable][] = flippy_custom_sorting_about
+features[variable][] = flippy_ellipse_about
+features[variable][] = flippy_first_label_about
+features[variable][] = flippy_firstlast_about
+features[variable][] = flippy_head_about
+features[variable][] = flippy_last_label_about
+features[variable][] = flippy_loop_about
+features[variable][] = flippy_next_label_about
+features[variable][] = flippy_order_about
+features[variable][] = flippy_prev_label_about
+features[variable][] = flippy_random_about
+features[variable][] = flippy_random_label_about
+features[variable][] = flippy_show_empty_about
+features[variable][] = flippy_sort_about
+features[variable][] = flippy_truncate_about
+features[variable][] = menu_options_about
+features[variable][] = menu_parent_about
+features[variable][] = node_options_about
+features[variable][] = node_preview_about
+features[variable][] = node_submitted_about
+features_exclude[field_base][body] = body
+
+; Information added by Drupal.org packaging script on 2015-04-07
+version = "7.x-1.0-beta4"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428378188"
+
+
+; Information added by Drupal.org packaging script on 2015-04-08
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1428461583"
+
+
+; Information added by Drupal.org packaging script on 2018-04-02
+version = "7.x-2.6"
+core = "7.x"
+project = "easy_booking"
+datestamp = "1522658352"
+
